@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#c0392b">
+<title>中文 · 100 Sentences</title>
+<style>
+  :root{
+    --red:#c0392b; --red-dark:#8e2a20; --ink:#232323; --muted:#6f6f6f;
+    --bg1:#fbeeec; --bg2:#f4ded9; --line:#f0dcd7;
+    --safe-t:env(safe-area-inset-top,0px);
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    font-family:"Segoe UI",Roboto,system-ui,-apple-system,"Noto Sans SC",Arial,sans-serif;
+    background:linear-gradient(165deg,var(--bg1),var(--bg2));
+    color:var(--ink); line-height:1.5; min-height:100vh;
+  }
+  /* Sticky header */
+  header{
+    position:sticky; top:0; z-index:20;
+    background:rgba(192,57,43,.97); color:#fff;
+    padding:calc(10px + var(--safe-t)) 14px 10px; backdrop-filter:blur(6px);
+    box-shadow:0 2px 12px rgba(120,30,22,.28);
+  }
+  .htop{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .htitle{font-size:19px;font-weight:700;letter-spacing:1px;}
+  .htitle small{font-weight:400;opacity:.85;font-size:13px;letter-spacing:0;}
+  .count{font-size:13px;font-weight:600;background:rgba(255,255,255,.18);padding:5px 10px;border-radius:20px;white-space:nowrap;}
+  .bar{height:6px;border-radius:6px;background:rgba(255,255,255,.25);margin-top:9px;overflow:hidden;}
+  .bar>span{display:block;height:100%;width:0;background:#fff;transition:width .25s ease;}
+  .controls{display:flex;gap:8px;margin-top:10px;}
+  .ctrl{
+    flex:1;min-height:40px;border:none;border-radius:11px;font-size:14px;font-weight:600;
+    background:rgba(255,255,255,.16);color:#fff;cursor:pointer;transition:background .15s;
+  }
+  .ctrl:active{background:rgba(255,255,255,.32);}
+  .ctrl.on{background:#fff;color:var(--red);}
+  /* Collapsible options panel */
+  .panel-toggle{
+    width:100%;margin-top:9px;min-height:32px;border:none;border-radius:9px;
+    background:rgba(255,255,255,.12);color:#fff;font-size:12.5px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;
+  }
+  .panel-toggle:active{background:rgba(255,255,255,.22);}
+  .chev{display:inline-block;transition:transform .2s ease;}
+  .panel-toggle.open .chev{transform:rotate(180deg);}
+  .controls-panel{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+  .controls-panel.open{max-height:400px;margin-top:8px;}
+  /* List */
+  main{max-width:640px;margin:0 auto;padding:14px 12px calc(30px + var(--safe-b));}
+  .card{
+    position:relative;background:#fff;border-radius:16px;margin-bottom:13px;
+    box-shadow:0 4px 16px rgba(150,40,30,.10);
+    border-left:5px solid var(--red);overflow:hidden;transition:opacity .2s,transform .2s;
+    display:flex;flex-direction:column;
+  }
+  .top{padding:14px 14px 12px;border-bottom:1px solid var(--line);}
+  .bottom{display:flex;align-items:stretch;}
+  .main{flex:1 1 52%;min-width:0;padding:12px 13px;}
+  .gloss{
+    flex:1 1 48%;min-width:0;background:#fbeeec;border-left:1px dashed #e6c9c3;
+    padding:12px 11px;display:flex;flex-direction:column;justify-content:center;gap:2px;
+  }
+  .gtitle{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#b07c74;margin-bottom:4px;}
+  .grow{display:flex;flex-wrap:nowrap;align-items:baseline;gap:6px;padding:3px 0;border-bottom:1px solid #f2e2dd;}
+  .grow:last-child{border-bottom:none;}
+  .ghz{font-size:14px;font-weight:600;color:var(--ink);flex:0 0 auto;}
+  .gpy{font-size:11.5px;font-weight:600;color:var(--red);flex:0 0 auto;}
+  .gen{font-size:11.5px;color:#5f5f5f;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .head{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+  .idx{font-size:12px;font-weight:700;color:var(--red);opacity:.8;line-height:1;}
+  .emoji{
+    font-size:17px;opacity:.5;filter:grayscale(15%);
+    pointer-events:none;user-select:none;line-height:1;
+  }
+  .speak{
+    margin-left:auto;flex:0 0 34px;height:34px;width:34px;border-radius:50%;border:none;
+    background:linear-gradient(145deg,var(--red),var(--red-dark));color:#fff;font-size:15px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    box-shadow:0 3px 8px rgba(192,57,43,.30);transition:transform .12s;
+  }
+  .speak:active{transform:scale(.92);}
+  .speak.playing{background:linear-gradient(145deg,#e0685c,var(--red));animation:pulse 1s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 3px 8px rgba(192,57,43,.30);}50%{box-shadow:0 3px 14px rgba(192,57,43,.55);}}
+  .sentence{display:flex;flex-wrap:wrap;gap:9px 11px;align-items:flex-end;}
+  .word{display:flex;flex-direction:column;align-items:center;max-width:120px;}
+  .py{font-size:17px;color:var(--red);font-weight:600;line-height:1.2;margin-bottom:1px;}
+  .gw{
+    display:none;font-size:12px;color:var(--muted);font-weight:600;font-style:italic;
+    line-height:1.2;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;
+  }
+  .hz{font-size:20px;font-weight:600;color:var(--ink);line-height:1.1;}
+  .punc{font-size:20px;color:var(--ink);align-self:flex-end;}
+  .en{margin-top:0;color:var(--muted);font-size:16.5px;font-style:italic;}
+  /* Display Mode: pinyin (default) vs English-per-word, above the hanzi row */
+  .pinyinBtn{
+    display:none;margin-top:10px;background:none;border:1px dashed var(--red);color:var(--red);
+    font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:8px;cursor:pointer;
+  }
+  .pinyinBtn:active{background:rgba(192,57,43,.08);}
+  body.displaymode-english .py{display:none;}
+  body.displaymode-english .gw{display:block;}
+  body.displaymode-english .pinyinBtn{display:inline-block;}
+  body.displaymode-english .card.pyrevealed .py{display:block;}
+  body.displaymode-english .card.pyrevealed .gw{display:none;}
+  body.displaymode-english .card.pyrevealed .pinyinBtn{display:none;}
+  /* know toggle */
+  .know{
+    display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:11px;
+    border-top:1px solid var(--line);cursor:pointer;min-height:34px;user-select:none;
+  }
+  .box{
+    flex:0 0 24px;height:24px;width:24px;border:2px solid #cdb7b2;border-radius:7px;
+    display:flex;align-items:center;justify-content:center;transition:all .15s;
+    font-size:16px;color:#fff;
+  }
+  .know .lbl{font-size:14px;color:var(--muted);font-weight:600;}
+  .card.known{opacity:.5;}
+  .card.known{border-left-color:#2e9e5b;}
+  .card.known .box{background:#2e9e5b;border-color:#2e9e5b;}
+  .card.known .lbl{color:#2e9e5b;}
+  .card.known .lbl::after{content:" ✓";}
+  /* hide-known mode */
+  body.hideknown .card.known{display:none;}
+  /* active-recall mode: hide English translation until revealed */
+  .revealBtn{
+    display:none;margin:6px 0 0;background:none;border:1px dashed var(--red);color:var(--red);
+    font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:8px;cursor:pointer;align-self:flex-start;
+  }
+  .revealBtn:active{background:rgba(192,57,43,.08);}
+  body.recallmode .en{display:none;}
+  body.recallmode .revealBtn{display:inline-block;}
+  body.recallmode .card.revealed .en{display:block;}
+  body.recallmode .card.revealed .revealBtn{display:none;}
+  .empty{text-align:center;color:var(--muted);padding:40px 20px;font-size:15px;display:none;}
+  footer{text-align:center;color:#a98d88;font-size:12px;padding:6px 16px calc(20px + var(--safe-b));}
+  @media(min-width:560px){
+    .sentence{gap:10px 14px;} .hz{font-size:22px;} .py{font-size:18px;}
+  }
+  /* keep gloss on the right of the bottom strip; only stack on ultra-narrow screens */
+  @media(max-width:300px){
+    .bottom{flex-direction:column;}
+    .gloss{border-left:none;border-top:1px dashed #e6c9c3;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="htop">
+    <div class="htitle">中文 <small>· 100 sentences</small></div>
+    <div class="count" id="count">0 / 100 known</div>
+  </div>
+  <div class="bar"><span id="barfill"></span></div>
+  <button class="panel-toggle" id="panelToggle">
+    <span id="panelToggleLabel">Show options</span><span class="chev" id="panelChev">▾</span>
+  </button>
+  <div class="controls-panel" id="controlsPanel">
+    <div class="controls">
+      <button class="ctrl" id="pageBtn1">Page 1</button>
+      <button class="ctrl" id="pageBtn2">Page 2</button>
+    </div>
+    <div class="controls" style="margin-top:8px;">
+      <button class="ctrl" id="toggleHide">Hide known</button>
+      <button class="ctrl" id="resetBtn">Reset</button>
+    </div>
+    <div class="controls" style="margin-top:8px;">
+      <button class="ctrl" id="exportBtn">💾 Save progress file</button>
+      <button class="ctrl" id="importBtn">📂 Load progress file</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none;">
+    </div>
+    <div class="controls" style="margin-top:8px;">
+      <button class="ctrl" id="toggleRecall">Hide English Translation</button>
+    </div>
+    <div class="controls" style="margin-top:8px;">
+      <button class="ctrl" id="toggleDisplayMode">Display Mode: Pinyin</button>
+    </div>
+  </div>
+</header>
+<main>
+  <div id="list"></div>
+  <div class="empty" id="empty">🎉 All sentences marked known.<br>Tap “Show all” to review again.</div>
+</main>
+<footer>Tap the box to mark known · autosaves in this browser · use "Save progress file" for a backup you can restore anytime</footer>
+
+<script>
+const DATA = [
+ {e:'👋',end:'！',en:'Hello!',w:[['你好','nǐ hǎo']]},
+ {e:'🙇',end:'！',en:'Hello, teacher! (polite)',w:[['您好','nín hǎo'],['，',''],['老师','lǎoshī']]},
+ {e:'👩‍🏫',end:'！',en:'Hello, teacher!',w:[['老师','lǎoshī'],['好','hǎo']]},
+ {e:'🌅',end:'！',en:'Good morning!',w:[['早上好','zǎoshang hǎo']]},
+ {e:'🌆',end:'！',en:'Good evening!',w:[['晚上好','wǎnshang hǎo']]},
+ {e:'🌙',end:'！',en:'Good night!',w:[['晚安','wǎn’ān']]},
+ {e:'🙏',end:'！',en:'Thank you!',w:[['谢谢','xièxie'],['你','nǐ']]},
+ {e:'😊',end:'。',en:'You’re welcome.',w:[['不客气','bú kèqi']]},
+ {e:'😔',end:'。',en:'Sorry.',w:[['对不起','duìbuqǐ']]},
+ {e:'👌',end:'。',en:'It’s okay.',w:[['没关系','méi guānxi']]},
+ {e:'👋',end:'！',en:'Goodbye!',w:[['再见','zàijiàn']]},
+ {e:'🙂',end:'？',en:'How are you?',w:[['你好','nǐ hǎo'],['吗','ma']]},
+ {e:'😊',end:'。',en:'I am very well.',w:[['我','wǒ'],['很','hěn'],['好','hǎo']]},
+ {e:'😊',end:'。',en:'I am also very well.',w:[['我','wǒ'],['也','yě'],['很','hěn'],['好','hǎo']]},
+ {e:'😄',end:'。',en:'I am extremely well.',w:[['我','wǒ'],['非常','fēicháng'],['好','hǎo']]},
+ {e:'😕',end:'。',en:'I am not so well.',w:[['我','wǒ'],['不太','bú tài'],['好','hǎo']]},
+ {e:'😟',end:'。',en:'I am not well.',w:[['我','wǒ'],['不好','bù hǎo']]},
+ {e:'🤔',end:'？',en:'And you?',w:[['你','nǐ'],['呢','ne']]},
+ {e:'😫',end:'。',en:'I am very tired.',w:[['我','wǒ'],['很','hěn'],['累','lèi']]},
+ {e:'😩',end:'。',en:'I am too tired.',w:[['我','wǒ'],['太','tài'],['累','lèi'],['了','le']]},
+ {e:'🏃',end:'。',en:'I am very busy.',w:[['我','wǒ'],['很','hěn'],['忙','máng']]},
+ {e:'😌',end:'。',en:'I am not busy.',w:[['我','wǒ'],['不忙','bù máng']]},
+ {e:'🍽️',end:'。',en:'I am very hungry.',w:[['我','wǒ'],['很','hěn'],['饿','è']]},
+ {e:'🙂',end:'。',en:'I am not hungry.',w:[['我','wǒ'],['不饿','bú è']]},
+ {e:'🥤',end:'。',en:'I am very thirsty.',w:[['我','wǒ'],['很','hěn'],['渴','kě']]},
+ {e:'🙂',end:'。',en:'I am not thirsty.',w:[['我','wǒ'],['不渴','bù kě']]},
+ {e:'😄',end:'。',en:'I am very happy.',w:[['我','wǒ'],['很','hěn'],['高兴','gāoxìng']]},
+ {e:'😁',end:'。',en:'I am very glad.',w:[['我','wǒ'],['很','hěn'],['开心','kāixīn']]},
+ {e:'😞',end:'。',en:'I am not happy.',w:[['我','wǒ'],['不高兴','bù gāoxìng']]},
+ {e:'😠',end:'。',en:'I got angry.',w:[['我','wǒ'],['生气','shēngqì'],['了','le']]},
+ {e:'🔥',end:'。',en:'It’s very hot here.',w:[['这里','zhèlǐ'],['很','hěn'],['热','rè']]},
+ {e:'🙂',end:'。',en:'It’s not hot here.',w:[['这里','zhèlǐ'],['不热','bú rè']]},
+ {e:'❄️',end:'。',en:'It’s very cold there.',w:[['那里','nàlǐ'],['很','hěn'],['冷','lěng']]},
+ {e:'🙂',end:'。',en:'It’s not cold here.',w:[['这里','zhèlǐ'],['不冷','bù lěng']]},
+ {e:'🔥',end:'。',en:'It’s very hot now.',w:[['现在','xiànzài'],['很','hěn'],['热','rè']]},
+ {e:'🙂',end:'。',en:'I’m not hot.',w:[['我','wǒ'],['不热','bú rè']]},
+ {e:'🙂',end:'。',en:'I’m not cold.',w:[['我','wǒ'],['不冷','bù lěng']]},
+ {e:'🙂',end:'。',en:'I’m not tired.',w:[['我','wǒ'],['不累','bú lèi']]},
+ {e:'👨',end:'。',en:'This is my dad.',w:[['这','zhè'],['是','shì'],['我','wǒ'],['爸爸','bàba']]},
+ {e:'👩',end:'。',en:'That is my mom.',w:[['那','nà'],['是','shì'],['我','wǒ'],['妈妈','māma']]},
+ {e:'👨‍👩‍👧',end:'。',en:'Mom and dad are both well.',w:[['爸爸','bàba'],['妈妈','māma'],['都','dōu'],['很','hěn'],['好','hǎo']]},
+ {e:'👦',end:'。',en:'I have an older brother.',w:[['我','wǒ'],['有','yǒu'],['一个','yí ge'],['哥哥','gēge']]},
+ {e:'🧒',end:'。',en:'I have a younger brother.',w:[['我','wǒ'],['有','yǒu'],['一个','yí ge'],['弟弟','dìdi']]},
+ {e:'🏫',end:'。',en:'Older and younger brother are both at school.',w:[['哥哥','gēge'],['弟弟','dìdi'],['都','dōu'],['在','zài'],['学校','xuéxiào']]},
+ {e:'👧',end:'。',en:'My older sister is very beautiful.',w:[['我','wǒ'],['姐姐','jiějie'],['很','hěn'],['漂亮','piàoliang']]},
+ {e:'🤫',end:'。',en:'My younger sister is very quiet.',w:[['我','wǒ'],['妹妹','mèimei'],['很','hěn'],['安静','ānjìng']]},
+ {e:'👴',end:'。',en:'Grandpa and grandma are both well.',w:[['爷爷','yéye'],['奶奶','nǎinai'],['都','dōu'],['很','hěn'],['好','hǎo']]},
+ {e:'💑',end:'。',en:'My spouse is very busy.',w:[['我','wǒ'],['爱人','àirén'],['很','hěn'],['忙','máng']]},
+ {e:'🧑‍🤝‍🧑',end:'。',en:'He is my friend.',w:[['他','tā'],['是','shì'],['我','wǒ'],['朋友','péngyou']]},
+ {e:'🎓',end:'。',en:'She is a student.',w:[['她','tā'],['是','shì'],['学生','xuésheng']]},
+ {e:'👨‍🏫',end:'。',en:'He is a teacher.',w:[['他','tā'],['是','shì'],['老师','lǎoshī']]},
+ {e:'🎓',end:'。',en:'We are all students.',w:[['我们','wǒmen'],['都','dōu'],['是','shì'],['学生','xuésheng']]},
+ {e:'👩‍🏫',end:'？',en:'Are you all teachers?',w:[['你们','nǐmen'],['都','dōu'],['是','shì'],['老师','lǎoshī'],['吗','ma']]},
+ {e:'👥',end:'。',en:'They are all my friends.',w:[['他们','tāmen'],['都','dōu'],['是','shì'],['我','wǒ'],['朋友','péngyou']]},
+ {e:'💪',end:'。',en:'My grandpa is awesome.',w:[['我','wǒ'],['爷爷','yéye'],['很','hěn'],['厉害','lìhai']]},
+ {e:'🤫',end:'。',en:'My grandma is very quiet.',w:[['我','wǒ'],['奶奶','nǎinai'],['很','hěn'],['安静','ānjìng']]},
+ {e:'😄',end:'。',en:'My older brother is very happy.',w:[['我','wǒ'],['哥哥','gēge'],['很','hěn'],['高兴','gāoxìng']]},
+ {e:'😠',end:'。',en:'My younger brother got angry.',w:[['我','wǒ'],['弟弟','dìdi'],['生气','shēngqì'],['了','le']]},
+ {e:'🍚',end:'。',en:'I like to eat.',w:[['我','wǒ'],['喜欢','xǐhuan'],['吃饭','chī fàn']]},
+ {e:'🍽️',end:'。',en:'We eat together.',w:[['我们','wǒmen'],['一起','yìqǐ'],['吃饭','chī fàn']]},
+ {e:'🥤',end:'。',en:'I want to drink cola.',w:[['我','wǒ'],['想','xiǎng'],['喝','hē'],['可乐','kělè']]},
+ {e:'🥤',end:'。',en:'I like to drink cola.',w:[['我','wǒ'],['喜欢','xǐhuan'],['喝','hē'],['可乐','kělè']]},
+ {e:'🥟',end:'。',en:'I like to eat steamed buns.',w:[['我','wǒ'],['喜欢','xǐhuan'],['吃','chī'],['包子','bāozi']]},
+ {e:'🥟',end:'。',en:'I like to eat dumplings.',w:[['我','wǒ'],['喜欢','xǐhuan'],['吃','chī'],['饺子','jiǎozi']]},
+ {e:'😋',end:'。',en:'Steamed buns are delicious.',w:[['包子','bāozi'],['很','hěn'],['好吃','hǎochī']]},
+ {e:'😋',end:'。',en:'Dumplings are extremely delicious.',w:[['饺子','jiǎozi'],['非常','fēicháng'],['好吃','hǎochī']]},
+ {e:'🥟',end:'。',en:'This dumpling is delicious.',w:[['这个','zhège'],['饺子','jiǎozi'],['很','hěn'],['好吃','hǎochī']]},
+ {e:'🐢',end:'。',en:'Please eat slowly.',w:[['请','qǐng'],['慢慢','mànmàn'],['吃','chī']]},
+ {e:'⚡',end:'！',en:'Eat quickly!',w:[['快点','kuàidiǎn'],['吃','chī']]},
+ {e:'🥤',end:'。',en:'We drink cola together.',w:[['我们','wǒmen'],['一起','yìqǐ'],['喝','hē'],['可乐','kělè']]},
+ {e:'🥤',end:'？',en:'What do you drink?',w:[['你','nǐ'],['喝','hē'],['什么','shénme']]},
+ {e:'🍚',end:'？',en:'What do you eat?',w:[['你','nǐ'],['吃','chī'],['什么','shénme']]},
+ {e:'🙅',end:'。',en:'I don’t want to eat.',w:[['我','wǒ'],['不想','bù xiǎng'],['吃','chī']]},
+ {e:'🚫',end:'。',en:'I don’t drink cola.',w:[['我','wǒ'],['不','bù'],['喝','hē'],['可乐','kělè']]},
+ {e:'📖',end:'。',en:'I read a book.',w:[['我','wǒ'],['看','kàn'],['书','shū']]},
+ {e:'📚',end:'。',en:'I like to read books.',w:[['我','wǒ'],['喜欢','xǐhuan'],['看','kàn'],['书','shū']]},
+ {e:'📖',end:'。',en:'Older brother is reading now.',w:[['哥哥','gēge'],['现在','xiànzài'],['看','kàn'],['书','shū']]},
+ {e:'🏫',end:'。',en:'The teacher is at school.',w:[['老师','lǎoshī'],['在','zài'],['学校','xuéxiào']]},
+ {e:'🤫',end:'。',en:'The students are all quiet.',w:[['学生','xuésheng'],['们','men'],['都','dōu'],['很','hěn'],['安静','ānjìng']]},
+ {e:'💡',end:'。',en:'I know.',w:[['我','wǒ'],['知道','zhīdào']]},
+ {e:'🤷',end:'。',en:'I don’t know.',w:[['我','wǒ'],['不','bù'],['知道','zhīdào']]},
+ {e:'💡',end:'。',en:'I understand now.',w:[['我','wǒ'],['明白','míngbai'],['了','le']]},
+ {e:'❓',end:'。',en:'I don’t understand.',w:[['我','wǒ'],['不','bù'],['明白','míngbai']]},
+ {e:'👍',end:'。',en:'I think it’s very good.',w:[['我','wǒ'],['觉得','juéde'],['很','hěn'],['好','hǎo']]},
+ {e:'🥟',end:'。',en:'I think dumplings are delicious.',w:[['我','wǒ'],['觉得','juéde'],['饺子','jiǎozi'],['很','hěn'],['好吃','hǎochī']]},
+ {e:'🤔',end:'？',en:'What do you think?',w:[['你','nǐ'],['觉得','juéde'],['呢','ne']]},
+ {e:'✅',end:'。',en:'This is correct.',w:[['这','zhè'],['是','shì'],['对的','duìde']]},
+ {e:'❌',end:'。',en:'That is wrong.',w:[['那','nà'],['是','shì'],['错的','cuòde']]},
+ {e:'👌',end:'！',en:'OK, sure!',w:[['好的','hǎode']]},
+ {e:'😮',end:'？',en:'Really?',w:[['真的','zhēnde'],['吗','ma']]},
+ {e:'🚪',end:'。',en:'Please open the door.',w:[['请','qǐng'],['开','kāi'],['门','mén']]},
+ {e:'🔔',end:'。',en:'The teacher has come.',w:[['老师','lǎoshī'],['来','lái'],['了','le']]},
+ {e:'🚶',end:'。',en:'He has left.',w:[['他','tā'],['走','zǒu'],['了','le']]},
+ {e:'🚗',end:'？',en:'Do you have a car?',w:[['你','nǐ'],['有','yǒu'],['车','chē'],['吗','ma']]},
+ {e:'💰',end:'？',en:'How much is this?',w:[['这个','zhège'],['多少','duōshao']]},
+ {e:'👋',end:'！',en:'See you later!',w:[['以后','yǐhòu'],['再见','zàijiàn']]},
+ {e:'💪',end:'！',en:'Keep it up! You’re awesome!',w:[['加油','jiāyóu'],['！',''],['你','nǐ'],['很','hěn'],['厉害','lìhai']]},
+ {e:'🙏',end:'！',en:'Thanks for your hard work!',w:[['你','nǐ'],['辛苦','xīnkǔ'],['了','le']]},
+ {e:'📅',end:'。',en:'I hate Thursday.',w:[['我','wǒ'],['讨厌','tǎoyàn'],['星期四','xīngqīsì']]},
+ {e:'📅',end:'。',en:'It is Wednesday now.',w:[['现在','xiànzài'],['是','shì'],['星期三','xīngqīsān']]},
+];
+
+const DATA2 = [
+ {e:'🔢',end:'！',en:'One, two, three, four, five!',w:[['一','yī'],['，',''],['二','èr'],['，',''],['三','sān'],['，',''],['四','sì'],['，',''],['五','wǔ']]},
+ {e:'🔢',end:'！',en:'Six, seven, eight, nine, ten!',w:[['六','liù'],['，',''],['七','qī'],['，',''],['八','bā'],['，',''],['九','jiǔ'],['，',''],['十','shí']]},
+ {e:'📅',end:'。',en:'Today is August 3rd.',w:[['今天','jīntiān'],['是','shì'],['八','bā'],['月','yuè'],['三','sān'],['号','hào']]},
+ {e:'🎂',end:'？',en:'How old are you?',w:[['你','nǐ'],['几','jǐ'],['岁','suì']]},
+ {e:'🎂',end:'。',en:'I am ten years old.',w:[['我','wǒ'],['十','shí'],['岁','suì']]},
+ {e:'🥤',end:'。',en:'This cup is very small.',w:[['这个','zhège'],['杯子','bēizi'],['很','hěn'],['小','xiǎo']]},
+ {e:'📅',end:'。',en:'Yesterday was Wednesday, today is Thursday.',w:[['昨天','zuótiān'],['是','shì'],['星期三','xīngqīsān'],['，',''],['今天','jīntiān'],['是','shì'],['星期四','xīngqīsì']]},
+ {e:'🍳',end:'。',en:'In the morning I eat breakfast.',w:[['早上','zǎoshang'],['我','wǒ'],['吃','chī'],['早饭','zǎofàn']]},
+ {e:'🍚',end:'。',en:'At noon I eat lunch.',w:[['中午','zhōngwǔ'],['我','wǒ'],['吃','chī'],['午饭','wǔfàn']]},
+ {e:'🍜',end:'。',en:'In the evening I eat dinner.',w:[['晚上','wǎnshang'],['我','wǒ'],['吃','chī'],['晚饭','wǎnfàn']]},
+ {e:'🍽️',end:'？',en:'Have you eaten?',w:[['你','nǐ'],['吃饭','chīfàn'],['了','le'],['吗','ma']]},
+ {e:'🥐',end:'？',en:'Have you had breakfast?',w:[['你','nǐ'],['吃','chī'],['早饭','zǎofàn'],['了','le'],['吗','ma']]},
+ {e:'🍴',end:'？',en:'What do you eat?',w:[['你','nǐ'],['吃','chī'],['什么','shénme']]},
+ {e:'🏠',end:'？',en:'When are you going home?',w:[['你','nǐ'],['什么','shénme'],['时候','shíhou'],['回','huí'],['家','jiā']]},
+ {e:'🏠',end:'。',en:'He is going home tomorrow.',w:[['他','tā'],['明天','míngtiān'],['回','huí'],['家','jiā']]},
+ {e:'📍',end:'？',en:'Where are you going?',w:[['你','nǐ'],['去','qù'],['哪儿','nǎr']]},
+ {e:'🏬',end:'。',en:'I’m going to the store.',w:[['我','wǒ'],['去','qù'],['商店','shāngdiàn']]},
+ {e:'🏬',end:'？',en:'Where is the shop?',w:[['商店','shāngdiàn'],['在','zài'],['哪儿','nǎr']]},
+ {e:'🏥',end:'？',en:'Where is the hospital?',w:[['医院','yīyuàn'],['在','zài'],['哪儿','nǎr']]},
+ {e:'🏥',end:'。',en:'The hospital is in front, the shop is behind.',w:[['医院','yīyuàn'],['在','zài'],['前面','qiánmiàn'],['，',''],['商店','shāngdiàn'],['在','zài'],['后面','hòumiàn']]},
+ {e:'⛰️',end:'。',en:'That mountain is very big.',w:[['那','nà'],['个','gè'],['山','shān'],['很','hěn'],['大','dà']]},
+ {e:'🌸',end:'。',en:'Beijing has a lot of flowers.',w:[['北京','běijīng'],['有','yǒu'],['很','hěn'],['多','duō'],['花','huā']]},
+ {e:'🏙️',end:'。',en:'Beijing is very big.',w:[['北京','běijīng'],['很','hěn'],['大','dà']]},
+ {e:'🏠',end:'。',en:'I live in Beijing.',w:[['我','wǒ'],['住','zhù'],['在','zài'],['北京','běijīng']]},
+ {e:'🏠',end:'？',en:'Where do you live?',w:[['你','nǐ'],['住','zhù'],['在','zài'],['哪儿','nǎr']]},
+ {e:'🐶',end:'。',en:'My family has a puppy.',w:[['我','wǒ'],['家','jiā'],['有','yǒu'],['小狗','xiǎogǒu']]},
+ {e:'🐶',end:'。',en:'The puppy is behind the big tree.',w:[['小狗','xiǎogǒu'],['在','zài'],['大树','dàshù'],['后面','hòumiàn']]},
+ {e:'🐾',end:'。',en:'Everyone likes puppies.',w:[['大家','dàjiā'],['都','dōu'],['喜欢','xǐhuan'],['小狗','xiǎogǒu']]},
+ {e:'🐟',end:'。',en:'It is a fish.',w:[['它','tā'],['是','shì'],['鱼','yú']]},
+ {e:'🐟',end:'。',en:'The fish is in the water.',w:[['鱼','yú'],['在','zài'],['水','shuǐ'],['里','lǐ']]},
+ {e:'🍎',end:'。',en:'The fruit is on the table.',w:[['水果','shuǐguǒ'],['在','zài'],['桌子','zhuōzi'],['上','shàng']]},
+ {e:'☕',end:'。',en:'The cup is on the table.',w:[['杯子','bēizi'],['在','zài'],['桌子','zhuōzi'],['上','shàng']]},
+ {e:'📖',end:'。',en:'The book is under the table.',w:[['书','shū'],['在','zài'],['桌子','zhuōzi'],['下','xià']]},
+ {e:'💻',end:'。',en:'I have a computer.',w:[['我','wǒ'],['有','yǒu'],['一','yī'],['个','gè'],['电脑','diànnǎo']]},
+ {e:'📺',end:'。',en:'I watch TV.',w:[['我','wǒ'],['看','kàn'],['电视','diànshì']]},
+ {e:'🎬',end:'。',en:'We watch a movie.',w:[['我们','wǒmen'],['看','kàn'],['电影','diànyǐng']]},
+ {e:'📞',end:'。',en:'He makes a phone call.',w:[['他','tā'],['打电话','dǎdiànhuà']]},
+ {e:'☎️',end:'！',en:'Hello! (on the phone) Hi!',w:[['喂','wèi'],['，',''],['你好','nǐhǎo']]},
+ {e:'✍️',end:'。',en:'I write characters.',w:[['我','wǒ'],['写','xiě'],['字','zì']]},
+ {e:'📝',end:'。',en:'I study writing characters.',w:[['我','wǒ'],['学习','xuéxí'],['写','xiě'],['字','zì']]},
+ {e:'🗣️',end:'？',en:'Can you speak Chinese?',w:[['你','nǐ'],['会','huì'],['说','shuō'],['汉语','hànyǔ'],['吗','ma']]},
+ {e:'🗣️',end:'。',en:'I can speak a little Chinese.',w:[['我','wǒ'],['会','huì'],['说','shuō'],['一点儿','yìdiǎnr'],['汉语','hànyǔ']]},
+ {e:'🗣️',end:'。',en:'He can speak Chinese.',w:[['他','tā'],['能','néng'],['说','shuō'],['汉语','hànyǔ']]},
+ {e:'📚',end:'？',en:'What book are you reading?',w:[['你','nǐ'],['读','dú'],['什么','shénme'],['书','shū']]},
+ {e:'📖',end:'。',en:'I am reading this book.',w:[['我','wǒ'],['读','dú'],['这','zhè'],['本','běn'],['书','shū']]},
+ {e:'👂',end:'。',en:'I listen to you.',w:[['我','wǒ'],['听','tīng'],['你','nǐ'],['说','shuō']]},
+ {e:'💰',end:'？',en:'How much is this?',w:[['这个','zhège'],['多少钱','duōshǎoqián']]},
+ {e:'💰',end:'？',en:'How much are the apples?',w:[['苹果','píngguǒ'],['多少钱','duōshǎoqián']]},
+ {e:'💴',end:'。',en:'Five yuan.',w:[['五','wǔ'],['块','kuài'],['钱','qián']]},
+ {e:'👴',end:'？',en:'Who is your teacher?',w:[['谁','shuí'],['是','shì'],['你','nǐ'],['的','de'],['老师','lǎoshī']]},
+ {e:'🛍️',end:'？',en:'What do you want to buy?',w:[['你','nǐ'],['想','xiǎng'],['买','mǎi'],['什么','shénme'],['东西','dōngxi']]},
+ {e:'🍇',end:'。',en:'I want to buy some fruit.',w:[['我','wǒ'],['想','xiǎng'],['买','mǎi'],['一','yī'],['些','xiē'],['水果','shuǐguǒ']]},
+ {e:'👥',end:'。',en:'There are many people in the shop.',w:[['商店','shāngdiàn'],['里','lǐ'],['有','yǒu'],['很','hěn'],['多','duō'],['人','rén']]},
+ {e:'🍏',end:'。',en:'There are plenty of apples.',w:[['苹果','píngguǒ'],['不','bù'],['少','shǎo']]},
+ {e:'🏷️',end:'？',en:'What is your name?',w:[['你','nǐ'],['叫','jiào'],['什么','shénme'],['名字','míngzi']]},
+ {e:'🙋',end:'。',en:'Hello, sir.',w:[['你好','nǐhǎo'],['，',''],['先生','xiānsheng']]},
+ {e:'🙋',end:'。',en:'Hello, miss.',w:[['你好','nǐhǎo'],['，',''],['小姐','xiǎojiě']]},
+ {e:'🤝',end:'。',en:'Nice to meet you.',w:[['很','hěn'],['高兴','gāoxìng'],['认识','rènshi'],['你','nǐ']]},
+ {e:'👋',end:'。',en:'He is my classmate.',w:[['他','tā'],['是','shì'],['我','wǒ'],['同学','tóngxué']]},
+ {e:'❓',end:'？',en:'What is this? Who is that?',w:[['这','zhè'],['是','shì'],['什么','shénme'],['？',''],['那','nà'],['是','shì'],['谁','shuí']]},
+ {e:'👦',end:'。',en:'This is my son.',w:[['这','zhè'],['是','shì'],['我','wǒ'],['儿子','érzi']]},
+ {e:'👧',end:'。',en:'That is my daughter.',w:[['那','nà'],['是','shì'],['我','wǒ'],['女儿','nǚér']]},
+ {e:'🙌',end:'！',en:'Hello everyone!',w:[['大家','dàjiā'],['好','hǎo']]},
+ {e:'👗',end:'。',en:'This clothing is very pretty.',w:[['这','zhè'],['衣服','yīfu'],['很','hěn'],['漂亮','piàoliang']]},
+ {e:'🏥',end:'。',en:'I’m going to the hospital to see the doctor.',w:[['我','wǒ'],['去','qù'],['医院','yīyuàn'],['看','kàn'],['医生','yīshēng']]},
+ {e:'👨‍⚕️',end:'。',en:'The doctor works at the hospital.',w:[['医生','yīshēng'],['在','zài'],['医院','yīyuàn'],['工作','gōngzuò']]},
+ {e:'👩‍⚕️',end:'。',en:'He is a doctor, she is a teacher.',w:[['他','tā'],['是','shì'],['医生','yīshēng'],['，',''],['她','tā'],['是','shì'],['老师','lǎoshī']]},
+ {e:'⛅',end:'？',en:'How’s the weather today?',w:[['今天','jīntiān'],['天气','tiānqì'],['怎么样','zěnmeyàng']]},
+ {e:'☀️',end:'。',en:'The weather is very good today.',w:[['今天','jīntiān'],['天气','tiānqì'],['很','hěn'],['好','hǎo']]},
+ {e:'🌧️',end:'？',en:'Will it rain tomorrow?',w:[['明天','míngtiān'],['会','huì'],['下雨','xiàyǔ'],['吗','ma']]},
+ {e:'🌧️',end:'。',en:'It’s raining today.',w:[['今天','jīntiān'],['下雨','xiàyǔ'],['了','le']]},
+ {e:'😴',end:'。',en:'I’m very tired, I want to sleep.',w:[['我','wǒ'],['很','hěn'],['累','lèi'],['，',''],['我','wǒ'],['想','xiǎng'],['睡觉','shuìjiào']]},
+ {e:'🛋️',end:'。',en:'I sit on the chair and sleep.',w:[['我','wǒ'],['坐','zuò'],['在','zài'],['椅子','yǐzi'],['上','shàng'],['睡觉','shuìjiào']]},
+ {e:'🙏',end:'。',en:'Please sit.',w:[['请','qǐng'],['坐','zuò']]},
+ {e:'🍳',end:'？',en:'What are you doing?',w:[['你','nǐ'],['在','zài'],['做','zuò'],['什么','shénme']]},
+ {e:'🍳',end:'。',en:'I am cooking.',w:[['我','wǒ'],['在','zài'],['做','zuò'],['菜','cài']]},
+ {e:'😋',end:'。',en:'This dish is delicious.',w:[['这个','zhège'],['菜','cài'],['很','hěn'],['好吃','hǎochī']]},
+ {e:'🍵',end:'。',en:'We drink tea.',w:[['我们','wǒmen'],['喝','hē'],['茶','chá']]},
+ {e:'🍚',end:'。',en:'Rice is delicious.',w:[['米饭','mǐfàn'],['很','hěn'],['好吃','hǎochī']]},
+ {e:'🍽️',end:'。',en:'We eat at the restaurant.',w:[['我们','wǒmen'],['在','zài'],['饭店','fàndiàn'],['吃饭','chīfàn']]},
+ {e:'🍜',end:'。',en:'This restaurant’s food is delicious.',w:[['这','zhè'],['家','jiā'],['饭店','fàndiàn'],['的','de'],['菜','cài'],['很','hěn'],['好吃','hǎochī']]},
+ {e:'💵',end:'？',en:'Do you have money?',w:[['你','nǐ'],['有','yǒu'],['钱','qián'],['吗','ma']]},
+ {e:'💼',end:'？',en:'Where does he work?',w:[['他','tā'],['在','zài'],['哪儿','nǎr'],['工作','gōngzuò']]},
+ {e:'🚶',end:'？',en:'How do you get to the shop?',w:[['你','nǐ'],['怎么','zěnme'],['去','qù'],['商店','shāngdiàn']]},
+ {e:'🤔',end:'？',en:'What do you think of this?',w:[['你','nǐ'],['觉得','juéde'],['这个','zhège'],['怎么样','zěnmeyàng']]},
+ {e:'👬',end:'。',en:'My friend and I go to the shop together.',w:[['我','wǒ'],['和','hé'],['朋友','péngyou'],['一起','yìqǐ'],['去','qù'],['商店','shāngdiàn']]},
+ {e:'👋',end:'！',en:'Goodbye, see you in a bit!',w:[['再见','zàijiàn'],['，',''],['一会儿见','yīhuǐrjiàn']]},
+ {e:'🙏',end:'！',en:'Thank you!',w:[['谢谢','xièxie'],['你','nǐ']]},
+ {e:'🙅',end:'！',en:'Don’t mention it!',w:[['不谢','búxiè']]},
+ {e:'❤️',end:'。',en:'Mom loves me, I love mom too.',w:[['妈妈','māma'],['爱','ài'],['我','wǒ'],['，',''],['我','wǒ'],['也','yě'],['爱','ài'],['妈妈','māma']]},
+ {e:'⏰',end:'！',en:'See you in five minutes!',w:[['五','wǔ'],['分钟','fēnzhōng'],['以后','yǐhòu'],['见','jiàn']]},
+ {e:'🚗',end:'。',en:'He drives to the shop.',w:[['他','tā'],['开','kāi'],['车','chē'],['去','qù'],['商店','shāngdiàn']]},
+ {e:'🚪',end:'。',en:'Please open the door.',w:[['请','qǐng'],['开','kāi'],['门','mén']]},
+ {e:'🐦',end:'。',en:'I saw a little bird.',w:[['我','wǒ'],['看见','kànjiàn'],['小鸟','xiǎoniǎo'],['了','le']]},
+ {e:'🕐',end:'？',en:'When are you coming?',w:[['你','nǐ'],['什么','shénme'],['时候','shíhou'],['来','lái']]},
+ {e:'🤷',end:'？',en:'Which one do you like?',w:[['你','nǐ'],['喜欢','xǐhuan'],['哪','nǎ'],['个','gè']]},
+ {e:'🍵',end:'？',en:'I want to drink tea, what about you?',w:[['我','wǒ'],['想','xiǎng'],['喝','hē'],['茶','chá'],['，',''],['你','nǐ'],['呢','ne']]},
+ {e:'🇨🇳',end:'。',en:'I have lived in China for three years.',w:[['我','wǒ'],['在','zài'],['中国','zhōngguó'],['住','zhù'],['了','le'],['三','sān'],['年','nián']]},
+ {e:'🌤️',end:'。',en:'The weather has been very good these days.',w:[['这','zhè'],['几','jǐ'],['天','tiān'],['天气','tiānqì'],['都','dōu'],['很','hěn'],['好','hǎo']]},
+ {e:'👪',end:'。',en:'My family has three members.',w:[['我','wǒ'],['家','jiā'],['有','yǒu'],['三','sān'],['口','kǒu'],['人','rén']]},
+];
+
+const GLOSS={
+ '你好':'hello','您好':'polite hello','老师':'teacher','好':'good / well',
+ '早上好':'good morning','晚上好':'good evening','晚安':'good night','谢谢':'thanks',
+ '你':'you','不客气':'you’re welcome','对不起':'sorry','没关系':'it’s okay','再见':'goodbye',
+ '吗':'(question)','我':'I / me','很':'very','也':'also','非常':'extremely',
+ '不太':'not so','不好':'not good','呢':'and…? / (question)','太':'too','累':'tired','了':'(now / done)',
+ '忙':'busy','不忙':'not busy','饿':'hungry','不饿':'not hungry','渴':'thirsty','不渴':'not thirsty',
+ '高兴':'happy','开心':'glad','不高兴':'not happy','生气':'angry','这里':'here','热':'hot','不热':'not hot',
+ '那里':'there','冷':'cold','不冷':'not cold','现在':'now','不累':'not tired',
+ '这':'this','是':'is / to be','爸爸':'dad','那':'that','妈妈':'mom','都':'all / both',
+ '有':'to have','一个':'a / one','哥哥':'older brother','弟弟':'younger brother','在':'at / in',
+ '学校':'school','姐姐':'older sister','漂亮':'beautiful','妹妹':'younger sister','安静':'quiet',
+ '爷爷':'grandpa','奶奶':'grandma','爱人':'spouse','他':'he','朋友':'friend','她':'she','学生':'student',
+ '我们':'we','你们':'you (pl.)','他们':'they','厉害':'awesome','喜欢':'to like','吃饭':'to eat',
+ '一起':'together','想':'to want','喝':'to drink','可乐':'cola','吃':'to eat','包子':'steamed bun',
+ '饺子':'dumpling','好吃':'delicious','这个':'this (one)','请':'please','慢慢':'slowly','快点':'hurry up',
+ '什么':'what','不想':'don’t want','不':'not','看':'to read / look','书':'book','们':'(plural)',
+ '知道':'to know','明白':'to understand','觉得':'to think / feel','对的':'correct','错的':'wrong',
+ '好的':'OK / sure','真的':'really','开':'to open','门':'door','来':'to come','走':'to leave',
+ '车':'car','多少':'how much','以后':'later','加油':'keep it up','辛苦':'hard work','讨厌':'to hate',
+ '星期四':'Thursday','星期三':'Wednesday',
+ '一':'one','一会儿见':'see you in a bit','一点儿':'a little','七':'seven','三':'three',
+ '上':'up / on','下':'under / below','下雨':'to rain','不谢':'don’t mention it','东西':'things',
+ '个':'(measure word)','中午':'noon','中国':'China','九':'nine','买':'to buy','二':'two','五':'five',
+ '些':'some / a few','人':'person','今天':'today','会':'can / to be able to','住':'to live',
+ '做':'to make / to do','儿子':'son','先生':'Mr. / sir','八':'eight','六':'six','写':'to write',
+ '几':'how many','分钟':'minute','前面':'front','北京':'Beijing','医生':'doctor','医院':'hospital',
+ '十':'ten','午饭':'lunch','去':'to go','口':'mouth','叫':'to be called','号':'number / date',
+ '同学':'classmate','名字':'name','后面':'back','听':'to listen','和':'and','哪':'which','哪儿':'where',
+ '商店':'shop','喂':'hello (on phone)','四':'four','回':'to return','坐':'to sit','块':'yuan (money)',
+ '多':'many / much','多少钱':'how much money','大':'big','大家':'everyone','大树':'big tree',
+ '天':'day / sky','天气':'weather','女儿':'daughter','字':'character','学习':'to study','它':'it',
+ '家':'family / home','小':'small','小姐':'miss','小狗':'puppy','小鸟':'little bird','少':'few / little',
+ '山':'mountain','岁':'years old','工作':'work / job','年':'year','怎么':'how','怎么样':'how about',
+ '打电话':'to make a phone call','早上':'morning','早饭':'breakfast','时候':'time','明天':'tomorrow',
+ '昨天':'yesterday','晚上':'evening','晚饭':'dinner','月':'month','本':'(measure word for books)',
+ '杯子':'cup','桌子':'table','椅子':'chair','水':'water','水果':'fruit','汉语':'Chinese (language)',
+ '爱':'love','电影':'film','电脑':'computer','电视':'television','的':'’s (possessive)',
+ '看见':'to see','睡觉':'to sleep','米饭':'rice','能':'can / to be able to','花':'flower',
+ '苹果':'apple','茶':'tea','菜':'dish','衣服':'clothes','见':'to see / meet','认识':'to know / meet',
+ '说':'to say','读':'to read','谁':'who','里':'inside','钱':'money','饭店':'restaurant','鱼':'fish'
+};
+
+const listEl=document.getElementById('list');
+const countEl=document.getElementById('count');
+const barEl=document.getElementById('barfill');
+const emptyEl=document.getElementById('empty');
+const hideBtn=document.getElementById('toggleHide');
+const resetBtn=document.getElementById('resetBtn');
+const recallBtn=document.getElementById('toggleRecall');
+const displayBtn=document.getElementById('toggleDisplayMode');
+const pageBtn1=document.getElementById('pageBtn1');
+const pageBtn2=document.getElementById('pageBtn2');
+const panelToggle=document.getElementById('panelToggle');
+const panelToggleLabel=document.getElementById('panelToggleLabel');
+const controlsPanel=document.getElementById('controlsPanel');
+
+// Page 1 keeps its original (unsuffixed) storage keys so existing saved progress isn't lost.
+// Page 2 gets its own suffixed keys so the two pages track progress independently.
+const PAGE_DATA={1:DATA,2:DATA2};
+function storageKey(base){ return currentPage===1 ? base+'_v1' : base+'_p2_v1'; }
+
+function load(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+let currentPage=load('zh100_page_v1',1);
+let known, hideMode, recallMode, displayMode;
+let revealed=new Set(); // per-card "shown" state (translation) — deliberately NOT saved, resets each session
+let pyRevealed=new Set(); // per-card "pinyin shown" state in english mode — NOT saved, resets each session
+let fileHandle=null; // remembered Save-As file handle — reset whenever the page switches
+
+function loadPageState(){
+  known=new Set(load(storageKey('zh100_known'),[]));
+  hideMode=load(storageKey('zh100_hide'),false);
+  recallMode=load(storageKey('zh100_recall'),false);
+  displayMode=load(storageKey('zh100_displaymode'),'pinyin');
+  revealed=new Set();
+  pyRevealed=new Set();
+  fileHandle=null;
+}
+loadPageState();
+
+function render(){
+  listEl.innerHTML='';
+  PAGE_DATA[currentPage].forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.className='card'+(known.has(i)?' known':'')+(revealed.has(i)?' revealed':'')+(pyRevealed.has(i)?' pyrevealed':'');
+    let sent='',rows='',plain='';
+    const lastIdx=s.w.length-1;
+    s.w.forEach(([hz,py],wi)=>{
+      const suffix=(wi===lastIdx)?s.end:''; // fuse end punctuation onto last char so it can't wrap alone
+      plain+=hz+suffix;
+      if(py){
+        const gw=GLOSS[hz]||'';
+        sent+=`<span class="word"><span class="py">${py}</span><span class="gw">${gw}</span><span class="hz">${hz}${suffix}</span></span>`;
+        rows+=`<div class="grow"><span class="ghz">${hz}</span><span class="gpy">${py}</span><span class="gen">${GLOSS[hz]||''}</span></div>`;
+      } else sent+=`<span class="punc">${hz}${suffix}</span>`;
+    });
+    card.dataset.zh=plain;
+    card.innerHTML=`
+      <div class="top">
+        <div class="head">
+          <span class="idx">${i+1}</span><span class="emoji">${s.e}</span>
+          <button class="speak" data-i="${i}" aria-label="Play pronunciation">🔊</button>
+        </div>
+        <div class="sentence">${sent}</div>
+        <button class="pinyinBtn" data-i="${i}">🔤 Show Pinyin</button>
+      </div>
+      <div class="bottom">
+        <div class="main">
+          <div class="en">${s.en}</div>
+          <button class="revealBtn" data-i="${i}">👁 Show Translation</button>
+          <div class="know" data-i="${i}">
+            <span class="box">✓</span><span class="lbl">I know this</span>
+          </div>
+        </div>
+        <div class="gloss"><div class="gtitle">Words</div>${rows}</div>
+      </div>`;
+    listEl.appendChild(card);
+  });
+  update();
+}
+function update(){
+  const total=PAGE_DATA[currentPage].length;
+  const n=known.size;
+  countEl.textContent=`${n} / ${total} known`;
+  barEl.style.width=(n/total*100)+'%';
+  document.body.classList.toggle('hideknown',hideMode);
+  hideBtn.classList.toggle('on',hideMode);
+  hideBtn.textContent=hideMode?'Show all':'Hide known';
+  document.body.classList.toggle('recallmode',recallMode);
+  recallBtn.classList.toggle('on',recallMode);
+  recallBtn.textContent=recallMode?'Show English Translation':'Hide English Translation';
+  document.body.classList.toggle('displaymode-english',displayMode==='english');
+  displayBtn.classList.toggle('on',displayMode==='english');
+  displayBtn.textContent=displayMode==='english'?'Display Mode: English (tap for Pinyin)':'Display Mode: Pinyin (tap for English)';
+  pageBtn1.classList.toggle('on',currentPage===1);
+  pageBtn2.classList.toggle('on',currentPage===2);
+  emptyEl.style.display=(hideMode && n===total)?'block':'none';
+}
+// --- speech (Web Speech API, built-in Chinese TTS voice) ---
+let voices=[];
+function loadVoices(){voices=window.speechSynthesis?speechSynthesis.getVoices():[];}
+if('speechSynthesis' in window){
+  loadVoices();
+  speechSynthesis.onvoiceschanged=loadVoices;
+}
+function pickVoice(){
+  return voices.find(v=>v.lang==='zh-CN')||voices.find(v=>v.lang&&v.lang.startsWith('zh'))||null;
+}
+function speak(text,btn){
+  if(!('speechSynthesis' in window)){
+    alert('Voice playback isn\'t supported in this browser.');return;
+  }
+  document.querySelectorAll('.speak.playing').forEach(b=>b.classList.remove('playing'));
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; u.rate=0.82; u.pitch=1;
+  const v=pickVoice(); if(v)u.voice=v;
+  if(btn){
+    btn.classList.add('playing');
+    u.onend=()=>btn.classList.remove('playing');
+    u.onerror=()=>btn.classList.remove('playing');
+  }
+  speechSynthesis.speak(u);
+}
+
+listEl.addEventListener('click',e=>{
+  const speakBtn=e.target.closest('.speak');
+  if(speakBtn){
+    const card=speakBtn.closest('.card');
+    speak(card.dataset.zh,speakBtn);
+    return;
+  }
+  const revealBtn=e.target.closest('.revealBtn');
+  if(revealBtn){
+    const i=+revealBtn.dataset.i;
+    revealed.add(i);
+    revealBtn.closest('.card').classList.add('revealed');
+    return;
+  }
+  const pinyinBtn=e.target.closest('.pinyinBtn');
+  if(pinyinBtn){
+    const i=+pinyinBtn.dataset.i;
+    pyRevealed.add(i);
+    pinyinBtn.closest('.card').classList.add('pyrevealed');
+    return;
+  }
+  const row=e.target.closest('.know'); if(!row)return;
+  const i=+row.dataset.i;
+  if(known.has(i))known.delete(i); else known.add(i);
+  save(storageKey('zh100_known'),[...known]);
+  row.closest('.card').classList.toggle('known',known.has(i));
+  update();
+});
+hideBtn.addEventListener('click',()=>{hideMode=!hideMode;save(storageKey('zh100_hide'),hideMode);update();});
+resetBtn.addEventListener('click',()=>{
+  known.clear();save(storageKey('zh100_known'),[]);hideMode=false;save(storageKey('zh100_hide'),false);
+  document.querySelectorAll('.card.known').forEach(c=>c.classList.remove('known'));
+  update();
+});
+recallBtn.addEventListener('click',()=>{
+  recallMode=!recallMode;
+  save(storageKey('zh100_recall'),recallMode);
+  revealed.clear(); // fresh recall session: re-hide any translations shown before
+  render();
+});
+displayBtn.addEventListener('click',()=>{
+  displayMode=(displayMode==='english')?'pinyin':'english';
+  save(storageKey('zh100_displaymode'),displayMode);
+  pyRevealed.clear(); // fresh session: re-hide any pinyin shown before
+  render();
+});
+function switchPage(p){
+  if(p===currentPage)return;
+  currentPage=p;
+  save('zh100_page_v1',currentPage);
+  loadPageState();
+  render();
+}
+pageBtn1.addEventListener('click',()=>switchPage(1));
+pageBtn2.addEventListener('click',()=>switchPage(2));
+
+// --- collapsible options panel (header was freezing ~half the screen on mobile) ---
+let panelOpen=load('zh100_panel_open_v1',false);
+function updatePanel(){
+  controlsPanel.classList.toggle('open',panelOpen);
+  panelToggle.classList.toggle('open',panelOpen);
+  panelToggleLabel.textContent=panelOpen?'Hide options':'Show options';
+}
+panelToggle.addEventListener('click',()=>{
+  panelOpen=!panelOpen;
+  save('zh100_panel_open_v1',panelOpen);
+  updatePanel();
+});
+updatePanel();
+
+// --- manual backup/restore (works even if browser storage gets cleared) ---
+const exportBtn=document.getElementById('exportBtn');
+const importBtn=document.getElementById('importBtn');
+const importFile=document.getElementById('importFile');
+
+async function exportProgress(){
+  const data={known:[...known],hideMode,page:currentPage,savedAt:new Date().toISOString()};
+  const text=JSON.stringify(data,null,2);
+  const suggestedName=currentPage===1?'zh100_progress.json':'zh100_progress_p2.json';
+
+  if('showSaveFilePicker' in window){
+    try{
+      if(!fileHandle){
+        fileHandle=await window.showSaveFilePicker({
+          suggestedName,
+          types:[{description:'Progress file',accept:{'application/json':['.json']}}]
+        });
+      }
+      const writable=await fileHandle.createWritable();
+      await writable.write(text);
+      await writable.close();
+      exportBtn.textContent='✅ Saved';
+      setTimeout(()=>exportBtn.textContent='💾 Save progress file',1200);
+      return;
+    }catch(err){
+      if(err && err.name==='AbortError')return; // user cancelled the picker
+      fileHandle=null; // fall through to classic download below
+    }
+  }
+  // Fallback for browsers without the Save-As picker (e.g. Firefox/Safari)
+  const blob=new Blob([text],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=suggestedName;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+exportBtn.addEventListener('click',exportProgress);
+
+importBtn.addEventListener('click',()=>importFile.click());
+importFile.addEventListener('change',()=>{
+  const file=importFile.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      known=new Set(Array.isArray(data.known)?data.known:[]);
+      hideMode=!!data.hideMode;
+      save(storageKey('zh100_known'),[...known]); save(storageKey('zh100_hide'),hideMode);
+      render();
+      alert(`Loaded progress: ${known.size} known sentences.`);
+    }catch(e){alert('That file could not be read as a progress backup.');}
+  };
+  reader.readAsText(file);
+  importFile.value='';
+});
+
+render();
+</script>
+</body>
+</html>
