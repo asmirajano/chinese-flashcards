@@ -4,7 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chinese · Grammar Rules</title>
-<link rel="stylesheet" href="accordion.css">
+<style>
+/*
+  Reusable Accordion Component — shared across all Chinese grammar lesson pages.
+  Include on any lesson page with:
+    <link rel="stylesheet" href="accordion.css">
+  Pair with accordion.js (same folder) for behavior.
+
+  Markup contract (see accordion.js for full docs):
+    <section class="acc" id="..." data-group="intro|learning" data-default-open="true|false">
+      <button class="acc-header" id="..-header" aria-expanded="false" aria-controls="..-body">
+        <span class="acc-chevron" aria-hidden="true">▶</span>
+        <span class="acc-icon">🇷🇺</span>
+        <span class="acc-title">Title</span>
+        <span class="acc-count">(3)</span>
+      </button>
+      <div class="acc-body-wrap">
+        <div class="acc-body" id="..-body" role="region" aria-labelledby="..-header">...</div>
+      </div>
+    </section>
+*/
+
+.acc-toolbar{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 20px;}
+.acc-ctrl{background:var(--card,#fff); border:1.5px solid var(--line,#f0e2d0); color:var(--ink,#22223b);
+  border-radius:12px; padding:9px 14px; font-size:.82rem; font-weight:700; cursor:pointer; transition:.15s;
+  font-family:inherit;}
+.acc-ctrl:hover{border-color:var(--red,#e63946); color:var(--red,#e63946); transform:translateY(-1px);}
+.acc-ctrl:active{transform:translateY(0);}
+.acc-ctrl:focus-visible{outline:2px solid var(--red,#e63946); outline-offset:2px;}
+
+.acc{border:1px solid var(--line,#f0e2d0); border-radius:16px; background:var(--card,#fff);
+  margin-bottom:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.04);
+  transition:box-shadow .2s ease, border-color .2s ease;}
+.acc.acc-open{box-shadow:0 6px 18px rgba(0,0,0,.08); border-color:var(--gold,#f4a259);}
+.acc.acc-flash{animation:acc-flash-anim 1.6s ease;}
+@keyframes acc-flash-anim{
+  0%{box-shadow:0 0 0 4px rgba(244,162,89,.55);}
+  100%{box-shadow:0 2px 8px rgba(0,0,0,.04);}
+}
+
+.acc-header{width:100%; display:flex; align-items:center; gap:10px; background:none; border:none;
+  cursor:pointer; padding:15px 18px; text-align:left; font:inherit; color:inherit; min-height:52px;
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;}
+.acc-header:hover{background:rgba(0,0,0,.025);}
+.acc-header:focus-visible{outline:2px solid var(--red,#e63946); outline-offset:-2px; border-radius:12px;}
+.acc-chevron{flex:none; font-size:.72rem; color:var(--soft,#6c757d); transition:transform .25s ease;
+  display:inline-flex; width:16px; justify-content:center;}
+.acc.acc-open .acc-chevron{transform:rotate(90deg); color:var(--red,#e63946);}
+.acc-icon{flex:none; font-size:1.1rem; line-height:1;}
+.acc-title{flex:1; font-weight:700; font-size:1rem; min-width:0;}
+.acc-count{flex:none; font-size:.82rem; color:var(--soft,#6c757d); font-weight:600;}
+
+.acc-body-wrap{display:grid; grid-template-rows:0fr; transition:grid-template-rows .32s ease;}
+.acc.acc-open .acc-body-wrap{grid-template-rows:1fr;}
+.acc-body{overflow:hidden; min-height:0; padding:0 18px 18px;}
+.acc-body > *:first-child{margin-top:0 !important;}
+
+@media(max-width:620px){
+  .acc-header{padding:14px 14px; gap:8px; min-height:50px;}
+  .acc-title{font-size:.93rem;}
+  .acc-icon{font-size:1rem;}
+  .acc-body{padding:0 14px 16px;}
+  .acc-toolbar{gap:6px;}
+  .acc-ctrl{flex:1 1 auto; font-size:.76rem; padding:9px 8px; text-align:center;}
+}
+
+</style>
 <style>
   :root{
     --red:#e63946; --gold:#f4a259; --ink:#22223b; --soft:#6c757d;
@@ -14,10 +79,11 @@
     --le:#f4a259; --lebg:#fff2e0;
   }
   *{box-sizing:border-box;}
-  html,body{height:100%;}
+  html,body{height:100%; overflow-x:hidden;}
   body{margin:0; font-family:"Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
     background:radial-gradient(1200px 500px at 50% -100px,#fff,#fff7ef); color:var(--ink); line-height:1.6;}
   .wrap{max-width:940px; margin:0 auto; padding:24px 18px 24px; min-height:100vh; display:flex; flex-direction:column;}
+  img,svg{max-width:100%;}
 
   .z{display:inline-flex; flex-direction:column; align-items:center; line-height:1.12; margin:0 3px; vertical-align:bottom;}
   .z .h{font-family:"PingFang SC","Microsoft YaHei","SimSun",serif; font-weight:600;}
@@ -95,12 +161,17 @@
   .clickex .sent{font-size:1.5rem; font-family:"PingFang SC","Microsoft YaHei",serif;}
   .legend{margin-top:10px; font-size:.82rem; display:flex; gap:14px; flex-wrap:wrap;}
 
-  table{width:100%; border-collapse:separate; border-spacing:0; margin-top:8px; border-radius:14px; overflow:hidden;
-    box-shadow:0 3px 10px rgba(0,0,0,.05);}
-  th,td{padding:11px 13px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line);}
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:8px;
+    border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,.05);}
+  table{width:100%; border-collapse:separate; border-spacing:0; border-radius:14px; overflow:hidden;}
+  th,td{padding:11px 13px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); white-space:nowrap;}
   th{background:var(--red); color:#fff; font-size:.88rem;}
   tr:nth-child(even) td{background:#fff;}
   tr:nth-child(odd) td{background:var(--bg);}
+  @media(max-width:620px){
+    .table-scroll::after{content:"→ swipe for more"; display:block; text-align:center; font-size:.72rem;
+      color:var(--soft); padding:4px 0 0; background:var(--card);}
+  }
 
   /* ---- PAGINATION ---- */
   .pages{position:relative; flex:1;}
@@ -179,6 +250,32 @@
   .num-card .audio-btn{margin:0;}
   @media(max-width:620px){.num-grid{gap:8px; scroll-snap-type:x proximity;}
     .num-card{padding:10px 4px 8px; min-width:58px;} .num-big{font-size:1.6rem;}}
+
+  /* ---- general mobile tuning ---- */
+  @media(max-width:620px){
+    .wrap{padding:14px 10px 18px;}
+    header{padding:20px 16px; border-radius:16px;}
+    header h1{font-size:1.35rem;}
+    header .sub{font-size:.85rem;}
+    .review-status{gap:6px;}
+    .review-badge, .review-sync-btn{font-size:.74rem; padding:5px 10px;}
+    .ruletitle{font-size:1.3rem; margin:18px 0 4px; line-height:1.3;}
+    .rule-ru-sub{font-size:.85rem;}
+    .builder{padding:14px 10px;}
+    .blocks{gap:6px;}
+    .blk{min-width:96px; padding:10px 10px; font-size:.92rem;}
+    .op{font-size:1.2rem; padding:0 2px;}
+    .tile{padding:14px;}
+    .navbar{padding:9px 10px; gap:6px; border-radius:14px;}
+    .navbtn{padding:8px 12px; font-size:.82rem;}
+    .dots{gap:5px;}
+    .dot-btn{width:8px; height:8px;}
+    .dot-btn.on{width:20px;}
+    .pageof{font-size:.74rem; min-width:auto;}
+    .acc-title{font-size:.9rem;}
+    th,td{padding:9px 10px; font-size:.86rem;}
+    .review-btn{font-size:.88rem; padding:10px 12px;}
+  }
 </style>
 </head>
 <body>
@@ -3100,16 +3197,1270 @@
     if(e.key==='ArrowLeft') goTo(current-1);
   });
 
+  // ---- mobile: make wide tables horizontally scrollable instead of overflowing the page ----
+  document.querySelectorAll('table').forEach(function(t){
+    if(t.parentElement.classList.contains('table-scroll')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'table-scroll';
+    t.parentNode.insertBefore(wrap, t);
+    wrap.appendChild(t);
+  });
+
   goTo(0);
 </script>
-<script src="grammar-glossary.js" defer></script>
-<script src="accordion.js" defer></script>
-<script src="video-data.js"></script>
-<script src="video-sidebar.js" defer></script>
-<script src="zh-glossary-data.js"></script>
-<script src="zh-hover-glossary.js" defer></script>
+<script>
+/*
+  Shared Grammar Terminology panel.
+  Include on any grammar-rule page with:
+    <script src="grammar-glossary.js" defer><\/script>
+  (glossary.js must sit in the same folder as the page, or adjust the src path.)
+
+  Two separate, logically-ordered lists:
+    - POS_TERMS      → Parts of Speech (Части речи) — what a word IS.
+    - SENTENCE_TERMS  → Parts of a Sentence (Члены предложения) — what a word DOES.
+  To add a term later: push a new { en, ru, example } object into whichever list it
+  belongs to, keeping each list ordered from most foundational to most supplementary.
+  New recurring grammar terms introduced by future lessons should be added here so every
+  page — past and future — picks them up automatically the next time it's opened.
+*/
+(function () {
+  if (window.__grammarGlossaryLoaded) return; // avoid double-init if included twice
+  window.__grammarGlossaryLoaded = true;
+
+  // List 1 — Parts of Speech (Части речи): what a word IS, on its own.
+  // Sorted from most foundational (core content words every sentence needs)
+  // to most supplementary (function words, then the English-only footnote).
+  var POS_TERMS = [
+    { en: "Noun", ru: "существительное", example: "дом, студент, яблоко" },
+    { en: "Verb", ru: "глагол", example: "идти, жить, говорить" },
+    { en: "Adjective", ru: "прилагательное", example: "большой, красивый, новый" },
+    { en: "Pronoun", ru: "местоимение", example: "я, он, они" },
+    { en: "Numeral", ru: "числительное", example: "один, второй, сто" },
+    { en: "Adverb", ru: "наречие", example: "быстро, здесь, сегодня" },
+    { en: "Preposition", ru: "предлог", example: "в, на, с" },
+    { en: "Conjunction", ru: "союз", example: "и, а, но, потому что" },
+    { en: "Particle", ru: "частица", example: "же, ли, бы" },
+    { en: "Negation", ru: "отрицание", example: "не, нет" },
+    { en: "Interjection", ru: "междометие", example: "ой, ура, ах" },
+    { en: "Article", ru: "артикль", example: "a, an, the — только в английском, в русском не используется" }
+  ];
+
+  // List 2 — Parts of a Sentence (Члены предложения): what a word DOES
+  // in a specific sentence. Sorted from the two obligatory core roles,
+  // through the object family, to the more specialized modifiers.
+  var SENTENCE_TERMS = [
+    { en: "Subject", ru: "подлежащее", example: "Я, студент, книга" },
+    { en: "Predicate", ru: "сказуемое", example: "читаю, находится, учится" },
+    { en: "Object", ru: "дополнение", example: "книгу, письмо, китайский язык" },
+    { en: "Direct Object (DO)", ru: "прямое дополнение", example: "книгу, ручку, письмо" },
+    { en: "Indirect Object (IO)", ru: "косвенное дополнение", example: "тебе, ему, учителю" },
+    { en: "Adverbial of place", ru: "обстоятельство места", example: "там, здесь, дома" },
+    { en: "Complement (补语)", ru: "дополнительный член (комплемент)", example: "得很好, 得很快" },
+    { en: "Result Complement (结果补语)", ru: "результативный комплемент", example: "写完, 洗干净, 摔破" }
+  ];
+
+  var CSS = ""
+    + ".gg-tab{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:9998;"
+    + "background:linear-gradient(135deg,#e63946,#f4a259);color:#fff;border:none;"
+    + "border-radius:0 12px 12px 0;padding:14px 8px;cursor:pointer;box-shadow:2px 0 12px rgba(0,0,0,.18);"
+    + "font-family:\"Segoe UI\",-apple-system,\"Helvetica Neue\",Arial,sans-serif;font-weight:700;"
+    + "font-size:.72rem;letter-spacing:.5px;writing-mode:vertical-rl;text-orientation:mixed;"
+    + "transition:.18s;line-height:1.3;}"
+    + ".gg-tab:hover{padding-left:12px;box-shadow:4px 0 16px rgba(0,0,0,.26);}"
+    + ".gg-backdrop{position:fixed;inset:0;background:rgba(34,34,59,.35);z-index:9999;"
+    + "opacity:0;pointer-events:none;transition:opacity .2s;}"
+    + ".gg-backdrop.gg-open{opacity:1;pointer-events:auto;}"
+    + ".gg-panel{position:fixed;left:0;top:0;height:100%;width:320px;max-width:86vw;"
+    + "background:#fff7ef;z-index:10000;box-shadow:6px 0 30px rgba(0,0,0,.22);"
+    + "transform:translateX(-100%);transition:transform .25s ease;display:flex;flex-direction:column;"
+    + "font-family:\"Segoe UI\",-apple-system,\"Helvetica Neue\",Arial,sans-serif;color:#22223b;}"
+    + ".gg-panel.gg-open{transform:translateX(0);}"
+    + ".gg-head{background:linear-gradient(135deg,#e63946,#f4a259);color:#fff;padding:16px 18px;"
+    + "display:flex;align-items:center;justify-content:space-between;flex:none;}"
+    + ".gg-head h2{margin:0;font-size:1.05rem;font-weight:800;}"
+    + ".gg-head .gg-sub{font-size:.72rem;opacity:.9;margin-top:2px;font-weight:400;}"
+    + ".gg-close{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5);color:#fff;"
+    + "border-radius:50%;width:28px;height:28px;font-size:1rem;cursor:pointer;line-height:1;flex:none;}"
+    + ".gg-close:hover{background:rgba(255,255,255,.38);}"
+    + ".gg-list{overflow-y:auto;padding:12px 14px 20px;flex:1;}"
+    + ".gg-section-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;"
+    + "color:#e63946;margin:18px 0 4px;padding-bottom:6px;border-bottom:2px solid #f0e2d0;}"
+    + ".gg-section-title:first-child{margin-top:2px;}"
+    + ".gg-section-sub{font-size:.74rem;font-weight:400;text-transform:none;letter-spacing:0;color:#6c757d;"
+    + "display:block;margin-top:2px;}"
+    + ".gg-item{background:#fff;border:1px solid #f0e2d0;border-radius:12px;padding:10px 13px;"
+    + "margin-bottom:9px;box-shadow:0 2px 6px rgba(0,0,0,.04);}"
+    + ".gg-term{font-weight:700;font-size:.92rem;}"
+    + ".gg-term .gg-en{color:#e63946;}"
+    + ".gg-term .gg-dash{color:#6c757d;font-weight:400;margin:0 4px;}"
+    + ".gg-term .gg-ru{color:#4361ee;}"
+    + ".gg-example{margin-top:3px;font-size:.83rem;color:#6c757d;font-style:italic;}"
+    + ".gg-foot{padding:10px 16px 14px;font-size:.72rem;color:#6c757d;text-align:center;flex:none;"
+    + "border-top:1px solid #f0e2d0;}"
+    + "@media(max-width:480px){.gg-tab{font-size:.66rem;padding:12px 6px;}}";
+
+  function injectCss() {
+    var style = document.createElement("style");
+    style.id = "gg-style";
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
+  function buildPanel() {
+    var backdrop = document.createElement("div");
+    backdrop.className = "gg-backdrop";
+
+    var panel = document.createElement("div");
+    panel.className = "gg-panel";
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-label", "Grammar terminology glossary");
+
+    var head = document.createElement("div");
+    head.className = "gg-head";
+    head.innerHTML =
+      '<div><h2>📖 Grammar Terms</h2><div class="gg-sub">Термины грамматики — краткий словарь</div></div>' +
+      '<button class="gg-close" aria-label="Close">✕</button>';
+
+    var list = document.createElement("div");
+    list.className = "gg-list";
+
+    function renderSection(titleHtml, terms) {
+      var title = document.createElement("div");
+      title.className = "gg-section-title";
+      title.innerHTML = titleHtml;
+      list.appendChild(title);
+      terms.forEach(function (t) {
+        var item = document.createElement("div");
+        item.className = "gg-item";
+        item.innerHTML =
+          '<div class="gg-term"><span class="gg-en">' + t.en + '</span>' +
+          '<span class="gg-dash">—</span><span class="gg-ru">' + t.ru + '</span></div>' +
+          '<div class="gg-example">' + t.example + '</div>';
+        list.appendChild(item);
+      });
+    }
+
+    renderSection(
+      '1. Parts of Speech<span class="gg-section-sub">Части речи — what a word IS</span>',
+      POS_TERMS
+    );
+    renderSection(
+      '2. Parts of a Sentence<span class="gg-section-sub">Члены предложения — what a word DOES</span>',
+      SENTENCE_TERMS
+    );
+
+    var foot = document.createElement("div");
+    foot.className = "gg-foot";
+    foot.textContent = "Shared glossary — grows as new terms appear in the lessons";
+
+    panel.appendChild(head);
+    panel.appendChild(list);
+    panel.appendChild(foot);
+
+    var tab = document.createElement("button");
+    tab.className = "gg-tab";
+    tab.textContent = "📖 Grammar Terms";
+    tab.setAttribute("aria-label", "Open grammar terminology glossary");
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(panel);
+    document.body.appendChild(tab);
+
+    function open() {
+      panel.classList.add("gg-open");
+      backdrop.classList.add("gg-open");
+    }
+    function close() {
+      panel.classList.remove("gg-open");
+      backdrop.classList.remove("gg-open");
+    }
+
+    tab.addEventListener("click", open);
+    head.querySelector(".gg-close").addEventListener("click", close);
+    backdrop.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+  }
+
+  function init() {
+    injectCss();
+    buildPanel();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<script>
+/*
+  Reusable Accordion Component — shared across all Chinese grammar lesson pages.
+  Include on any lesson page with:
+    <script src="accordion.js" defer><\/script>
+  Pair with accordion.css (same folder) for styling.
+
+  Markup contract per section:
+    <section class="acc" id="r1-quick-reference" data-group="intro|learning" data-default-open="true|false">
+      <button class="acc-header" id="r1-quick-reference-header" aria-expanded="false" aria-controls="r1-quick-reference-body">
+        <span class="acc-chevron" aria-hidden="true">▶</span>
+        <span class="acc-icon">🔗</span>
+        <span class="acc-title">Quick Reference</span>
+        <span class="acc-count">(3)</span>
+      </button>
+      <div class="acc-body-wrap">
+        <div class="acc-body" id="r1-quick-reference-body" role="region" aria-labelledby="r1-quick-reference-header">
+          ...content...
+        </div>
+      </div>
+    </section>
+
+  Bulk controls — any element with these classes toggles every .acc section within the
+  closest ancestor that has class "page" (falls back to the whole document if none):
+    .acc-expand-all       .acc-collapse-all
+    .acc-expand-learning  .acc-collapse-learning   (only sections with data-group="learning")
+
+  Hash navigation — an id like "#r3-quick-reference" will, on load or hashchange:
+    1) ask window.__grammarGoTo(ruleIndex) to switch to that rule's page, if defined
+    2) force the target section open
+    3) smoothly scroll it into view
+    4) briefly highlight it (.acc-flash)
+
+  State persistence — expand/collapse state is remembered per section id in
+  localStorage (survives reloads). Sections not yet seen fall back to their
+  data-default-open attribute.
+*/
+(function () {
+  if (window.__accordionLoaded) return;
+  window.__accordionLoaded = true;
+
+  var STORAGE_KEY = 'chineseGrammarAccordionState';
+
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function saveState(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    catch (e) { /* localStorage unavailable — state just won't persist across reloads */ }
+  }
+
+  var state = loadState();
+
+  function setOpen(section, open, persist) {
+    var body = section.querySelector('.acc-body');
+    var header = section.querySelector('.acc-header');
+    section.classList.toggle('acc-open', open);
+    if (header) header.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (body) {
+      body.setAttribute('aria-hidden', open ? 'false' : 'true');
+      if (open) body.removeAttribute('inert');
+      else body.setAttribute('inert', '');
+    }
+    if (persist !== false) {
+      state[section.id] = open;
+      saveState(state);
+    }
+  }
+
+  function initSection(section) {
+    var header = section.querySelector('.acc-header');
+    if (!header) return;
+    var stored = state.hasOwnProperty(section.id) ? state[section.id] : (section.dataset.defaultOpen === 'true');
+    setOpen(section, stored, false);
+    header.addEventListener('click', function () {
+      setOpen(section, !section.classList.contains('acc-open'));
+    });
+  }
+
+  function sectionsIn(scope) {
+    return Array.prototype.slice.call((scope || document).querySelectorAll('.acc'));
+  }
+
+  function scopeFor(el) {
+    return (el.closest && el.closest('.page')) || document;
+  }
+
+  function goToHash() {
+    var id = decodeURIComponent(location.hash || '').replace('#', '');
+    if (!id) return;
+    var section = document.getElementById(id);
+    if (!section || !section.classList.contains('acc')) return;
+
+    var m = id.match(/^r(\d+)-/);
+    if (m && typeof window.__grammarGoTo === 'function') {
+      window.__grammarGoTo(parseInt(m[1], 10) - 1);
+    }
+
+    setOpen(section, true);
+
+    setTimeout(function () {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      section.classList.add('acc-flash');
+      setTimeout(function () { section.classList.remove('acc-flash'); }, 1600);
+    }, 60);
+  }
+
+  function ready(fn) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  ready(function () {
+    sectionsIn().forEach(initSection);
+
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      var trigger = t.closest && (
+        t.closest('.acc-expand-all') || t.closest('.acc-collapse-all') ||
+        t.closest('.acc-expand-learning') || t.closest('.acc-collapse-learning')
+      );
+      if (!trigger) return;
+
+      var scope = scopeFor(trigger);
+      var open = trigger.classList.contains('acc-expand-all') || trigger.classList.contains('acc-expand-learning');
+      var learningOnly = trigger.classList.contains('acc-expand-learning') || trigger.classList.contains('acc-collapse-learning');
+
+      sectionsIn(scope)
+        .filter(function (s) { return !learningOnly || s.dataset.group === 'learning'; })
+        .forEach(function (s) { setOpen(s, open); });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('acc-header')) {
+        e.preventDefault();
+        e.target.click();
+      }
+    });
+
+    goToHash();
+    window.addEventListener('hashchange', goToHash);
+  });
+})();
+
+</script>
+<script>
+/*
+  Video recommendation data — the ONLY file you need to touch to change
+  what shows up in the right-hand "Learning Videos" sidebar.
+
+  video-sidebar.js (same folder) is the reusable component; it reads this
+  object and renders whatever topic key matches the current page's
+  data-topic attribute. Add a new page/topic by adding a new key here —
+  no changes to video-sidebar.js required.
+
+  Each entry:
+    title    - short, descriptive label for the card
+    channel  - the recommended channel/creator
+    lang     - 'ru' or 'en' (drives the flag badge)
+    query    - search terms used to build a live, always-valid YouTube
+               search link (channel + topic keywords)
+    thumbClass - one of 'tc-1'..'tc-5', just a color variant for the
+               placeholder thumbnail (swap for a real thumbnail URL by
+               adding a `thumb: "https://..."` field instead)
+
+  NOTE: these point to scoped YouTube searches (channel + exact grammar
+  point) rather than a single pinned video ID, so every link is guaranteed
+  to resolve to real, relevant results even as videos get added/removed/
+  reordered on YouTube. Swap in `thumb`/`url` with a specific video's real
+  thumbnail + watch URL any time — the component doesn't care which you use.
+*/
+(function () {
+  window.VIDEO_RECOMMENDATIONS = {
+
+    'r1': [ // Third tone sandhi
+      { title: 'Third Tone Sandhi Rule — 3rd Tone + 3rd Tone', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese third tone sandhi rule nihao', thumbClass:'tc-1' },
+      { title: 'Mandarin Tone Pairs: Third Tone Changes', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner third tone sandhi tone pairs', thumbClass:'tc-2' },
+      { title: 'Chinese Tone Sandhi for Beginners', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod tone sandhi third tone beginner', thumbClass:'tc-3' },
+      { title: 'Третий тон в китайском — правило сандхи', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский третий тон сандхи правило', thumbClass:'tc-4' },
+      { title: 'Изменение третьего тона в потоке речи', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский третий тон изменение сандхи', thumbClass:'tc-5' }
+    ],
+
+    'r2': [ // 不 tone change before 4th tone
+      { title: '不 (bù) Tone Change Rule Explained', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese bu tone change fourth tone rule', thumbClass:'tc-2' },
+      { title: 'When Does 不 Become bú? Tone Sandhi', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod bu bú tone sandhi fourth tone', thumbClass:'tc-3' },
+      { title: 'Mandarin Tone Changes: 不 Before 4th Tone', channel: 'Grace Mandarin Chinese', lang: 'en', query: 'Grace Mandarin Chinese bu tone change before fourth tone', thumbClass:'tc-4' },
+      { title: 'Изменение тона 不 (bù → bú)', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский 不 bu изменение тона четвертый тон', thumbClass:'tc-5' },
+      { title: '不 перед четвёртым тоном — bú', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 不 bu bú четвертый тон', thumbClass:'tc-1' }
+    ],
+
+    'r3': [ // 了 changes the negation word
+      { title: '了 vs 没 vs 不 — Chinese Negation Explained', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese 了 没 不 negation grammar' , thumbClass:'tc-1'},
+      { title: 'How to Negate Sentences with 没 and 不', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod 没 不 negation beginner', thumbClass:'tc-2' },
+      { title: '没 vs 不 — Beginner Chinese Grammar', channel: 'Grace Mandarin Chinese', lang: 'en', query: 'Grace Mandarin Chinese 没 不 negation', thumbClass:'tc-3' },
+      { title: 'Китайский язык: отрицание 不 и 没', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык отрицание 不 没', thumbClass:'tc-4' },
+      { title: '没 и 不 — как правильно отрицать в китайском', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 没 不 отрицание', thumbClass:'tc-5' }
+    ],
+
+    'r4': [ // No tenses, only the verb
+      { title: 'Chinese Grammar: No Verb Tenses! (了 / 过 / 在)', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese Chinese has no tenses 了 过 在', thumbClass:'tc-2' },
+      { title: 'Understanding Chinese Aspect Particles 了 过 在', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod aspect particles 了 过 在', thumbClass:'tc-3' },
+      { title: 'Talking About Time in Chinese Without Tenses', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner time without tenses 了 过', thumbClass:'tc-4' },
+      { title: 'Как выразить время без времён глагола', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык время без времён глагола 了 过 在', thumbClass:'tc-5' },
+      { title: 'Частицы 了, 过, 在 — вид действия в китайском', channel: 'Магазета', lang: 'ru', query: 'Магазета китайский язык 了 过 在 вид действия', thumbClass:'tc-1' }
+    ],
+
+    'r5': [ // Location: S + 在 + 哪儿/那儿/这儿
+      { title: "How to Say Where Something Is (在 + 哪儿/那儿/这儿)", channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese 在 哪儿 那儿 这儿 location', thumbClass:'tc-3' },
+      { title: "Asking & Answering 'Where' in Chinese", channel: 'Grace Mandarin Chinese', lang: 'en', query: 'Grace Mandarin Chinese where is 在 哪儿', thumbClass:'tc-4' },
+      { title: 'Location Sentences with 在 for Beginners', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod 在 location sentence beginner', thumbClass:'tc-5' },
+      { title: '在 哪儿/那儿/这儿 — где, там, здесь по-китайски', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 在 哪儿 那儿 这儿 где там здесь', thumbClass:'tc-1' },
+      { title: "Как спросить 'где' — 在哪儿", channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык 在哪儿 где находится', thumbClass:'tc-2' }
+    ],
+
+    'r6': [ // S + V + IO + DO
+      { title: 'Chinese Sentences with Two Objects (给 IO + DO)', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese double object 给 indirect direct object', thumbClass:'tc-4' },
+      { title: 'Using 给, 教, 送, 问 with Two Objects', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod 给 教 送 问 double object grammar', thumbClass:'tc-5' },
+      { title: 'Giving and Asking — Double Object Verbs in Chinese', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner double object verbs 给 教 送', thumbClass:'tc-1' },
+      { title: '给 教 送 问 — двойное дополнение в китайском', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 给 教 送 问 двойное дополнение', thumbClass:'tc-2' },
+      { title: 'Косвенное и прямое дополнение в китайском языке', channel: 'Магазета', lang: 'ru', query: 'Магазета китайский косвенное прямое дополнение 给', thumbClass:'tc-3' }
+    ],
+
+    'r7': [ // S + V + O + V + 得 + Complement
+      { title: 'The Complement 得 (de) — How Well You Do Something', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese 得 de complement how well', thumbClass:'tc-5' },
+      { title: 'Degree Complements with 得 Explained', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod degree complement 得 grammar', thumbClass:'tc-1' },
+      { title: 'V + 得 + Adjective — Chinese Manner Complement', channel: 'Grace Mandarin Chinese', lang: 'en', query: 'Grace Mandarin Chinese 得 manner complement adjective', thumbClass:'tc-2' },
+      { title: 'Дополнение степени 得', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык 得 дополнение степени', thumbClass:'tc-3' },
+      { title: '得 — как оценить действие в китайском языке', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 得 оценка действия', thumbClass:'tc-4' }
+    ],
+
+    'r8': [ // 是 vs 很
+      { title: "是 vs 很 — Chinese 'To Be' with Adjectives", channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese 是 很 to be adjectives', thumbClass:'tc-1' },
+      { title: "Why You Don't Need 是 Before Adjectives", channel: 'ChinesePod', lang: 'en', query: 'ChinesePod 是 很 adjectives no shi', thumbClass:'tc-2' },
+      { title: '很 + Adjective — Common Beginner Mistake', channel: 'Grace Mandarin Chinese', lang: 'en', query: 'Grace Mandarin Chinese 很 adjective mistake beginner', thumbClass:'tc-3' },
+      { title: '是 и 很 — глагол-связка', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык 是 很 связка быть', thumbClass:'tc-4' },
+      { title: '是 vs 很 — когда какое слово использовать', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 是 很 разница', thumbClass:'tc-5' }
+    ],
+
+    'r9': [ // Result Complement 结果补语
+      { title: 'Result Complements in Chinese (写完, 洗干净, 摔破)', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese result complement 结果补语 写完 洗干净', thumbClass:'tc-2' },
+      { title: 'Chinese Result Complements Explained', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod result complement grammar 结果补语', thumbClass:'tc-3' },
+      { title: 'Verb + Result — How Chinese Shows Outcome', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner verb result complement outcome', thumbClass:'tc-4' },
+      { title: '结果补语 — результативный комплемент', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 结果补语 результативный комплемент', thumbClass:'tc-5' },
+      { title: 'Результативные морфемы после глагола', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык результативные морфемы 完 干净 破', thumbClass:'tc-1' }
+    ],
+
+    'r10': [ // Directional complement 趋向补语
+      { title: 'Directional Complements in Chinese (上/下/进/出/回/过)', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese directional complement 趋向补语 shang xia jin chu', thumbClass:'tc-3' },
+      { title: 'Simple vs Compound Directional Complements', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod simple compound directional complement lai qu', thumbClass:'tc-4' },
+      { title: 'Verb + 来/去 — Direction Toward or Away from Speaker', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner directional complement lai qu speaker viewpoint', thumbClass:'tc-5' },
+      { title: 'Направительные комплементы 上下进出回过 来去', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский направительный комплемент 上下进出回过 来去', thumbClass:'tc-1' },
+      { title: 'Глаголы движения с 来/去 в китайском', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык глаголы движения 来 去 направление', thumbClass:'tc-2' }
+    ],
+
+    'r11': [ // Measure words 量词
+      { title: 'Chinese Measure Words (量词) for Beginners', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese measure words liangci beginner 个 本 只', thumbClass:'tc-4' },
+      { title: '两 vs 二 — When to Use Which "Two"', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod liang vs er two measure word', thumbClass:'tc-5' },
+      { title: 'The Ultimate Guide to Chinese Measure Words', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner Chinese measure words guide 量词', thumbClass:'tc-1' },
+      { title: 'Счётные слова 量词 в китайском языке', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский счётные слова 量词 个 本 只', thumbClass:'tc-2' },
+      { title: '两 и 二 — разница между "два"', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык 两 二 разница два', thumbClass:'tc-3' }
+    ]
+
+  };
+})();
+
+</script>
+<script>
+/*
+  Learning Videos — right-hand slide-out sidebar.
+  Mirrors the look, behavior and animation of the left "Grammar Terms"
+  panel (grammar-glossary.js) exactly, just anchored to the opposite edge.
+
+  Include on any lesson page with:
+    <script src="video-data.js"><\/script>       (page-specific data — see that file)
+    <script src="video-sidebar.js" defer><\/script>
+
+  How topic detection works (zero config for new pages):
+    - Give each top-level lesson section a `data-topic="r1"` (etc.) attribute
+      and a `.page` class, same convention already used by the accordion
+      component. Whichever `.page` currently has class="active" decides
+      which key is read out of window.VIDEO_RECOMMENDATIONS.
+    - A MutationObserver watches for that "active" class flipping (e.g. when
+      the existing pagination's goTo() runs) and automatically re-renders
+      the video list — no event wiring needed on the page's side.
+    - The panel's subtitle is pulled straight from that page's .ruletitle
+      text, so it always matches whatever's on screen.
+
+  To reuse this on a page with a totally different navigation model (no
+  .page/.active pagination at all), just call window.__videoSidebarRender(key)
+  yourself whenever the topic changes — everything else still works.
+*/
+(function () {
+  if (window.__videoSidebarLoaded) return;
+  window.__videoSidebarLoaded = true;
+
+  var CSS = ""
+    + ".vs-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:9998;"
+    + "background:linear-gradient(135deg,#e63946,#f4a259);color:#fff;border:none;"
+    + "border-radius:12px 0 0 12px;padding:14px 8px;cursor:pointer;box-shadow:-2px 0 12px rgba(0,0,0,.18);"
+    + "font-family:\"Segoe UI\",-apple-system,\"Helvetica Neue\",Arial,sans-serif;font-weight:700;"
+    + "font-size:.72rem;letter-spacing:.5px;writing-mode:vertical-rl;text-orientation:mixed;"
+    + "transition:.18s;line-height:1.3;}"
+    + ".vs-tab:hover{padding-right:12px;box-shadow:-4px 0 16px rgba(0,0,0,.26);}"
+    + ".vs-backdrop{position:fixed;inset:0;background:rgba(34,34,59,.35);z-index:9999;"
+    + "opacity:0;pointer-events:none;transition:opacity .2s;}"
+    + ".vs-backdrop.vs-open{opacity:1;pointer-events:auto;}"
+    + ".vs-panel{position:fixed;right:0;top:0;height:100%;width:340px;max-width:88vw;"
+    + "background:#fff7ef;z-index:10000;box-shadow:-6px 0 30px rgba(0,0,0,.22);"
+    + "transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;"
+    + "font-family:\"Segoe UI\",-apple-system,\"Helvetica Neue\",Arial,sans-serif;color:#22223b;}"
+    + ".vs-panel.vs-open{transform:translateX(0);}"
+    + ".vs-head{background:linear-gradient(135deg,#e63946,#f4a259);color:#fff;padding:16px 18px;"
+    + "display:flex;align-items:center;justify-content:space-between;flex:none;gap:10px;}"
+    + ".vs-head h2{margin:0;font-size:1.05rem;font-weight:800;}"
+    + ".vs-head .vs-sub{font-size:.72rem;opacity:.9;margin-top:2px;font-weight:400;"
+    + "overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}"
+    + ".vs-close{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5);color:#fff;"
+    + "border-radius:50%;width:28px;height:28px;font-size:1rem;cursor:pointer;line-height:1;flex:none;}"
+    + ".vs-close:hover{background:rgba(255,255,255,.38);}"
+    + ".vs-list{overflow-y:auto;padding:12px 14px 20px;flex:1;}"
+    + ".vs-card{background:#fff;border:1px solid #f0e2d0;border-radius:14px;overflow:hidden;"
+    + "margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:.15s;}"
+    + ".vs-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.1);transform:translateY(-1px);}"
+    + ".vs-thumb{position:relative;width:100%;height:96px;display:flex;align-items:center;"
+    + "justify-content:center;font-size:1.8rem;color:#fff;}"
+    + ".vs-thumb.tc-1{background:linear-gradient(135deg,#e63946,#f4a259);}"
+    + ".vs-thumb.tc-2{background:linear-gradient(135deg,#4361ee,#4cc9f0);}"
+    + ".vs-thumb.tc-3{background:linear-gradient(135deg,#2a9d8f,#8ecae6);}"
+    + ".vs-thumb.tc-4{background:linear-gradient(135deg,#f4a259,#f9c74f);}"
+    + ".vs-thumb.tc-5{background:linear-gradient(135deg,#7209b7,#e63946);}"
+    + ".vs-thumb img{width:100%;height:100%;object-fit:cover;}"
+    + ".vs-lang{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.55);border-radius:8px;"
+    + "padding:2px 6px;font-size:.7rem;line-height:1.3;}"
+    + ".vs-body{padding:10px 12px 12px;}"
+    + ".vs-title{font-weight:700;font-size:.88rem;line-height:1.3;margin:0 0 4px;}"
+    + ".vs-channel{font-size:.78rem;color:#6c757d;margin:0 0 10px;}"
+    + ".vs-watch{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#e63946,#f4a259);"
+    + "color:#fff;text-decoration:none;border-radius:10px;padding:7px 12px;font-size:.78rem;font-weight:700;"
+    + "transition:.15s;}"
+    + ".vs-watch:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(230,57,70,.3);}"
+    + ".vs-empty{color:#6c757d;font-size:.88rem;text-align:center;padding:30px 10px;}"
+    + ".vs-foot{padding:10px 16px 14px;font-size:.7rem;color:#6c757d;text-align:center;flex:none;"
+    + "border-top:1px solid #f0e2d0;}"
+    + "@media(max-width:480px){.vs-tab{font-size:.66rem;padding:12px 6px;}.vs-panel{width:88vw;}}";
+
+  function injectCss() {
+    var style = document.createElement("style");
+    style.id = "vs-style";
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
+  function buildPanel() {
+    var backdrop = document.createElement("div");
+    backdrop.className = "vs-backdrop";
+
+    var panel = document.createElement("div");
+    panel.className = "vs-panel";
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-label", "Recommended learning videos");
+
+    var head = document.createElement("div");
+    head.className = "vs-head";
+    head.innerHTML =
+      '<div style="min-width:0"><h2>🎬 Learning Videos</h2><div class="vs-sub" id="vs-sub">Pick a rule to see recommendations</div></div>' +
+      '<button class="vs-close" aria-label="Close">✕</button>';
+
+    var list = document.createElement("div");
+    list.className = "vs-list";
+    list.id = "vs-list";
+
+    var foot = document.createElement("div");
+    foot.className = "vs-foot";
+    foot.textContent = "Curated per grammar rule — 🇷🇺 Russian & 🇬🇧 English picks";
+
+    panel.appendChild(head);
+    panel.appendChild(list);
+    panel.appendChild(foot);
+
+    var tab = document.createElement("button");
+    tab.className = "vs-tab";
+    tab.textContent = "🎬 Learning Videos";
+    tab.setAttribute("aria-label", "Open recommended learning videos");
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(panel);
+    document.body.appendChild(tab);
+
+    function open() {
+      panel.classList.add("vs-open");
+      backdrop.classList.add("vs-open");
+    }
+    function close() {
+      panel.classList.remove("vs-open");
+      backdrop.classList.remove("vs-open");
+    }
+    function toggle() {
+      if (panel.classList.contains("vs-open")) close();
+      else open();
+    }
+
+    tab.addEventListener("click", toggle);
+    head.querySelector(".vs-close").addEventListener("click", close);
+    backdrop.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+    });
+
+    return { list: list, sub: head.querySelector("#vs-sub") };
+  }
+
+  function escapeHtml(s) {
+    return String(s || "").replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function youtubeSearchUrl(entry) {
+    if (entry.url) return entry.url;
+    var q = entry.query || (entry.channel + " " + entry.title);
+    return "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+  }
+
+  function renderCard(entry) {
+    var flag = entry.lang === "ru" ? "🇷🇺" : "🇬🇧";
+    var thumbInner = entry.thumb
+      ? '<img src="' + escapeHtml(entry.thumb) + '" alt="">'
+      : "▶️";
+    var thumbClass = entry.thumb ? "" : (entry.thumbClass || "tc-1");
+    return (
+      '<div class="vs-card">' +
+        '<div class="vs-thumb ' + thumbClass + '">' + thumbInner +
+          '<span class="vs-lang" title="' + (entry.lang === "ru" ? "Russian" : "English") + '">' + flag + '</span>' +
+        '</div>' +
+        '<div class="vs-body">' +
+          '<div class="vs-title">' + escapeHtml(entry.title) + '</div>' +
+          '<div class="vs-channel">' + escapeHtml(entry.channel) + '</div>' +
+          '<a class="vs-watch" href="' + youtubeSearchUrl(entry) + '" target="_blank" rel="noopener noreferrer">▶ Watch on YouTube</a>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  var refs = null;
+
+  function currentTopicKey() {
+    var activePage = document.querySelector(".page.active[data-topic]");
+    return activePage ? activePage.getAttribute("data-topic") : null;
+  }
+
+  function currentTopicLabel() {
+    var activePage = document.querySelector(".page.active");
+    if (!activePage) return "";
+    var titleEl = activePage.querySelector(".ruletitle");
+    return titleEl ? titleEl.textContent.trim() : "";
+  }
+
+  function render(key) {
+    if (!refs) return;
+    key = key || currentTopicKey();
+    var data = (window.VIDEO_RECOMMENDATIONS && window.VIDEO_RECOMMENDATIONS[key]) || [];
+    refs.sub.textContent = currentTopicLabel() || "Pick a rule to see recommendations";
+    if (!data.length) {
+      refs.list.innerHTML = '<div class="vs-empty">No video recommendations yet for this rule.</div>';
+      return;
+    }
+    refs.list.innerHTML = data.map(renderCard).join("");
+  }
+  window.__videoSidebarRender = render;
+
+  function watchTopicChanges() {
+    var pagesWrap = document.querySelector(".pages") || document.body;
+    var observer = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        if (mutations[i].attributeName === "class") { render(); return; }
+      }
+    });
+    observer.observe(pagesWrap, { attributes: true, attributeFilter: ["class"], subtree: true });
+  }
+
+  function init() {
+    injectCss();
+    refs = buildPanel();
+    render();
+    watchTopicChanges();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<script>
+/*
+  Chinese hover-glossary data.
+  Maps every Chinese word/expression used anywhere on Grammar Rules.html
+  to its pinyin (with tone marks) and a short English gloss.
+
+  Used by zh-hover-glossary.js, which wraps matching text in a hoverable
+  span. To teach the glossary a new word, just add a line here — no other
+  file needs to change.
+*/
+(function () {
+  window.ZH_GLOSSARY = {
+    "不客气": ["búkèqì", "you're welcome"],
+    "图书馆": ["túshūguǎn", "library"],
+    "洗手间": ["xǐshǒujiān", "restroom"],
+    "看起来": ["kànqǐlái", "seems; looks like"],
+    "上去": ["shàngqù", "to go up (directional complement)"],
+    "下来": ["xiàlái", "to come down (directional complement)"],
+    "中国": ["zhōngguó", "China"],
+    "中文": ["zhōngwén", "Chinese (language/writing)"],
+    "今天": ["jīntiān", "today"],
+    "作业": ["zuòyè", "homework"],
+    "你好": ["nǐhǎo", "hello"],
+    "写字": ["xiězì", "to write characters"],
+    "出去": ["chūqù", "to go out (directional complement)"],
+    "出来": ["chūlái", "to come out (directional complement)"],
+    "努力": ["nǔlì", "hardworking; effort"],
+    "吃饭": ["chīfàn", "to eat (a meal)"],
+    "哪儿": ["nǎr", "where"],
+    "商店": ["shāngdiàn", "store; shop"],
+    "大家": ["dàjiā", "everyone"],
+    "天气": ["tiānqì", "weather"],
+    "客气": ["kèqì", "polite"],
+    "干净": ["gānjìng", "clean"],
+    "我们": ["wǒmen", "we; us"],
+    "打球": ["dǎqiú", "to play ball/sports"],
+    "明天": ["míngtiān", "tomorrow"],
+    "明白": ["míngbai", "to understand; clear"],
+    "昨天": ["zuótiān", "yesterday"],
+    "杯子": ["bēizi", "cup"],
+    "正在": ["zhèngzài", "currently; in the middle of (doing)"],
+    "汉语": ["hànyǔ", "Chinese (spoken language)"],
+    "汽车": ["qìchē", "car"],
+    "没有": ["méiyǒu", "to not have; there isn't"],
+    "流利": ["liúlì", "fluent"],
+    "现在": ["xiànzài", "now"],
+    "知道": ["zhīdào", "to know"],
+    "秋天": ["qiūtiān", "autumn"],
+    "第一": ["dìyī", "first"],
+    "结果": ["jiéguǒ", "result"],
+    "老师": ["lǎoshī", "teacher"],
+    "英语": ["yīngyǔ", "English (language)"],
+    "苹果": ["píngguǒ", "apple"],
+    "衣服": ["yīfú", "clothes"],
+    "补语": ["bǔyǔ", "complement (grammar term)"],
+    "裙子": ["qúnzi", "skirt"],
+    "起来": ["qǐlái", "up; (inchoative aspect, directional complement)"],
+    "趋向": ["qūxiàng", "direction; tendency"],
+    "路上": ["lùshàng", "on the road; on the way"],
+    "过去": ["guòqù", "to go over there (directional complement)"],
+    "过来": ["guòlái", "to come over here (directional complement)"],
+    "这儿": ["zhèr", "here"],
+    "进来": ["jìnlái", "to come in (directional complement)"],
+    "那儿": ["nàr", "there"],
+    "量词": ["liàngcí", "measure word; classifier"],
+    "银行": ["yínháng", "bank"],
+    "问题": ["wèntí", "question; problem"],
+    "一": ["yī", "one"],
+    "七": ["qī", "seven"],
+    "三": ["sān", "three"],
+    "上": ["shàng", "up; on"],
+    "下": ["xià", "down; under"],
+    "不": ["bù", "not"],
+    "两": ["liǎng", "two (used right before a measure word)"],
+    "个": ["gè", "general measure word"],
+    "九": ["jiǔ", "nine"],
+    "也": ["yě", "also; too"],
+    "书": ["shū", "book"],
+    "了": ["le", "completion/change particle"],
+    "事": ["shì", "matter; affair"],
+    "二": ["èr", "two"],
+    "五": ["wǔ", "five"],
+    "人": ["rén", "person"],
+    "他": ["tā", "he; him"],
+    "件": ["jiàn", "measure word for clothes/matters"],
+    "你": ["nǐ", "you"],
+    "做": ["zuò", "to do; to make"],
+    "八": ["bā", "eight"],
+    "六": ["liù", "six"],
+    "写": ["xiě", "to write"],
+    "冷": ["lěng", "cold"],
+    "凉": ["liáng", "cool"],
+    "出": ["chū", "out"],
+    "十": ["shí", "ten"],
+    "去": ["qù", "to go"],
+    "变": ["biàn", "to change; to become"],
+    "只": ["zhī", "measure word for animals"],
+    "吃": ["chī", "to eat"],
+    "吗": ["ma", "question particle"],
+    "听": ["tīng", "to listen"],
+    "四": ["sì", "four"],
+    "回": ["huí", "to return; measure word for times"],
+    "在": ["zài", "at; in; (progressive aspect marker)"],
+    "坐": ["zuò", "to sit"],
+    "太": ["tài", "too; very"],
+    "她": ["tā", "she; her"],
+    "好": ["hǎo", "good; well"],
+    "学": ["xué", "to study; to learn"],
+    "完": ["wán", "finished; complete (result complement)"],
+    "客": ["kè", "guest (part of 客气)"],
+    "尝": ["cháng", "to taste"],
+    "就": ["jiù", "then; precisely; just"],
+    "张": ["zhāng", "measure word for flat, thin things"],
+    "很": ["hěn", "very"],
+    "得": ["de", "complement particle (\"so...that\")"],
+    "忙": ["máng", "busy"],
+    "快": ["kuài", "fast; quick"],
+    "懂": ["dǒng", "to understand"],
+    "我": ["wǒ", "I; me"],
+    "打": ["dǎ", "to hit; to play (sports)"],
+    "拿": ["ná", "to take; to hold"],
+    "摔": ["shuāi", "to drop/fall (causing damage)"],
+    "支": ["zhī", "measure word for long, thin objects"],
+    "教": ["jiāo", "to teach"],
+    "明": ["míng", "bright (part of 明天/明白)"],
+    "是": ["shì", "to be"],
+    "有": ["yǒu", "to have; there is"],
+    "本": ["běn", "measure word for books/magazines"],
+    "条": ["tiáo", "measure word for long, flexible things"],
+    "来": ["lái", "to come"],
+    "没": ["méi", "not (used with 有 / completed actions)"],
+    "洗": ["xǐ", "to wash"],
+    "渴": ["kě", "thirsty"],
+    "湿": ["shī", "wet"],
+    "狗": ["gǒu", "dog"],
+    "甜": ["tián", "sweet"],
+    "的": ["de", "possessive/descriptive particle"],
+    "知": ["zhī", "to know (part of 知道)"],
+    "短": ["duǎn", "short"],
+    "破": ["pò", "broken (result complement)"],
+    "站": ["zhàn", "to stand; station"],
+    "笔": ["bǐ", "pen"],
+    "第": ["dì", "ordinal prefix (\"the -th\")"],
+    "纸": ["zhǐ", "paper"],
+    "给": ["gěi", "to give; for"],
+    "美": ["měi", "beautiful"],
+    "菜": ["cài", "dish; food; vegetable"],
+    "说": ["shuō", "to speak; to say"],
+    "请": ["qǐng", "please"],
+    "走": ["zǒu", "to walk; to leave"],
+    "起": ["qǐ", "to rise (part of 起来)"],
+    "跑": ["pǎo", "to run"],
+    "辆": ["liàng", "measure word for vehicles"],
+    "过": ["guò", "experiential particle (\"have ever\"); to pass"],
+    "这": ["zhè", "this"],
+    "进": ["jìn", "to enter; in"],
+    "送": ["sòng", "to give (as a gift); to see off"],
+    "钱": ["qián", "money"],
+    "问": ["wèn", "to ask"],
+    "零": ["líng", "zero"],
+    "飞": ["fēi", "to fly"],
+    "饿": ["è", "hungry"],
+    "鱼": ["yú", "fish"],
+    "鸟": ["niǎo", "bird"],
+  };
+})();
+
+</script>
+<script>
+/*
+  Chinese Hover Glossary — one reusable tooltip for every Chinese word/expression
+  on the page.
+
+  How it works (zero config for new content):
+    - window.ZH_GLOSSARY (see zh-glossary-data.js) maps each known Chinese word
+      or fixed expression to [pinyin, english].
+    - On load, every text node in <body> is scanned left-to-right. At each
+      position we try the LONGEST dictionary entry that matches starting
+      there first (so a compound word like 图书馆 wins over matching 图 alone,
+      while something merely adjacent-but-unrelated like 五辆 correctly falls
+      back to matching 五 and 辆 as two separate, independently meaningful
+      hovers). Matches get wrapped in <span class="zh-term">; everything else
+      is left completely untouched.
+    - A single tooltip element is reused for every term — hovering, focusing
+      (Tab key), or tapping (touch) a term shows Chinese + pinyin + English
+      right above/below it.
+    - A MutationObserver re-runs the same scan on anything added later
+      (accordion content that was always in the DOM needs no re-scan, but
+      the Pattern Visualization popups and the two sidebars inject fresh
+      HTML at runtime — this catches those automatically, with no changes
+      needed anywhere else).
+
+  To teach the glossary a new word for future rules, just add a line to
+  window.ZH_GLOSSARY in zh-glossary-data.js — this file never needs to change.
+*/
+(function () {
+  if (window.__zhGlossaryLoaded) return;
+  window.__zhGlossaryLoaded = true;
+
+  var DICT = window.ZH_GLOSSARY || {};
+  var MAX_LEN = 0;
+  for (var k in DICT) { if (k.length > MAX_LEN) MAX_LEN = k.length; }
+  var CJK_TEST = /[一-鿿]/;
+
+  var CSS = ""
+    + ".zh-term{cursor:help; border-bottom:1px dotted rgba(108,117,125,.5); "
+    + "-webkit-tap-highlight-color:transparent;}"
+    + ".zh-term:focus-visible{outline:2px solid var(--red,#e63946); outline-offset:1px; border-radius:2px;}"
+    + "#zh-tip-popover{position:fixed; z-index:99999; max-width:230px; "
+    + "background:var(--card,#fff); color:var(--ink,#22223b); "
+    + "border:1px solid var(--line,#f0e2d0); border-radius:10px; "
+    + "box-shadow:0 8px 24px rgba(0,0,0,.18); padding:9px 12px; "
+    + "font-family:\"Segoe UI\",-apple-system,\"Helvetica Neue\",Arial,sans-serif; "
+    + "font-size:.86rem; line-height:1.35; pointer-events:none; "
+    + "opacity:0; transform:translateY(2px); transition:opacity .12s ease, transform .12s ease;}"
+    + "#zh-tip-popover.zh-tip-open{opacity:1; transform:translateY(0);}"
+    + "#zh-tip-popover .zh-tip-cn{font-weight:800; font-size:1rem; margin-bottom:2px;}"
+    + "#zh-tip-popover .zh-tip-py{color:var(--red,#e63946); font-style:italic; font-weight:600; margin-bottom:2px;}"
+    + "#zh-tip-popover .zh-tip-en{color:var(--soft,#6c757d);}";
+
+  function injectCss() {
+    var style = document.createElement("style");
+    style.id = "zh-tip-style";
+    style.textContent = CSS;
+    document.head.appendChild(style);
+  }
+
+  // ---- tooltip component (single, reused instance) ----
+  var tip, tipCn, tipPy, tipEn, currentTarget = null, tipOpen = false;
+
+  function buildTip() {
+    tip = document.createElement("div");
+    tip.id = "zh-tip-popover";
+    tip.setAttribute("role", "tooltip");
+    tipCn = document.createElement("div"); tipCn.className = "zh-tip-cn";
+    tipPy = document.createElement("div"); tipPy.className = "zh-tip-py";
+    tipEn = document.createElement("div"); tipEn.className = "zh-tip-en";
+    tip.appendChild(tipCn); tip.appendChild(tipPy); tip.appendChild(tipEn);
+    document.body.appendChild(tip);
+  }
+
+  function positionTip(target) {
+    var r = target.getBoundingClientRect();
+    tip.style.left = "0px";
+    tip.style.top = "0px";
+    tip.style.visibility = "hidden";
+    tip.classList.add("zh-tip-open");
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    tip.classList.remove("zh-tip-open");
+
+    var left = r.left + r.width / 2 - tw / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+
+    var top = r.top - th - 8;
+    if (top < 8) top = r.bottom + 8; // not enough room above -> show below
+
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+    tip.style.visibility = "";
+  }
+
+  function showTip(target) {
+    var word = target.getAttribute("data-zh");
+    var entry = DICT[word];
+    if (!entry) return;
+    currentTarget = target;
+    tipCn.textContent = word;
+    tipPy.textContent = entry[0];
+    tipEn.textContent = entry[1];
+    positionTip(target);
+    requestAnimationFrame(function () { tip.classList.add("zh-tip-open"); });
+    tipOpen = true;
+  }
+
+  function hideTip() {
+    if (!tipOpen) return;
+    tip.classList.remove("zh-tip-open");
+    tipOpen = false;
+    currentTarget = null;
+  }
+
+  // ---- wrapping: scan text nodes, wrap dictionary matches ----
+  function shouldSkip(node) {
+    var el = node.nodeType === 1 ? node : node.parentElement;
+    if (!el) return true;
+    return !!el.closest("script, style, textarea, #zh-tip-popover, .zh-term");
+  }
+
+  function findMatch(text, i) {
+    var maxTry = Math.min(MAX_LEN, text.length - i);
+    for (var len = maxTry; len >= 1; len--) {
+      var sub = text.substr(i, len);
+      if (Object.prototype.hasOwnProperty.call(DICT, sub)) return sub;
+    }
+    return null;
+  }
+
+  function wrapTextNode(node) {
+    if (shouldSkip(node)) return;
+    var text = node.nodeValue;
+    if (!text || !CJK_TEST.test(text)) return;
+
+    var frag = null, lastIndex = 0, i = 0, found = false;
+    while (i < text.length) {
+      if (CJK_TEST.test(text[i])) {
+        var match = findMatch(text, i);
+        if (match) {
+          if (!frag) frag = document.createDocumentFragment();
+          if (i > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, i)));
+          var span = document.createElement("span");
+          span.className = "zh-term";
+          span.tabIndex = 0;
+          span.setAttribute("data-zh", match);
+          span.textContent = match;
+          frag.appendChild(span);
+          i += match.length;
+          lastIndex = i;
+          found = true;
+          continue;
+        }
+      }
+      i++;
+    }
+    if (found) {
+      if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      node.parentNode.replaceChild(frag, node);
+    }
+  }
+
+  function walk(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { wrapTextNode(root); return; }
+    if (root.nodeType !== 1) return;
+    if (root.closest && root.closest("script, style, textarea, #zh-tip-popover")) return;
+    var tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return shouldSkip(n) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [];
+    var n;
+    while ((n = tw.nextNode())) nodes.push(n);
+    for (var i = 0; i < nodes.length; i++) wrapTextNode(nodes[i]);
+  }
+
+  // ---- events: hover, keyboard focus, tap ----
+  var isTouch = window.matchMedia && window.matchMedia("(hover: none)").matches;
+
+  document.addEventListener("mouseover", function (e) {
+    if (isTouch) return;
+    var t = e.target.closest && e.target.closest(".zh-term");
+    if (t) showTip(t);
+  });
+  document.addEventListener("mouseout", function (e) {
+    if (isTouch) return;
+    var t = e.target.closest && e.target.closest(".zh-term");
+    if (t) hideTip();
+  });
+  document.addEventListener("focusin", function (e) {
+    var t = e.target.closest && e.target.closest(".zh-term");
+    if (t) showTip(t);
+  });
+  document.addEventListener("focusout", function (e) {
+    var t = e.target.closest && e.target.closest(".zh-term");
+    if (t) hideTip();
+  });
+  document.addEventListener("click", function (e) {
+    if (!isTouch) return;
+    var t = e.target.closest && e.target.closest(".zh-term");
+    if (t) {
+      e.preventDefault();
+      if (tipOpen && currentTarget === t) hideTip();
+      else showTip(t);
+      return;
+    }
+    if (!(e.target.closest && e.target.closest("#zh-tip-popover"))) hideTip();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") hideTip();
+  });
+  window.addEventListener("scroll", hideTip, true);
+  window.addEventListener("resize", hideTip);
+
+  // ---- watch for dynamically injected content (popups, sidebars) ----
+  function observe() {
+    var obs = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        var m = mutations[i];
+        if (m.target && m.target.closest && m.target.closest("#zh-tip-popover")) continue;
+        if (m.type === "childList") {
+          m.addedNodes.forEach(function (node) {
+            if (node.nodeType === 1 && node.id === "zh-tip-popover") return;
+            walk(node);
+          });
+        } else if (m.type === "characterData") {
+          wrapTextNode(m.target);
+        }
+      }
+    });
+    obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  function init() {
+    injectCss();
+    buildTip();
+    walk(document.body);
+    observe();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="zh-rules-sync.js" defer></script>
+<script>
+/*
+  Cross-device "reviewed" tracking for Grammar Rules.html, via Firebase Firestore.
+
+  Mirrors the sync pattern already used in 6_Cards_Sentences/Chinese_Cards_2.html:
+    - Same Firebase project (chinese-flashcards-6e922).
+    - Same sync-code storage key ('zh100_synccode_v1') on purpose, so entering the
+      same code in either app shares one identity — no need to remember two codes.
+    - A SEPARATE Firestore collection ('rules_sync' instead of 'sync') so this
+      app's field names never collide with the sentence app's doc shape.
+    - Same shape: onSnapshot listener applies remote state and re-renders,
+      guarded by `applyingRemote` so that doesn't immediately re-trigger a push.
+
+  Requires (loaded before this file, same order as Chinese_Cards_2.html):
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"><\/script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"><\/script>
+
+  Markup contract:
+    - Header: <span id="reviewBadge"></span> + <button id="rulesSyncBtn"></button>
+    - Per rule: <button class="review-btn" data-rule="r1" onclick="toggleReviewed('r1')">
+*/
+(function () {
+  if (window.__rulesSyncLoaded) return;
+  window.__rulesSyncLoaded = true;
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyAs5erZk85FoC2WT17WWM5iPKoYhF2s1f4",
+    authDomain: "chinese-flashcards-6e922.firebaseapp.com",
+    projectId: "chinese-flashcards-6e922",
+    storageBucket: "chinese-flashcards-6e922.firebasestorage.app",
+    messagingSenderId: "110784026042",
+    appId: "1:110784026042:web:6b46320c6e36aaf233f983"
+  };
+
+  if (typeof firebase === "undefined") {
+    console.warn("Firebase SDK not loaded — cloud sync disabled for Grammar Rules.");
+    return;
+  }
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.firestore();
+
+  function load(k, d) {
+    try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); }
+    catch (e) { return d; }
+  }
+  function save(k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
+  }
+
+  // Same key as Chinese_Cards_2.html on purpose — one sync code, shared identity.
+  var syncCode = load('zh100_synccode_v1', null);
+  var syncDocRef = null, unsubscribeSync = null, applyingRemote = false;
+  var reviewed = new Set(load('rules_reviewed_v1', []));
+
+  var badgeEl, syncBtn;
+
+  function totalRules() {
+    return document.querySelectorAll(".review-btn").length;
+  }
+
+  function render() {
+    document.querySelectorAll(".review-btn").forEach(function (btn) {
+      var id = btn.getAttribute("data-rule");
+      var done = reviewed.has(id);
+      btn.classList.toggle("done", done);
+      btn.textContent = done ? "✅ Reviewed" : "☐ Mark as Reviewed";
+    });
+    if (badgeEl) badgeEl.textContent = reviewed.size + " / " + totalRules() + " reviewed";
+  }
+
+  window.toggleReviewed = function (id) {
+    if (reviewed.has(id)) reviewed.delete(id);
+    else reviewed.add(id);
+    save('rules_reviewed_v1', [...reviewed]);
+    render();
+    pushSync();
+  };
+
+  function applyRemoteData(data) {
+    applyingRemote = true;
+    if (Array.isArray(data.reviewed)) {
+      reviewed = new Set(data.reviewed);
+      save('rules_reviewed_v1', [...reviewed]);
+    }
+    render();
+    applyingRemote = false;
+  }
+
+  function connectSync() {
+    if (unsubscribeSync) { unsubscribeSync(); unsubscribeSync = null; }
+    if (!syncCode) { syncDocRef = null; return; }
+    syncDocRef = db.collection('rules_sync').doc(syncCode);
+    unsubscribeSync = syncDocRef.onSnapshot(function (doc) {
+      if (doc.exists) applyRemoteData(doc.data());
+      else pushSync(); // first device with this code: seed the cloud with local state
+    }, function (err) { console.warn('Cloud sync error:', err); });
+  }
+
+  function pushSync() {
+    if (!syncDocRef || applyingRemote) return;
+    syncDocRef.set({
+      reviewed: [...reviewed],
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true }).catch(function (err) { console.warn('Cloud sync push failed:', err); });
+  }
+
+  function updateSyncBtn() {
+    if (!syncBtn) return;
+    syncBtn.textContent = syncCode ? '🔗 Cloud Sync: On' : '🔗 Cloud Sync: Off';
+    syncBtn.classList.toggle('on', !!syncCode);
+  }
+
+  function setupSyncCode() {
+    var entered = prompt(
+      syncCode
+        ? 'Cloud Sync is ON (code: "' + syncCode + '").\n\nEnter a different code to switch, or clear the box and press OK to turn sync off.\n\nTip: this is the same code as your 100-sentences app — enter the same one there to link both.'
+        : 'Enter a sync code (use the exact same code on every device — and the same one as your 100-sentences app, if you want a single shared code):',
+      syncCode || ''
+    );
+    if (entered === null) return; // cancelled
+    var trimmed = entered.trim();
+    if (!trimmed) {
+      syncCode = null; save('zh100_synccode_v1', null);
+      if (unsubscribeSync) { unsubscribeSync(); unsubscribeSync = null; }
+      syncDocRef = null;
+      updateSyncBtn();
+      return;
+    }
+    if (trimmed.length < 6) { alert('Please use a sync code of at least 6 characters.'); return; }
+    syncCode = trimmed; save('zh100_synccode_v1', syncCode);
+    connectSync();
+    updateSyncBtn();
+  }
+
+  function init() {
+    badgeEl = document.getElementById('reviewBadge');
+    syncBtn = document.getElementById('rulesSyncBtn');
+    render();
+    updateSyncBtn();
+    if (syncBtn) syncBtn.addEventListener('click', setupSyncCode);
+    if (syncCode) connectSync();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+</script>
 </body>
 </html>
