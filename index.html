@@ -182,6 +182,9 @@
     <div class="controls" style="margin-top:8px;">
       <button class="ctrl" id="toggleDisplayMode">Display Mode: Pinyin</button>
     </div>
+    <div class="controls" style="margin-top:8px;">
+      <button class="ctrl" id="syncBtn">🔗 Cloud Sync: Off</button>
+    </div>
   </div>
 </header>
 <main>
@@ -190,9 +193,24 @@
 </main>
 <footer>Tap the box to mark known · autosaves in this browser · use "Save progress file" for a backup you can restore anytime</footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
+// Cloud sync (Firebase Firestore) — lets "I know this" progress follow you across devices
+// when you set the same sync code on each one. See the "🔗 Cloud Sync" button in Options.
+const firebaseConfig = {
+  apiKey: "AIzaSyAs5erZk85FoC2WT17WWM5iPKoYhF2s1f4",
+  authDomain: "chinese-flashcards-6e922.firebaseapp.com",
+  projectId: "chinese-flashcards-6e922",
+  storageBucket: "chinese-flashcards-6e922.firebasestorage.app",
+  messagingSenderId: "110784026042",
+  appId: "1:110784026042:web:6b46320c6e36aaf233f983"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 const DATA = [
- {e:'👋',end:'！',en:'Hello!',label:'This is test card.',w:[['你好','nǐ hǎo']]},
+ {e:'👋',end:'！',en:'Hello!',w:[['你好','nǐ hǎo']]},
  {e:'🙇',end:'！',en:'Hello, teacher! (polite)',w:[['您好','nín hǎo'],['，',''],['老师','lǎoshī']]},
  {e:'👩‍🏫',end:'！',en:'Hello, teacher!',w:[['老师','lǎoshī'],['好','hǎo']]},
  {e:'🌅',end:'！',en:'Good morning!',w:[['早上好','zǎoshang hǎo']]},
@@ -453,6 +471,7 @@ const pageBtn2=document.getElementById('pageBtn2');
 const panelToggle=document.getElementById('panelToggle');
 const panelToggleLabel=document.getElementById('panelToggleLabel');
 const controlsPanel=document.getElementById('controlsPanel');
+const syncBtn=document.getElementById('syncBtn');
 
 // Page 1 keeps its original (unsuffixed) storage keys so existing saved progress isn't lost.
 // Page 2 gets its own suffixed keys so the two pages track progress independently.
@@ -478,6 +497,73 @@ function loadPageState(){
   fileHandle=null;
 }
 loadPageState();
+
+// --- Cloud sync: same code on two devices = same "known" progress, near-real-time ---
+let syncCode=load('zh100_synccode_v1',null);
+let syncDocRef=null;
+let unsubscribeSync=null;
+let applyingRemote=false; // guards against our own pushes re-triggering a re-render loop
+
+function applyRemoteData(data){
+  const prefix=currentPage===1?'p1':'p2';
+  applyingRemote=true;
+  if(Array.isArray(data[prefix+'_known'])){ known=new Set(data[prefix+'_known']); save(storageKey('zh100_known'),[...known]); }
+  if(typeof data[prefix+'_hide']==='boolean'){ hideMode=data[prefix+'_hide']; save(storageKey('zh100_hide'),hideMode); }
+  if(typeof data[prefix+'_recall']==='boolean'){ recallMode=data[prefix+'_recall']; save(storageKey('zh100_recall'),recallMode); }
+  if(typeof data[prefix+'_display']==='string'){ displayMode=data[prefix+'_display']; save(storageKey('zh100_displaymode'),displayMode); }
+  render();
+  applyingRemote=false;
+}
+
+function connectSync(){
+  if(unsubscribeSync){ unsubscribeSync(); unsubscribeSync=null; }
+  if(!syncCode){ syncDocRef=null; return; }
+  syncDocRef=db.collection('sync').doc(syncCode);
+  unsubscribeSync=syncDocRef.onSnapshot(doc=>{
+    if(doc.exists) applyRemoteData(doc.data());
+    else pushSync(); // first device with this code: seed the cloud with local state
+  }, err=>console.warn('Cloud sync error:',err));
+}
+
+function pushSync(){
+  if(!syncDocRef||applyingRemote) return;
+  const prefix=currentPage===1?'p1':'p2';
+  syncDocRef.set({
+    [prefix+'_known']:[...known],
+    [prefix+'_hide']:hideMode,
+    [prefix+'_recall']:recallMode,
+    [prefix+'_display']:displayMode,
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  },{merge:true}).catch(err=>console.warn('Cloud sync push failed:',err));
+}
+
+function updateSyncBtn(){
+  syncBtn.textContent=syncCode?'🔗 Cloud Sync: On':'🔗 Cloud Sync: Off';
+  syncBtn.classList.toggle('on',!!syncCode);
+}
+function setupSyncCode(){
+  const entered=prompt(
+    syncCode
+      ? `Cloud Sync is ON (code: "${syncCode}").\n\nEnter a different code to switch, or clear the box and press OK to turn sync off.`
+      : 'Enter a sync code (use the exact same code on every device you want kept in sync):',
+    syncCode||''
+  );
+  if(entered===null) return; // cancelled
+  const trimmed=entered.trim();
+  if(!trimmed){
+    syncCode=null; save('zh100_synccode_v1',null);
+    if(unsubscribeSync){ unsubscribeSync(); unsubscribeSync=null; }
+    syncDocRef=null;
+    updateSyncBtn();
+    return;
+  }
+  if(trimmed.length<6){ alert('Please use a sync code of at least 6 characters.'); return; }
+  syncCode=trimmed; save('zh100_synccode_v1',syncCode);
+  connectSync();
+  updateSyncBtn();
+}
+syncBtn.addEventListener('click',setupSyncCode);
+updateSyncBtn();
 
 function render(){
   listEl.innerHTML='';
@@ -592,24 +678,28 @@ listEl.addEventListener('click',e=>{
   save(storageKey('zh100_known'),[...known]);
   row.closest('.card').classList.toggle('known',known.has(i));
   update();
+  pushSync();
 });
-hideBtn.addEventListener('click',()=>{hideMode=!hideMode;save(storageKey('zh100_hide'),hideMode);update();});
+hideBtn.addEventListener('click',()=>{hideMode=!hideMode;save(storageKey('zh100_hide'),hideMode);update();pushSync();});
 resetBtn.addEventListener('click',()=>{
   known.clear();save(storageKey('zh100_known'),[]);hideMode=false;save(storageKey('zh100_hide'),false);
   document.querySelectorAll('.card.known').forEach(c=>c.classList.remove('known'));
   update();
+  pushSync();
 });
 recallBtn.addEventListener('click',()=>{
   recallMode=!recallMode;
   save(storageKey('zh100_recall'),recallMode);
   revealed.clear(); // fresh recall session: re-hide any translations shown before
   render();
+  pushSync();
 });
 displayBtn.addEventListener('click',()=>{
   displayMode=(displayMode==='english')?'pinyin':'english';
   save(storageKey('zh100_displaymode'),displayMode);
   pyRevealed.clear(); // fresh session: re-hide any pinyin shown before
   render();
+  pushSync();
 });
 function switchPage(p){
   if(p===currentPage)return;
@@ -617,6 +707,9 @@ function switchPage(p){
   save('zh100_page_v1',currentPage);
   loadPageState();
   render();
+  if(syncDocRef){
+    syncDocRef.get().then(doc=>{ if(doc.exists) applyRemoteData(doc.data()); }).catch(()=>{});
+  }
 }
 pageBtn1.addEventListener('click',()=>switchPage(1));
 pageBtn2.addEventListener('click',()=>switchPage(2));
@@ -693,6 +786,7 @@ importFile.addEventListener('change',()=>{
 });
 
 render();
+connectSync();
 </script>
 </body>
 </html>
