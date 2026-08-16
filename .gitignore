@@ -1,0 +1,23 @@
+# Generated deployment output
+public/
+
+# Dependencies and logs
+node_modules/
+npm-debug.log*
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
+
+# Local credentials and environment
+.env
+.env.*
+sa.json
+*serviceAccount*.json
+*service-account*.json
+
+# Editor and operating-system noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp

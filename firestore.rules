@@ -1,0 +1,55 @@
+rules_version = '2';
+
+// Firestore security rules for project chinese-flashcards-6e922.
+//
+// IMPORTANT — what these rules do and do not give you:
+// there is no Firebase Authentication in these apps. The "sync code" is a shared
+// secret in the document path, so possession of a code IS the authorisation.
+// Newly generated Grammar Rules codes are 24 random characters (~120 bits) and are
+// not practically guessable, but this is not per-user authentication: anyone the
+// code is shared with, deliberately or accidentally, has full read/write access to
+// that one document. If real accounts are ever needed, add Firebase Auth and key
+// documents by request.auth.uid instead of by code.
+//
+// The rules below are deliberately narrow: only the two known collections are
+// reachable, each write is shape-checked, and everything else is denied.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- 100-sentences flashcards app (pre-existing, left as-is) ----
+    // Fields are prefixed p1_/p2_ by that app. Not tightened here because this
+    // task did not cover it and changing it could break the live app.
+    match /sync/{code} {
+      allow read, write: if code.size() >= 6;
+    }
+
+    // ---- Grammar Rules app ----
+    // Document shape: { reviewed: string[], checkboxes: map, updatedAt: timestamp }
+    match /rules_sync/{code} {
+
+      allow read: if code.size() >= 6 && code.size() <= 128;
+
+      allow write: if code.size() >= 6
+                   && code.size() <= 128
+                   // no stray fields may be introduced, even via merge writes
+                   && request.resource.data.keys().hasOnly(['reviewed', 'checkboxes', 'updatedAt'])
+                   && request.resource.data.reviewed is list
+                   // bounds the document size: 11 rules today, room to grow, not unbounded
+                   && request.resource.data.reviewed.size() <= 500
+                   && request.resource.data.checkboxes is map
+                   && request.resource.data.checkboxes.size() <= 500
+                   // the client must use FieldValue.serverTimestamp(), so a client
+                   // cannot backdate or forward-date a write
+                   && request.resource.data.updatedAt == request.time;
+
+      // Progress is never deleted by the app; deletion has to go through the console.
+      allow delete: if false;
+    }
+
+    // ---- everything else is closed ----
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

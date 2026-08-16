@@ -1,0 +1,15 @@
+{
+  "name": "chinese-flashcards-static",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Two static Chinese-learning apps published to GitHub Pages and Firebase Hosting.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "node --check scripts/build.mjs && node --check scripts/validate-static.mjs && node --check zh-rules-sync.js",
+    "test": "node scripts/validate-static.mjs --source",
+    "build": "node scripts/build.mjs",
+    "test:dist": "node scripts/validate-static.mjs --public"
+  }
+}
