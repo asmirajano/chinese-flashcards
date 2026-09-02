@@ -68,7 +68,6 @@
   .acc-toolbar{gap:6px;}
   .acc-ctrl{flex:1 1 auto; font-size:.76rem; padding:9px 8px; text-align:center;}
 }
-
 </style>
 <style>
   :root{
@@ -102,11 +101,6 @@
     cursor:pointer; transition:.15s; font-family:inherit;}
   header .review-sync-btn:hover{background:rgba(255,255,255,.28);}
   header .review-sync-btn.on{background:#fff; color:var(--red);}
-  header .sync-status{font-size:.78rem; font-weight:700; padding:5px 12px; border-radius:20px;
-    white-space:nowrap; border:1px solid rgba(255,255,255,.45); background:rgba(255,255,255,.12);}
-  header .sync-status.saving{opacity:.85;}
-  header .sync-status.on{background:rgba(255,255,255,.28);}
-  header .sync-status.error{background:#fde2e2; color:#a12020; border-color:#f0b4b4;}
   .review-btn{display:block; width:100%; margin:0 0 20px; padding:12px 16px; border:1.5px solid var(--line);
     border-radius:14px; background:var(--card); color:var(--ink); font-weight:700; font-size:.95rem;
     cursor:pointer; transition:.15s; text-align:center; font-family:inherit;}
@@ -263,7 +257,7 @@
     header h1{font-size:1.35rem;}
     header .sub{font-size:.85rem;}
     .review-status{gap:6px;}
-    .review-badge, .review-sync-btn, .sync-status{font-size:.74rem; padding:5px 10px;}
+    .review-badge, .review-sync-btn{font-size:.74rem; padding:5px 10px;}
     .ruletitle{font-size:1.3rem; margin:18px 0 4px; line-height:1.3;}
     .rule-ru-sub{font-size:.85rem;}
     .builder{padding:14px 10px;}
@@ -291,7 +285,6 @@
     <div class="sub">Tones, negation, verb behavior, location, objects, complements &amp; results</div>
     <div class="review-status">
       <span class="review-badge" id="reviewBadge">0 / 11 reviewed</span>
-      <span class="sync-status off" id="rulesSyncStatus" style="display:none"></span>
       <button type="button" class="review-sync-btn" id="rulesSyncBtn">🔗 Cloud Sync: Off</button>
     </div>
   </header>
@@ -3079,6 +3072,692 @@
       </section>
     </div>
 
+
+    <!-- PAGE 12: RULE 12 -->
+    <div class="page" data-title="Rule 12" data-topic="r12">
+      <div class="ruletitle">Rule 12 — State Complement (状态补语, zhuàngtài bǔyǔ)</div>
+      <div class="rule-ru-sub">Это правило про то, как через 得 описать манеру, степень или состояние действия — «как именно» оно делается.</div>
+      <button type="button" class="review-btn" data-rule="r12" onclick="toggleReviewed('r12')">☐ Mark as Reviewed</button>
+
+      <div class="acc-toolbar">
+        <button type="button" class="acc-ctrl acc-expand-all">Expand All</button>
+        <button type="button" class="acc-ctrl acc-collapse-all">Collapse All</button>
+        <button type="button" class="acc-ctrl acc-expand-learning">Expand Learning Sections</button>
+        <button type="button" class="acc-ctrl acc-collapse-learning">Collapse Learning Sections</button>
+      </div>
+
+      <section class="acc" id="r12-summary-ru" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="r12-summary-ru-header" aria-expanded="false" aria-controls="r12-summary-ru-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇷🇺</span>
+          <span class="acc-title">Summary in Russian</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-summary-ru-body" role="region" aria-labelledby="r12-summary-ru-header">
+            <div class="ru-block">
+              <div class="ru-tag">🇷🇺 На русском</div>
+              <p><b>状态补语 (zhuàngtài bǔyǔ)</b> — комплемент состояния. Он описывает <b>манеру, степень или состояние</b> действия: не «что сделал», а <b>как</b> сделал. Ключевой маркер — частица <b>得 (de)</b>, всегда в нейтральном тоне.</p>
+              <p><b>Базовая структура:</b> Глагол / Прилагательное + 得 + Прилагательное / Фраза → 他跑得很快 (tā pǎo de hěn kuài) «он бегает очень быстро».</p>
+              <p><b>Если есть дополнение</b>, между глаголом и 得 оно мешает — поэтому глагол <b>повторяется</b>: 她说中文说得很流利 (tā shuō Zhōngwén shuō de hěn liúlì). Второй вариант — вынести дополнение вперёд: 她中文说得很流利.</p>
+              <p><b>Отрицание:</b> 不 ставится <b>после</b> 得, а не перед глаголом → 他跑得不快 (tā pǎo de bù kuài) «он бегает небыстро».</p>
+              <p><b>Вопрос:</b> либо 吗 в конце (他跑得快吗？), либо повтор прилагательного через 不 (他跑得快不快？).</p>
+              <p>⚠️ Почти всегда после 得 нужен усилитель — 很, 太, 真 и т.п. Просто «他跑得快» звучит незакончённо; норма — 他跑得很快.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-explain-en" data-group="intro" data-default-open="false">
+        <button class="acc-header" id="r12-explain-en-header" aria-expanded="false" aria-controls="r12-explain-en-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇬🇧</span>
+          <span class="acc-title">Explanation in English</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-explain-en-body" role="region" aria-labelledby="r12-explain-en-header">
+            <p class="lead">A <b>state complement (状态补语)</b> describes the <b>manner, degree or state</b> of an action — not <i>what</i> happened, but <i>how</i> it happened. The key marker is the particle <b>得 (de)</b>, always neutral tone.</p>
+            <div class="h2" style="margin-top:16px"><span class="em">🧱</span> The four forms</div>
+            <table>
+              <tr><th>Form</th><th>Structure</th><th>Example</th><th>Meaning</th></tr>
+              <tr>
+                <td><b>Basic</b></td>
+                <td>Verb / Adj + 得 + Adj / Phrase</td>
+                <td><span class="z"><span class="h">他跑得很快。</span><span class="p">tā pǎo de hěn kuài.</span></span></td>
+                <td>He runs very fast.</td>
+              </tr>
+              <tr>
+                <td><b>With object</b></td>
+                <td>S + V + O + V + 得 + …<br>or S + O + V + 得 + …</td>
+                <td><span class="z"><span class="h">她说中文说得很流利。</span><span class="p">tā shuō Zhōngwén shuō de hěn liúlì.</span></span></td>
+                <td>She speaks Chinese fluently.</td>
+              </tr>
+              <tr>
+                <td><b>Negative</b></td>
+                <td>Verb + 得 + 不 + Adj</td>
+                <td><span class="z"><span class="h">他跑得不快。</span><span class="p">tā pǎo de bù kuài.</span></span></td>
+                <td>He doesn't run fast.</td>
+              </tr>
+              <tr>
+                <td><b>Question</b></td>
+                <td>V + 得 + Adj + 吗？<br>or V + 得 + Adj + 不 + Adj？</td>
+                <td><span class="z"><span class="h">他跑得快不快？</span><span class="p">tā pǎo de kuài bu kuài?</span></span></td>
+                <td>Does he run fast (or not)?</td>
+              </tr>
+            </table>
+            <p class="lead" style="margin-top:14px">⚠️ In the affirmative, 得 almost always needs an intensifier after it — <b>很</b>, <b>太…了</b>, <b>真</b>. Bare <span style="color:var(--red)">他跑得快</span> sounds unfinished; <span style="color:var(--red)">他跑得很快</span> is the natural sentence. In the negative and in the A-不-A question this requirement disappears.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-pattern" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="r12-pattern-header" aria-expanded="false" aria-controls="r12-pattern-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🧩</span>
+          <span class="acc-title">Pattern Visualization</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-pattern-body" role="region" aria-labelledby="r12-pattern-header">
+            <div class="builder">
+              <h2>👆 Tap a block to see its job</h2>
+              <div class="hint">得 is the hinge: the action on the left, the assessment of it on the right.</div>
+              <div class="blocks">
+                <div class="blk b-le" onclick="showState('v')">
+                  <div class="lbl">Verb / Adjective</div>
+                  <div class="big">跑</div>
+                  <div class="py2">pǎo — to run</div>
+                </div>
+                <div class="op">+</div>
+                <div class="blk b-mei" onclick="showState('de')">
+                  <div class="lbl">得 (marker)</div>
+                  <div class="big">得</div>
+                  <div class="py2">de — neutral tone</div>
+                </div>
+                <div class="op">+</div>
+                <div class="blk b-bu" onclick="showState('c')">
+                  <div class="lbl">State / Degree</div>
+                  <div class="big">很快</div>
+                  <div class="py2">hěn kuài — very fast</div>
+                </div>
+              </div>
+              <div class="popup3" id="popup12">👆 Tap any block above. Pattern:
+                <span class="z"><span class="h">V / Adj + 得 + 状态</span><span class="p">V / Adj + de + state phrase</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-main-examples" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r12-main-examples-header" aria-expanded="false" aria-controls="r12-main-examples-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🎯</span>
+          <span class="acc-title">Main Examples</span>
+          <span class="acc-count">(3)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-main-examples-body" role="region" aria-labelledby="r12-main-examples-header">
+            <div class="tiles">
+              <div class="tile good">
+                <h3>✅ No object — verb + 得 directly</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">他跑得很快。</span><span class="p">tā pǎo de hěn kuài.</span></span>
+                  <button class="audio-btn" onclick="speak('他跑得很快。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">Nothing sits between 跑 and 得, so no repetition is needed. This is the cleanest form of the pattern.</div>
+              </div>
+              <div class="tile good">
+                <h3>✅ Object present — verb repeats</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">她说中文说得很流利。</span><span class="p">tā shuō Zhōngwén shuō de hěn liúlì.</span></span>
+                  <button class="audio-btn" onclick="speak('她说中文说得很流利。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">说 appears twice: once carrying the object 中文, once again right before 得. Alternative with the object fronted: <span class="z"><span class="h">她中文说得很流利。</span><span class="p">tā Zhōngwén shuō de hěn liúlì.</span></span></div>
+              </div>
+              <div class="tile bad">
+                <h3>❌ Object left in the way, verb not repeated</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">她说中文得很流利。</span><span class="p">tā shuō Zhōngwén de hěn liúlì.</span></span>
+                </div>
+                <div class="gloss">得 can only attach to a verb, never to an object. Either repeat the verb or move the object in front of it.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-more-examples" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r12-more-examples-header" aria-expanded="false" aria-controls="r12-more-examples-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">📚</span>
+          <span class="acc-title">More Examples</span>
+          <span class="acc-count">(6)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-more-examples-body" role="region" aria-labelledby="r12-more-examples-header">
+            <div class="subhead"><span class="em">👩‍🏫</span> The six sentences from class</div>
+            <div class="grid" style="margin-top:8px">
+              <div class="scard">
+                <div class="num">1</div><h3>跑 → 跑得很快</h3>
+                <div class="gloss">run → runs fast</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">他跑得很快。</span><span class="p">tā pǎo de hěn kuài.</span></span>
+                  <button class="audio-btn" onclick="speak('他跑得很快。')" aria-label="Play audio">🔊</button>
+                  <div class="en">He runs very fast.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">2</div><h3>写 → 写得很漂亮</h3>
+                <div class="gloss">write → written beautifully</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">汉字写得很漂亮。</span><span class="p">Hànzì xiě de hěn piàoliang.</span></span>
+                  <button class="audio-btn" onclick="speak('汉字写得很漂亮。')" aria-label="Play audio">🔊</button>
+                  <div class="en">The Chinese characters are written beautifully.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">3</div><h3>说 → 说得很流利</h3>
+                <div class="gloss">speak → speaks fluently</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">她说中文说得很流利。</span><span class="p">tā shuō Zhōngwén shuō de hěn liúlì.</span></span>
+                  <button class="audio-btn" onclick="speak('她说中文说得很流利。')" aria-label="Play audio">🔊</button>
+                  <div class="en">She speaks Chinese fluently.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">4</div><h3>笑 → 笑得很开心</h3>
+                <div class="gloss">laugh → laughs happily</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">孩子笑得很开心。</span><span class="p">Háizi xiào de hěn kāixīn.</span></span>
+                  <button class="audio-btn" onclick="speak('孩子笑得很开心。')" aria-label="Play audio">🔊</button>
+                  <div class="en">The child laughs happily.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">5</div><h3>贵 → 贵得吓人</h3>
+                <div class="gloss">expensive → shockingly expensive</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">这件衣服贵得吓人。</span><span class="p">Zhè jiàn yīfu guì de xiàrén.</span></span>
+                  <button class="audio-btn" onclick="speak('这件衣服贵得吓人。')" aria-label="Play audio">🔊</button>
+                  <div class="en">This piece of clothing is surprisingly expensive.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">6</div><h3>走 → 走得太慢了</h3>
+                <div class="gloss">walk → walks too slowly</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">他走得太慢了。</span><span class="p">tā zǒu de tài màn le.</span></span>
+                  <button class="audio-btn" onclick="speak('他走得太慢了。')" aria-label="Play audio">🔊</button>
+                  <div class="en">He walks too slowly.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="h2 more-block" style="margin-top:22px"><span class="em">📚</span> Examples</div>
+            <table>
+              <tr><th>Chinese</th><th>Pinyin</th><th>English</th><th>Russian</th><th>Что происходит</th><th>Audio</th></tr>
+              <tr><td>他跑得很快。</td><td>tā pǎo de hěn kuài.</td><td>He runs very fast.</td><td class="ru">Он бегает очень быстро.</td><td class="note">Базовая форма: нет дополнения → 跑 сразу присоединяет 得 + 很快.</td><td><button class="audio-btn" onclick="speak('他跑得很快。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>汉字写得很漂亮。</td><td>Hànzì xiě de hěn piàoliang.</td><td>The Chinese characters are written beautifully.</td><td class="ru">Иероглифы написаны очень красиво.</td><td class="note">汉字 вынесено вперёд как тема, поэтому 写 не нужно повторять.</td><td><button class="audio-btn" onclick="speak('汉字写得很漂亮。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>她说中文说得很流利。</td><td>tā shuō Zhōngwén shuō de hěn liúlì.</td><td>She speaks Chinese fluently.</td><td class="ru">Она очень свободно говорит по-китайски.</td><td class="note">Дополнение 中文 стоит между глаголом и 得 → 说 повторяется.</td><td><button class="audio-btn" onclick="speak('她说中文说得很流利。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>孩子笑得很开心。</td><td>Háizi xiào de hěn kāixīn.</td><td>The child laughs happily.</td><td class="ru">Ребёнок смеётся очень радостно.</td><td class="note">得 описывает эмоциональное состояние во время действия, а не его результат.</td><td><button class="audio-btn" onclick="speak('孩子笑得很开心。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>这件衣服贵得吓人。</td><td>Zhè jiàn yīfu guì de xiàrén.</td><td>This piece of clothing is surprisingly expensive.</td><td class="ru">Эта одежда пугающе дорогая.</td><td class="note">Слева от 得 стоит <b>прилагательное</b> (贵), а справа — целая фраза (吓人 «пугает людей»). Значение: «настолько..., что...».</td><td><button class="audio-btn" onclick="speak('这件衣服贵得吓人。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>他走得太慢了。</td><td>tā zǒu de tài màn le.</td><td>He walks too slowly.</td><td class="ru">Он идёт слишком медленно.</td><td class="note">Вместо 很 — усилитель 太…了 («слишком»). Один из усилителей обязателен.</td><td><button class="audio-btn" onclick="speak('他走得太慢了。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>他跑得不快。</td><td>tā pǎo de bù kuài.</td><td>He doesn't run fast.</td><td class="ru">Он бегает небыстро.</td><td class="note">Отрицание: 不 после 得, а не перед глаголом. 他不跑得快 — ошибка.</td><td><button class="audio-btn" onclick="speak('他跑得不快。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>他跑得快不快？</td><td>tā pǎo de kuài bu kuài?</td><td>Does he run fast?</td><td class="ru">Он быстро бегает?</td><td class="note">Вопрос через повтор прилагательного: Adj + 不 + Adj. Здесь 很 не нужно.</td><td><button class="audio-btn" onclick="speak('他跑得快不快？')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-quick-reference" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r12-quick-reference-header" aria-expanded="false" aria-controls="r12-quick-reference-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🔗</span>
+          <span class="acc-title">Quick Reference</span>
+          <span class="acc-count">(4)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-quick-reference-body" role="region" aria-labelledby="r12-quick-reference-header">
+            <table>
+              <tr><th>Form</th><th>Pattern</th><th>Example</th><th>Pinyin</th></tr>
+              <tr><td>Affirmative</td><td>V + 得 + 很 + Adj</td><td><span class="h">他跑得很快。</span></td><td>tā pǎo de hěn kuài.</td></tr>
+              <tr><td>With object</td><td>S + V + O + V + 得 + …</td><td><span class="h">她说中文说得很流利。</span></td><td>tā shuō Zhōngwén shuō de hěn liúlì.</td></tr>
+              <tr><td>Negative</td><td>V + 得 + 不 + Adj</td><td><span class="h">他跑得不快。</span></td><td>tā pǎo de bù kuài.</td></tr>
+              <tr><td>Question</td><td>V + 得 + Adj + 不 + Adj？</td><td><span class="h">他跑得快不快？</span></td><td>tā pǎo de kuài bu kuài?</td></tr>
+            </table>
+
+            <div class="h2" style="margin-top:20px"><span class="em">🔀</span> 得 in the three complement rules</div>
+            <table>
+              <tr><th>Rule</th><th>Type</th><th>Question it answers</th><th>Example</th></tr>
+              <tr><td>Rule 9</td><td>结果补语 — result</td><td>Did the action reach its outcome?</td><td><span class="h">我写完作业。</span> wǒ xiě wán zuòyè</td></tr>
+              <tr><td>Rule 12</td><td>状态补语 — state / manner</td><td><b>How</b> is it done?</td><td><span class="h">他跑得很快。</span> tā pǎo de hěn kuài</td></tr>
+              <tr><td>Rule 13</td><td>可能补语 — potential</td><td><b>Can</b> the outcome be reached?</td><td><span class="h">我看得懂汉字。</span> wǒ kàn de dǒng Hànzì</td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-common-mistakes" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r12-common-mistakes-header" aria-expanded="false" aria-controls="r12-common-mistakes-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">⚠️</span>
+          <span class="acc-title">Common Mistakes</span>
+          <span class="acc-count">(4)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-common-mistakes-body" role="region" aria-labelledby="r12-common-mistakes-header">
+            <table>
+              <tr><th>❌ Wrong</th><th>✅ Right</th><th>Why</th></tr>
+              <tr><td><span class="h">他不跑得快。</span></td><td><span class="h">他跑得不快。</span></td><td>不 goes <b>after</b> 得, negating the state — not in front of the verb.</td></tr>
+              <tr><td><span class="h">他跑得快。</span></td><td><span class="h">他跑得很快。</span></td><td>An affirmative state complement needs an intensifier (很 / 太…了 / 真). Bare adjectives sound cut off.</td></tr>
+              <tr><td><span class="h">她说中文得很流利。</span></td><td><span class="h">她说中文说得很流利。</span></td><td>得 attaches to a verb only. With an object in between, repeat the verb (or front the object).</td></tr>
+              <tr><td><span class="h">他跑的很快。</span></td><td><span class="h">他跑得很快。</span></td><td>Wrong character. 的 is the possessive/descriptive particle; the complement marker is <b>得</b>. Both are pronounced <i>de</i>, so this is a typing mistake, not a hearing one.</td></tr>
+            </table>
+            <p class="lead" style="margin-top:14px">💡 <b>得 is always neutral tone here</b> — <i>de</i>, never <i>dé</i> or <i>děi</i>. The syllable 得 has three readings (de / dé "obtain" / děi "must"); as a complement marker it is always the toneless <i>de</i>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-kettle" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r12-kettle-header" aria-expanded="false" aria-controls="r12-kettle-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🫖</span>
+          <span class="acc-title">For "Чайник"</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-kettle-body" role="region" aria-labelledby="r12-kettle-header">
+            <div class="kettle-block">
+              <div class="kettle-tag">🫖 Для "чайника"</div>
+              <p>Представь, что 得 — это знак «оценка»: слева ты называешь действие, справа ставишь ему оценку. «Бегает 得 очень быстро», «пишет 得 очень красиво», «смеётся 得 очень радостно». Это как в русском наречие: «бегает <i>быстро</i>» — только китайцы вставляют перед оценкой служебное 得.</p>
+              <p>Три вещи, которые нужно запомнить:</p>
+              <p>1️⃣ Оценка почти всегда идёт с усилителем: не «跑得快», а <b>跑得很快</b>. Без 很 фраза звучит как обрубок.</p>
+              <p>2️⃣ Отрицание ставится в <b>оценку</b>, а не в действие: «бегает 得 <b>не</b> быстро» → 跑得不快. Действие-то он совершает — просто плохо.</p>
+              <p>3️⃣ Если между глаголом и оценкой влезло дополнение («говорить <i>по-китайски</i>»), глагол приходится повторить: 说中文<b>说</b>得很流利. Или убрать дополнение вперёд: 中文说得很流利.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-analogue-en" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r12-analogue-en-header" aria-expanded="false" aria-controls="r12-analogue-en-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇬🇧</span>
+          <span class="acc-title">Analogue in English Grammar</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-analogue-en-body" role="region" aria-labelledby="r12-analogue-en-header">
+            <div class="analogue-card en">
+              <div class="a-tag">🇬🇧 English</div>
+              <p>The closest match is the <b>adverb of manner</b> — "fast", "beautifully", "fluently" — which English simply places after the verb phrase with no marker at all. English also has no equivalent of the verb repetition: the object never blocks anything.</p>
+              <p>For the adjective + 得 + phrase variant (贵得吓人), the English analogue is the <b>"so … that"</b> construction: "so expensive it's frightening."</p>
+              <p class="a-ex">他跑得很快 ≈ "He runs very fast" — 得 + 很快 does the job of the adverb "fast."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r12-analogue-ru" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r12-analogue-ru-header" aria-expanded="false" aria-controls="r12-analogue-ru-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇷🇺</span>
+          <span class="acc-title">Analogue in Russian Grammar</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r12-analogue-ru-body" role="region" aria-labelledby="r12-analogue-ru-header">
+            <div class="analogue-card ru">
+              <div class="a-tag">🇷🇺 Русский</div>
+              <p>Ближайший аналог — <b>наречие образа действия</b>: «быстро», «красиво», «свободно». Оно стоит рядом с глаголом без всякого служебного слова, так что точного соответствия частице 得 в русском нет.</p>
+              <p>Для варианта «прилагательное + 得 + фраза» (贵得吓人) аналог — конструкция <b>«такой…, что…»</b>: «такая дорогая, что страшно».</p>
+              <p class="a-ex">他跑得很快 ≈ «Он бегает очень быстро» — наречие «быстро» выполняет роль 得 + 很快.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE 13: RULE 13 -->
+    <div class="page" data-title="Rule 13" data-topic="r13">
+      <div class="ruletitle">Rule 13 — Potential Complement (可能补语, kěnéng bǔyǔ)</div>
+      <div class="rule-ru-sub">Это правило про то, как сказать «могу / не могу» не словом 能, а через 得 и 不 внутри самого глагола.</div>
+      <button type="button" class="review-btn" data-rule="r13" onclick="toggleReviewed('r13')">☐ Mark as Reviewed</button>
+
+      <div class="acc-toolbar">
+        <button type="button" class="acc-ctrl acc-expand-all">Expand All</button>
+        <button type="button" class="acc-ctrl acc-collapse-all">Collapse All</button>
+        <button type="button" class="acc-ctrl acc-expand-learning">Expand Learning Sections</button>
+        <button type="button" class="acc-ctrl acc-collapse-learning">Collapse Learning Sections</button>
+      </div>
+
+      <section class="acc" id="r13-summary-ru" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="r13-summary-ru-header" aria-expanded="false" aria-controls="r13-summary-ru-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇷🇺</span>
+          <span class="acc-title">Summary in Russian</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-summary-ru-body" role="region" aria-labelledby="r13-summary-ru-header">
+            <div class="ru-block">
+              <div class="ru-tag">🇷🇺 На русском</div>
+              <p><b>可能补语 (kěnéng bǔyǔ)</b> — комплемент возможности. Он берёт готовую пару «глагол + результат» (из Правила 9) или «глагол + направление» (из Правила 10) и вставляет между ними <b>得</b> или <b>不</b>:</p>
+              <p>✅ <b>Утверждение:</b> Глагол + <b>得</b> + комплемент → 我看<b>得</b>懂汉字 (wǒ kàn de dǒng Hànzì) «я понимаю иероглифы (могу прочитать и понять)».</p>
+              <p>❌ <b>Отрицание:</b> Глагол + <b>不</b> + комплемент → 我看<b>不</b>懂汉字 (wǒ kàn bu dǒng Hànzì) «я не понимаю иероглифы». Обратите внимание: 得 <b>исчезает</b>, его место занимает 不. Формы 看得不懂 не существует.</p>
+              <p>❓ <b>Вопрос:</b> …吗？или полный повтор: 你看得懂看不懂？(чаще просто 你看得懂吗？)</p>
+              <p>Разница с 能: <b>能</b> — это внешняя возможность или разрешение («мне можно / есть условия»), а <b>得/不</b> внутри глагола — про то, <b>получается ли достичь результата</b>. Поэтому «我可以看汉字» («мне разрешено смотреть на иероглифы») — это <b>не то же самое</b>, что «我看得懂汉字» («я способен их понять»).</p>
+              <p>⚠️ 得 здесь — нейтральный тон <b>de</b>, не <i>dé</i>. В отрицании 不 тоже часто произносится нейтрально: <i>bu</i>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-explain-en" data-group="intro" data-default-open="false">
+        <button class="acc-header" id="r13-explain-en-header" aria-expanded="false" aria-controls="r13-explain-en-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇬🇧</span>
+          <span class="acc-title">Explanation in English</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-explain-en-body" role="region" aria-labelledby="r13-explain-en-header">
+            <p class="lead">A <b>potential complement (可能补语)</b> takes an existing verb + complement pair — either a <b>result complement</b> (Rule 9: 懂, 完, 着) or a <b>directional complement</b> (Rule 10: 下来, 上去, 出来) — and slots <b>得</b> or <b>不</b> in between to say whether the outcome <b>can be achieved</b>.</p>
+            <table>
+              <tr><th>Form</th><th>Structure</th><th>Example</th><th>Meaning</th></tr>
+              <tr>
+                <td>✅ <b>Affirmative</b></td>
+                <td>Verb + <b>得</b> + complement</td>
+                <td><span class="z"><span class="h">我搬得动箱子。</span><span class="p">wǒ bān de dòng xiāngzi.</span></span></td>
+                <td>I can carry the box.</td>
+              </tr>
+              <tr>
+                <td>❌ <b>Negative</b></td>
+                <td>Verb + <b>不</b> + complement</td>
+                <td><span class="z"><span class="h">我搬不动箱子。</span><span class="p">wǒ bān bu dòng xiāngzi.</span></span></td>
+                <td>I can't carry the box.</td>
+              </tr>
+              <tr>
+                <td>❓ <b>Question</b></td>
+                <td>… 吗？ / V得C + V不C？</td>
+                <td><span class="z"><span class="h">你搬得动吗？</span><span class="p">nǐ bān de dòng ma?</span></span></td>
+                <td>Can you carry it?</td>
+              </tr>
+            </table>
+            <p class="lead" style="margin-top:14px">🔑 The negative <b>drops 得 entirely</b> — 不 replaces it. There is no such thing as <span style="color:var(--red)">搬得不动</span>. In everyday speech the negative form (搬不动, 看不懂, 吃不完) is by far the more common of the two.</p>
+            <p class="lead">🔑 <b>得 is neutral tone <i>de</i></b> here, not <i>dé</i>. And 不 in this slot is usually said neutrally too: <i>bān bu dòng</i>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-pattern" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="r13-pattern-header" aria-expanded="false" aria-controls="r13-pattern-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🧩</span>
+          <span class="acc-title">Pattern Visualization</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-pattern-body" role="region" aria-labelledby="r13-pattern-header">
+            <div class="builder">
+              <h2>👆 Tap a block to see its job</h2>
+              <div class="hint">得 or 不 is a switch dropped into the middle of an existing verb + complement pair.</div>
+              <div class="blocks">
+                <div class="blk b-le" onclick="showPotential('v')">
+                  <div class="lbl">Verb</div>
+                  <div class="big">看</div>
+                  <div class="py2">kàn — to look/read</div>
+                </div>
+                <div class="op">+</div>
+                <div class="blk b-mei" onclick="showPotential('switch')">
+                  <div class="lbl">得 / 不 (the switch)</div>
+                  <div class="big">得 / 不</div>
+                  <div class="py2">de = can · bu = can't</div>
+                </div>
+                <div class="op">+</div>
+                <div class="blk b-bu" onclick="showPotential('c')">
+                  <div class="lbl">Complement</div>
+                  <div class="big">懂</div>
+                  <div class="py2">dǒng — to understand</div>
+                </div>
+              </div>
+              <div class="popup3" id="popup13">👆 Tap any block above. Pattern:
+                <span class="z"><span class="h">V + 得/不 + 补语</span><span class="p">V + de/bu + complement</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-main-examples" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r13-main-examples-header" aria-expanded="false" aria-controls="r13-main-examples-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🎯</span>
+          <span class="acc-title">Main Examples</span>
+          <span class="acc-count">(3)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-main-examples-body" role="region" aria-labelledby="r13-main-examples-header">
+            <div class="tiles">
+              <div class="tile good">
+                <h3>✅ Can — 得 in the middle</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">我看得懂汉字。</span><span class="p">wǒ kàn de dǒng Hànzì.</span></span>
+                  <button class="audio-btn" onclick="speak('我看得懂汉字。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">看懂 ("read-and-understand", a result complement from Rule 9) with 得 inserted = "I'm able to understand Chinese characters."</div>
+              </div>
+              <div class="tile good">
+                <h3>❌ Can't — 不 takes 得's place</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">我看不懂汉字。</span><span class="p">wǒ kàn bu dǒng Hànzì.</span></span>
+                  <button class="audio-btn" onclick="speak('我看不懂汉字。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">得 vanishes; 不 fills the same slot. Not <span style="color:var(--red)">看得不懂</span>. This negative form is the one you'll hear most often.</div>
+              </div>
+              <div class="tile bad">
+                <h3>❌ 可以 is a different meaning</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">我可以看汉字。</span><span class="p">wǒ kěyǐ kàn Hànzì.</span></span>
+                  <button class="audio-btn" onclick="speak('我可以看汉字。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">This says "I <b>may</b> / am allowed to look at Chinese characters" — permission, with no claim about comprehension. For "I can understand them" you need the potential complement: 我看<b>得懂</b>汉字.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-more-examples" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r13-more-examples-header" aria-expanded="false" aria-controls="r13-more-examples-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">📚</span>
+          <span class="acc-title">More Examples</span>
+          <span class="acc-count">(5)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-more-examples-body" role="region" aria-labelledby="r13-more-examples-header">
+            <div class="subhead"><span class="em">👩‍🏫</span> The verbs from class</div>
+            <div class="grid" style="margin-top:8px">
+              <div class="scard">
+                <div class="num">1</div><h3>搬动 → 搬得动 / 搬不动</h3>
+                <div class="gloss">strong enough to move it / not strong enough</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">我搬得动箱子。</span><span class="p">wǒ bān de dòng xiāngzi.</span></span>
+                  <button class="audio-btn" onclick="speak('我搬得动箱子。')" aria-label="Play audio">🔊</button>
+                  <div class="en">I can carry the box.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">2</div><h3>搬下来 → 搬得下来</h3>
+                <div class="gloss">with a directional complement (Rule 10)</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">箱子我搬得下来。</span><span class="p">xiāngzi wǒ bān de xiàlái.</span></span>
+                  <button class="audio-btn" onclick="speak('箱子我搬得下来。')" aria-label="Play audio">🔊</button>
+                  <div class="en">I can carry the box down.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">3</div><h3>看懂 → 看得懂 / 看不懂</h3>
+                <div class="gloss">able to read and understand</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">我看得懂汉字。</span><span class="p">wǒ kàn de dǒng Hànzì.</span></span>
+                  <button class="audio-btn" onclick="speak('我看得懂汉字。')" aria-label="Play audio">🔊</button>
+                  <div class="en">I can understand Chinese characters.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">4</div><h3>吃完 → 吃得完 / 吃不完</h3>
+                <div class="gloss">able to finish the food</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">我吃得完饭。</span><span class="p">wǒ chī de wán fàn.</span></span>
+                  <button class="audio-btn" onclick="speak('我吃得完饭。')" aria-label="Play audio">🔊</button>
+                  <div class="en">I can finish the meal.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">5</div><h3>睡着 → 睡得着 / 睡不着</h3>
+                <div class="gloss">able to fall asleep · 着 = zháo</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">我睡得着觉。</span><span class="p">wǒ shuì de zháo jiào.</span></span>
+                  <button class="audio-btn" onclick="speak('我睡得着觉。')" aria-label="Play audio">🔊</button>
+                  <div class="en">I can fall asleep.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="h2 more-block" style="margin-top:22px"><span class="em">📚</span> Examples</div>
+            <table>
+              <tr><th>Chinese</th><th>Pinyin</th><th>English</th><th>Russian</th><th>Что происходит</th><th>Audio</th></tr>
+              <tr><td>我搬得动箱子。</td><td>wǒ bān de dòng xiāngzi.</td><td>I can carry the box.</td><td class="ru">Я могу поднять/перенести коробку.</td><td class="note">搬动 («сдвинуть») + 得 внутри → «сил хватает».</td><td><button class="audio-btn" onclick="speak('我搬得动箱子。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>我搬不动箱子。</td><td>wǒ bān bu dòng xiāngzi.</td><td>I can't carry the box.</td><td class="ru">Я не могу сдвинуть коробку.</td><td class="note">得 исчезает, вместо него 不. Самая частая форма в живой речи.</td><td><button class="audio-btn" onclick="speak('我搬不动箱子。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>箱子我搬得下来。</td><td>xiāngzi wǒ bān de xiàlái.</td><td>I can carry the box down.</td><td class="ru">Коробку я могу спустить вниз.</td><td class="note">Комплемент направления 下来 (Правило 10) внутри той же схемы. Дополнение 箱子 вынесено вперёд как тема — так естественнее, чем ставить его после 下来.</td><td><button class="audio-btn" onclick="speak('箱子我搬得下来。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>我看得懂汉字。</td><td>wǒ kàn de dǒng Hànzì.</td><td>I can understand Chinese characters.</td><td class="ru">Я понимаю иероглифы (могу прочитать и понять).</td><td class="note">看懂 (Правило 9) + 得. Речь о способности понять, а не о разрешении смотреть.</td><td><button class="audio-btn" onclick="speak('我看得懂汉字。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>我看不懂汉字。</td><td>wǒ kàn bu dǒng Hànzì.</td><td>I can't understand Chinese characters.</td><td class="ru">Я не понимаю иероглифы.</td><td class="note">Отрицательная форма через 不.</td><td><button class="audio-btn" onclick="speak('我看不懂汉字。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>我吃得完饭。</td><td>wǒ chī de wán fàn.</td><td>I can finish the meal.</td><td class="ru">Я смогу всё съесть.</td><td class="note">吃完 + 得 → «получится дойти до конца».</td><td><button class="audio-btn" onclick="speak('我吃得完饭。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>我吃不完饭。</td><td>wǒ chī bu wán fàn.</td><td>I can't finish the meal.</td><td class="ru">Я не смогу всё съесть.</td><td class="note">Очень частая бытовая фраза за столом.</td><td><button class="audio-btn" onclick="speak('我吃不完饭。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>我吃完饭。</td><td>wǒ chī wán fàn.</td><td>I finished the meal.</td><td class="ru">Я доел.</td><td class="note">⚠️ Без 得/不 это уже <b>Правило 9</b>: простой результат («доел»), а не возможность («смогу доесть»). Сравните три формы: 吃完 = доел · 吃得完 = смогу доесть · 吃不完 = не смогу доесть.</td><td><button class="audio-btn" onclick="speak('我吃完饭。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>我睡不着觉。</td><td>wǒ shuì bu zháo jiào.</td><td>I can't fall asleep.</td><td class="ru">Я не могу заснуть.</td><td class="note">着 здесь читается <b>zháo</b> (не zhe!) и означает «удалось». 睡不着 — стандартная фраза про бессонницу.</td><td><button class="audio-btn" onclick="speak('我睡不着觉。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>你看得懂吗？</td><td>nǐ kàn de dǒng ma?</td><td>Can you understand it?</td><td class="ru">Ты понимаешь (можешь понять)?</td><td class="note">Вопрос проще всего строить через 吗 в конце.</td><td><button class="audio-btn" onclick="speak('你看得懂吗？')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-quick-reference" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r13-quick-reference-header" aria-expanded="false" aria-controls="r13-quick-reference-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🔗</span>
+          <span class="acc-title">Quick Reference</span>
+          <span class="acc-count">(6)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-quick-reference-body" role="region" aria-labelledby="r13-quick-reference-header">
+            <table>
+              <tr><th>Verb + complement</th><th>✅ Can (得)</th><th>❌ Can't (不)</th><th>Meaning</th></tr>
+              <tr><td><span class="z"><span class="h">搬动</span><span class="p">bān dòng</span></span></td><td><span class="z"><span class="h">搬得动</span><span class="p">bān de dòng</span></span></td><td><span class="z"><span class="h">搬不动</span><span class="p">bān bu dòng</span></span></td><td>strong enough to move it</td></tr>
+              <tr><td><span class="z"><span class="h">看懂</span><span class="p">kàn dǒng</span></span></td><td><span class="z"><span class="h">看得懂</span><span class="p">kàn de dǒng</span></span></td><td><span class="z"><span class="h">看不懂</span><span class="p">kàn bu dǒng</span></span></td><td>able to read & understand</td></tr>
+              <tr><td><span class="z"><span class="h">听懂</span><span class="p">tīng dǒng</span></span></td><td><span class="z"><span class="h">听得懂</span><span class="p">tīng de dǒng</span></span></td><td><span class="z"><span class="h">听不懂</span><span class="p">tīng bu dǒng</span></span></td><td>able to catch what's said</td></tr>
+              <tr><td><span class="z"><span class="h">吃完</span><span class="p">chī wán</span></span></td><td><span class="z"><span class="h">吃得完</span><span class="p">chī de wán</span></span></td><td><span class="z"><span class="h">吃不完</span><span class="p">chī bu wán</span></span></td><td>able to finish eating</td></tr>
+              <tr><td><span class="z"><span class="h">睡着</span><span class="p">shuì zháo</span></span></td><td><span class="z"><span class="h">睡得着</span><span class="p">shuì de zháo</span></span></td><td><span class="z"><span class="h">睡不着</span><span class="p">shuì bu zháo</span></span></td><td>able to fall asleep</td></tr>
+              <tr><td><span class="z"><span class="h">搬下来</span><span class="p">bān xiàlái</span></span></td><td><span class="z"><span class="h">搬得下来</span><span class="p">bān de xiàlái</span></span></td><td><span class="z"><span class="h">搬不下来</span><span class="p">bān bu xiàlái</span></span></td><td>able to bring it down</td></tr>
+            </table>
+
+            <div class="h2" style="margin-top:20px"><span class="em">🔀</span> 得 across the complement rules</div>
+            <table>
+              <tr><th>Rule</th><th>Type</th><th>Question it answers</th><th>Example</th></tr>
+              <tr><td>Rule 9</td><td>结果补语 — result</td><td>Did it reach the outcome?</td><td><span class="h">我吃完饭。</span> wǒ chī wán fàn</td></tr>
+              <tr><td>Rule 12</td><td>状态补语 — state / manner</td><td><b>How</b> is it done?</td><td><span class="h">他跑得很快。</span> tā pǎo de hěn kuài</td></tr>
+              <tr><td>Rule 13</td><td>可能补语 — potential</td><td><b>Can</b> the outcome be reached?</td><td><span class="h">我吃得完饭。</span> wǒ chī de wán fàn</td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-common-mistakes" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r13-common-mistakes-header" aria-expanded="false" aria-controls="r13-common-mistakes-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">⚠️</span>
+          <span class="acc-title">Common Mistakes</span>
+          <span class="acc-count">(5)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-common-mistakes-body" role="region" aria-labelledby="r13-common-mistakes-header">
+            <table>
+              <tr><th>❌ Wrong</th><th>✅ Right</th><th>Why</th></tr>
+              <tr><td><span class="h">我看得不懂汉字。</span></td><td><span class="h">我看不懂汉字。</span></td><td>The negative <b>replaces</b> 得 with 不 — it never keeps both.</td></tr>
+              <tr><td><span class="h">我不看得懂汉字。</span></td><td><span class="h">我看不懂汉字。</span></td><td>不 goes <b>inside</b> the verb+complement pair, not in front of the verb.</td></tr>
+              <tr><td><span class="h">我可以看汉字。</span> <span class="p">(for "I can understand them")</span></td><td><span class="h">我看得懂汉字。</span></td><td>可以 / 能 = permission or external possibility. Achieving a result takes 得/不 inside the verb.</td></tr>
+              <tr><td><span class="h">我搬得下来箱子。</span></td><td><span class="h">箱子我搬得下来。</span></td><td>With a compound directional complement (下来/上去/出来), an object tacked on the end sounds awkward. Front the object as the topic instead.</td></tr>
+              <tr><td><span class="p">wǒ kàn <b>dé</b> dǒng Hànzì</span></td><td><span class="p">wǒ kàn <b>de</b> dǒng Hànzì</span></td><td>Tone. As a complement marker 得 is always the toneless <i>de</i> — never <i>dé</i> ("to obtain") or <i>děi</i> ("must").</td></tr>
+            </table>
+            <p class="lead" style="margin-top:14px">💡 <b>能 and 得/不 can combine</b> for emphasis: 我<b>能</b>看<b>得懂</b> — "I really am able to understand it." But if you only pick one, the potential complement is what a native speaker reaches for when talking about whether something <i>works out</i>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-kettle" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r13-kettle-header" aria-expanded="false" aria-controls="r13-kettle-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🫖</span>
+          <span class="acc-title">For "Чайник"</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-kettle-body" role="region" aria-labelledby="r13-kettle-header">
+            <div class="kettle-block">
+              <div class="kettle-tag">🫖 Для "чайника"</div>
+              <p>Возьми знакомую пару из Правила 9: <b>看懂</b> («посмотрел и понял»), <b>吃完</b> («съел до конца»), <b>睡着</b> («заснул»). Теперь просто <b>раздвинь</b> эти два иероглифа и вставь между ними переключатель:</p>
+              <p>➡️ вставил <b>得</b> — «получается»: 看<b>得</b>懂 = «могу понять».<br>➡️ вставил <b>不</b> — «не получается»: 看<b>不</b>懂 = «не могу понять».</p>
+              <p>Всё. Никакого 能 не нужно — способность уже встроена внутрь глагола.</p>
+              <p>Почему это не то же самое, что 能/可以? Потому что 能 — про <b>внешние</b> обстоятельства («мне разрешили», «есть время»), а 得/不 — про <b>результат</b>: получится или нет. «我可以看汉字» = «мне можно посмотреть на иероглифы». «我看得懂汉字» = «я способен их понять». Разные вещи.</p>
+              <p>И главное правило-ловушка: в отрицании 得 <b>не остаётся</b>. Не «看得不懂», а просто <b>看不懂</b>. 不 садится ровно на то место, где было 得.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-analogue-en" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r13-analogue-en-header" aria-expanded="false" aria-controls="r13-analogue-en-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇬🇧</span>
+          <span class="acc-title">Analogue in English Grammar</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-analogue-en-body" role="region" aria-labelledby="r13-analogue-en-header">
+            <div class="analogue-card en">
+              <div class="a-tag">🇬🇧 English</div>
+              <p>English uses the modal verbs <b>"can" / "can't"</b> — but places them <i>before</i> the verb, as separate words. Chinese does the opposite: it splits the verb open and puts the switch <i>inside</i>. There is no English structure that behaves this way.</p>
+              <p>The closest feel is a resultative phrase like "read it <b>through</b>" vs "couldn't get through it" — the emphasis on whether the endpoint was reachable, not on the ability in the abstract.</p>
+              <p class="a-ex">我看得懂 ≈ "I can make sense of it" · 我看不懂 ≈ "I can't make sense of it."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r13-analogue-ru" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r13-analogue-ru-header" aria-expanded="false" aria-controls="r13-analogue-ru-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇷🇺</span>
+          <span class="acc-title">Analogue in Russian Grammar</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r13-analogue-ru-body" role="region" aria-labelledby="r13-analogue-ru-header">
+            <div class="analogue-card ru">
+              <div class="a-tag">🇷🇺 Русский</div>
+              <p>Ближайший аналог — глагол <b>«смочь / не смочь»</b> плюс инфинитив: «смог понять», «не смог поднять». Но в русском это <b>отдельное</b> слово перед глаголом, а в китайском переключатель встраивается <b>внутрь</b> глагола — такого в русском нет.</p>
+              <p>Ещё ближе по смыслу русские безличные формы: «не читается», «не спится», «не поднимается» — они тоже говорят не о разрешении, а о том, что <b>не получается</b>. 睡不着 ≈ «не спится».</p>
+              <p class="a-ex">我搬不动箱子 ≈ «Я не могу сдвинуть коробку» / «коробка не поднимается».</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
   </div>
 
   <div class="navbar">
@@ -3157,6 +3836,20 @@
     noun:'🔴 <b>Noun</b> — the thing being counted. It can never attach to the number directly; the measure word always sits in between.'
   };
   function showMW(r){ document.getElementById('popup11').innerHTML = mwText[r]; }
+
+  var stateText = {
+    v:'\u26aa <b>Verb / Adjective</b> \u2014 the action or quality being assessed: <span style="color:#e63946">\u8dd1 (p\u01ceo)</span> = "to run." If an object follows it, the verb has to repeat before \u5f97.',
+    de:'\ud83d\udfe0 <b>\u5f97 (de)</b> \u2014 the state-complement marker, always <b>neutral tone</b>. Never \u7684 and never <i>d\u00e9</i>. It hinges the action to its assessment.',
+    c:'\ud83d\udd34 <b>State / degree phrase</b> \u2014 how the action is done: <span style="color:#e63946">\u5f88\u5feb (h\u011bn ku\u00e0i)</span> = "very fast." An intensifier (\u5f88 / \u592a\u2026\u4e86 / \u771f) is nearly always required here.'
+  };
+  function showState(r){ document.getElementById('popup12').innerHTML = stateText[r]; }
+
+  var potentialText = {
+    v:'\u26aa <b>Verb</b> \u2014 the plain action: <span style="color:#e63946">\u770b (k\u00e0n)</span> = "to look/read." It normally sits glued to its complement (\u770b\u61c2).',
+    switch:'\ud83d\udfe0 <b>\u5f97 / \u4e0d (the switch)</b> \u2014 dropped between verb and complement. <span style="color:#e63946">\u5f97 (de)</span> = the outcome is achievable; <span style="color:#e63946">\u4e0d (bu)</span> = it isn\'t. The negative <b>replaces</b> \u5f97 \u2014 \u770b\u4e0d\u61c2, never \u770b\u5f97\u4e0d\u61c2.',
+    c:'\ud83d\udd34 <b>Complement</b> \u2014 the result (\u61c2/\u5b8c/\u7740, Rule 9) or direction (\u4e0b\u6765/\u4e0a\u53bb, Rule 10) you are trying to reach: <span style="color:#e63946">\u61c2 (d\u01d2ng)</span> = "understand."'
+  };
+  function showPotential(r){ document.getElementById('popup13').innerHTML = potentialText[r]; }
 
   // ---- text-to-speech ----
   function speak(text){
@@ -3400,7 +4093,6 @@
     init();
   }
 })();
-
 </script>
 <script>
 /*
@@ -3546,7 +4238,6 @@
     window.addEventListener('hashchange', goToHash);
   });
 })();
-
 </script>
 <script>
 /*
@@ -3663,11 +4354,26 @@
       { title: 'The Ultimate Guide to Chinese Measure Words', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner Chinese measure words guide 量词', thumbClass:'tc-1' },
       { title: 'Счётные слова 量词 в китайском языке', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский счётные слова 量词 个 本 只', thumbClass:'tc-2' },
       { title: '两 и 二 — разница между "два"', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык 两 二 разница два', thumbClass:'tc-3' }
+    ],
+
+    'r12': [ // State complement 状态补语
+      { title: 'Degree & Manner with 得 (V + 得 + Adjective)', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese degree complement de adjective 跑得很快', thumbClass:'tc-1' },
+      { title: 'How to Describe HOW an Action Is Done', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod manner complement de adverbial 状态补语', thumbClass:'tc-2' },
+      { title: 'V + 得 + Adj — Repeating the Verb with an Object', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner verb repetition de complement object 说中文说得', thumbClass:'tc-3' },
+      { title: '状态补语 — комплемент состояния через 得', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 得 комплемент состояния 跑得很快', thumbClass:'tc-4' },
+      { title: 'Частица 得 после глагола — как описать образ действия', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык частица 得 образ действия наречие', thumbClass:'tc-5' }
+    ],
+
+    'r13': [ // Potential complement 可能补语
+      { title: 'Potential Complements: 得 vs 不 (看得懂 / 看不懂)', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese potential complement 看得懂 看不懂 de bu', thumbClass:'tc-2' },
+      { title: '听不懂, 吃不完, 睡不着 — Chinese "Can\'t" Without 不能', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod potential complement 听不懂 吃不完 睡不着', thumbClass:'tc-3' },
+      { title: '能 vs Potential Complement — Which "Can" to Use', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner neng vs potential complement difference can', thumbClass:'tc-4' },
+      { title: '可能补语 — комплемент возможности 得/不', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 可能补语 комплемент возможности 看得懂 看不懂', thumbClass:'tc-5' },
+      { title: 'Как сказать "не могу" через 不 внутри глагола', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык 看不懂 睡不着 不 внутри глагола возможность', thumbClass:'tc-1' }
     ]
 
   };
 })();
-
 </script>
 <script>
 /*
@@ -3896,7 +4602,6 @@
     init();
   }
 })();
-
 </script>
 <script>
 /*
@@ -3965,6 +4670,18 @@
     "量词": ["liàngcí", "measure word; classifier"],
     "银行": ["yínháng", "bank"],
     "问题": ["wèntí", "question; problem"],
+    "状态": ["zhuàngtài", "state; condition"],
+    "可能": ["kěnéng", "possible; possibility"],
+    "汉字": ["hànzì", "Chinese character(s)"],
+    "漂亮": ["piàoliang", "beautiful; pretty"],
+    "开心": ["kāixīn", "happy; delighted"],
+    "吓人": ["xiàrén", "frightening; alarmingly (so)"],
+    "孩子": ["háizi", "child"],
+    "箱子": ["xiāngzi", "box; suitcase"],
+    "睡觉": ["shuìjiào", "to sleep"],
+    "可以": ["kěyǐ", "can; may (permission/possibility)"],
+    "听懂": ["tīngdǒng", "to understand (by listening)"],
+    "看懂": ["kàndǒng", "to understand (by reading/watching)"],
     "一": ["yī", "one"],
     "七": ["qī", "seven"],
     "三": ["sān", "three"],
@@ -4062,9 +4779,28 @@
     "饿": ["è", "hungry"],
     "鱼": ["yú", "fish"],
     "鸟": ["niǎo", "bird"],
+    "字": ["zì", "character; written word"],
+    "吓": ["xià", "to frighten"],
+    "孩": ["hái", "child (part of 孩子)"],
+    "开": ["kāi", "to open; to start"],
+    "心": ["xīn", "heart; mind"],
+    "亮": ["liàng", "bright"],
+    "慢": ["màn", "slow"],
+    "笑": ["xiào", "to laugh; to smile"],
+    "贵": ["guì", "expensive"],
+    "搬": ["bān", "to move/carry (something)"],
+    "动": ["dòng", "to move; (result complement: manage to move)"],
+    "着": ["zháo", "(result complement: succeed in / manage to)"],
+    "睡": ["shuì", "to sleep"],
+    "觉": ["jiào", "sleep (noun, as in 睡觉)"],
+    "箱": ["xiāng", "box; case"],
+    "可": ["kě", "can; may"],
+    "能": ["néng", "can; to be able to"],
+    "饭": ["fàn", "meal; cooked rice"],
+    "真": ["zhēn", "really; true"],
+    "看": ["kàn", "to look; to read; to watch"],
   };
 })();
-
 </script>
 <script>
 /*
@@ -4313,7 +5049,6 @@
     init();
   }
 })();
-
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>

@@ -40,8 +40,8 @@ async function validateSource() {
   assert.match(rules, /<title>Chinese · Grammar Rules<\/title>/, "grammar-rules title is missing");
   assert.equal(
     (rules.match(/<button type="button" class="review-btn"/g) ?? []).length,
-    11,
-    "rules.html must contain 11 review buttons"
+    13,
+    "rules.html must contain 13 review buttons"
   );
   assert.match(rules, /firebase-firestore-compat\.js/, "grammar-rules Firestore client is missing");
   assert.match(syncSource, /var COLLECTION\s*=\s*['"]rules_sync['"]/, "grammar-rules sync collection changed unexpectedly");
