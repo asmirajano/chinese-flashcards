@@ -5050,6 +5050,533 @@
   }
 })();
 </script>
+<script>
+/*
+  Chinese Click-to-Speak — one shared pronunciation layer for every Chinese
+  word, phrase and sentence on the page.
+
+  ------------------------------------------------------------------
+  WHY Web Speech API (and not a cloud TTS or pre-rendered audio files)
+  ------------------------------------------------------------------
+  This app is a single static HTML file served from GitHub Pages, with no
+  backend and no build step. That rules out the alternatives:
+
+    - Cloud TTS (Google / Azure / ElevenLabs) needs an API key. In a static
+      client-side page the key is visible to anyone who opens DevTools, so it
+      would be a live billing/abuse hole. Non-starter.
+    - Pre-generated MP3s would sound best, but there are ~1,500 distinct
+      Chinese strings across the rule pages. As files they'd break the
+      one-file deployment; inlined as base64 they'd add tens of megabytes.
+
+  The browser's own speech synthesis, by contrast, is free, offline, instant,
+  needs no secrets, and every modern platform ships a real Mandarin voice
+  (Ting-Ting on iOS/macOS, Google 普通话 on Android/Chrome, Microsoft
+  Huihui/Xiaoxiao on Windows). Those are genuine Mandarin TTS engines, so
+  tones and sentence rhythm are correct.
+
+  The quality/reliability work therefore goes into HOW we drive it:
+    1. Ranked voice selection — we pick the best available Mandarin voice
+       explicitly instead of trusting `utterance.lang` to resolve well. A
+       wrong voice is the #1 cause of "it reads Chinese like gibberish".
+    2. Async voice list — getVoices() is empty on first call in Chrome, so we
+       wait for the `voiceschanged` event before giving up.
+    3. Honest failure — if the device genuinely has no Chinese voice we say so
+       once, instead of silently reading Hanzi with an English voice.
+    4. Whole-phrase utterances — a sentence is spoken as ONE utterance so the
+       engine applies natural prosody, never character-by-character.
+    5. Chrome cancel/speak race — speak() right after cancel() can be
+       swallowed; we re-arm on the next tick.
+    6. Single active utterance — starting a new one always stops the old one.
+
+  ------------------------------------------------------------------
+  HOW the clickable units are found (zero config for new content)
+  ------------------------------------------------------------------
+  zh-hover-glossary.js has already wrapped every dictionary word in
+  <span class="zh-term">. Because the glossary covers 100% of the Chinese on
+  the page, any CJK left in a raw text node is punctuation only.
+
+  So we walk the DOM and, inside each element, group maximal runs of
+  consecutive `.zh-term` siblings (Chinese punctuation and whitespace may sit
+  between them) into one <span class="zh-phrase" data-zh-speak="...">.
+  Anything else — Latin, Cyrillic, a pinyin span — breaks the run.
+
+  The effect is exactly the unit a learner expects:
+    <td>他跑得很快。</td>                      -> one run, the whole sentence
+    "...частица 得 (de), всегда..."           -> one run, just 得
+    "усилитель — 很, 太, 真"                  -> three separate runs
+    <span class="h">跑得很快</span><span class="p">pǎo de hěn kuài</span>
+                                              -> one run; the pinyin is
+                                                 excluded, so we always speak
+                                                 the characters, never the
+                                                 romanisation.
+
+  A MutationObserver re-runs the same pass on content injected later (the
+  Pattern Visualization popups and the two sidebars), so future rule pages
+  need no changes here at all.
+
+  Public API:
+    ZH_AUDIO.speak(text, hostEl)  play a string (hostEl gets the playing state)
+    ZH_AUDIO.stop()               stop immediately
+    ZH_AUDIO.status()             { supported, voice, voices, ready }
+    window.speak(text)            legacy entry point used by the 🔊 buttons
+*/
+(function () {
+  if (window.__zhAudioLoaded) return;
+  window.__zhAudioLoaded = true;
+
+  // ---------------------------------------------------------------- config
+  var RATE = 0.9;        // slightly under natural pace — this is for learners
+  var RATE_SLOW = 0.6;   // shift-click / long-press
+  var PITCH = 1;
+  var HINT_KEY = 'zh100_audio_hint_v1';
+
+  // CJK ideographs (incl. rare/extension blocks) — what counts as "Chinese".
+  var CJK = /[㐀-䶿一-鿿豈-﫿]/;
+  // Chinese/fullwidth punctuation that may sit INSIDE a phrase run.
+  var CN_PUNCT_ONLY = /^[\s　-〿！-･‘’“”]*$/;
+  // Elements we never touch.
+  var SKIP = 'script, style, textarea, input, select, #zh-tip-popover, .zh-phrase';
+
+  // ------------------------------------------------------------ voice layer
+  var supported = typeof window !== 'undefined' &&
+                  'speechSynthesis' in window &&
+                  typeof window.SpeechSynthesisUtterance === 'function';
+  var voice = null;
+  var voicesReady = false;
+  var warnedNoVoice = false;
+
+  /* Score a voice as a Mandarin candidate. -1 = not Chinese at all.
+     Language first (Mainland Mandarin beats Taiwan/HK), then known-good
+     engine names, so a device with several Chinese voices picks the best. */
+  function scoreVoice(v) {
+    var lang = (v.lang || '').toLowerCase().replace('_', '-');
+    var name = (v.name || '').toLowerCase();
+    var score;
+
+    if (lang.indexOf('zh-cn') === 0 || lang.indexOf('zh-hans') === 0) score = 100;
+    else if (lang === 'zh' || lang.indexOf('zh-cmn') === 0) score = 80;
+    else if (lang.indexOf('zh-sg') === 0) score = 60;
+    else if (lang.indexOf('zh-tw') === 0 || lang.indexOf('zh-hk') === 0) score = 30;
+    else if (lang.indexOf('cmn') === 0) score = 70;
+    else if (lang.indexOf('zh') === 0) score = 40;
+    else return -1;
+
+    // Microsoft neural voices (Edge) — clearly the best when present.
+    if (/xiaoxiao|xiaoyi|yunxi|yunyang|yunjian|xiaochen|xiaohan/.test(name)) score += 40;
+    // Google's Mandarin voice (Chrome desktop/Android).
+    else if (name.indexOf('google') === 0 || /普通话|谷歌/.test(v.name || '')) score += 30;
+    // Apple's Mandarin voice (macOS/iOS).
+    else if (/ting-?ting|tingting|婷婷|li-?mu|lilian/.test(name)) score += 30;
+    // Older Microsoft SAPI voices — usable, but plainer.
+    else if (/huihui|kangkang|yaoyao/.test(name)) score += 15;
+
+    return score;
+  }
+
+  function pickVoice() {
+    if (!supported) return null;
+    var list;
+    try { list = window.speechSynthesis.getVoices() || []; }
+    catch (e) { return null; }
+    if (!list.length) return null;
+
+    voicesReady = true;
+    var best = null, bestScore = -1;
+    for (var i = 0; i < list.length; i++) {
+      var s = scoreVoice(list[i]);
+      if (s > bestScore) { bestScore = s; best = list[i]; }
+    }
+    voice = bestScore >= 0 ? best : null;
+    return voice;
+  }
+
+  function initVoices() {
+    if (!supported) return;
+    pickVoice();
+    // Chrome returns [] synchronously on first load; the list arrives later.
+    if ('onvoiceschanged' in window.speechSynthesis) {
+      window.speechSynthesis.addEventListener('voiceschanged', function () {
+        pickVoice();
+      });
+    }
+    // Belt and braces for engines that never fire the event.
+    var tries = 0;
+    var poll = setInterval(function () {
+      if (voicesReady || ++tries > 20) { clearInterval(poll); return; }
+      pickVoice();
+    }, 250);
+  }
+
+  // ---------------------------------------------------------- playback core
+  var current = { host: null, timer: null };
+
+  function clearState() {
+    if (current.timer) { clearTimeout(current.timer); current.timer = null; }
+    if (current.host) {
+      current.host.classList.remove('zh-playing');
+      current.host = null;
+    }
+  }
+
+  function stop() {
+    clearState();
+    if (!supported) return;
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+
+  function noVoiceNotice() {
+    if (warnedNoVoice) return;
+    warnedNoVoice = true;
+    showToast(
+      'No Chinese voice is installed in this browser, so pronunciation is unavailable here. ' +
+      'On Windows: Settings → Time & language → Language → add Chinese (Simplified) speech. ' +
+      'Chrome on Android and Safari on iPhone/iPad have a Mandarin voice built in.',
+      9000
+    );
+  }
+
+  /* Speak one string as a single utterance.
+     `host` is the element that shows the "playing" state (optional). */
+  function speak(text, host, opts) {
+    if (!text) return;
+    opts = opts || {};
+
+    if (!supported) {
+      showToast('This browser does not support speech synthesis.', 4000);
+      return;
+    }
+
+    var wasSpeaking = false;
+    try { wasSpeaking = window.speechSynthesis.speaking || window.speechSynthesis.pending; }
+    catch (e) {}
+
+    // Always stop whatever is playing — no overlapping audio, and clicking the
+    // same item again restarts it from the top.
+    stop();
+
+    if (!voice) pickVoice();
+    if (!voice && voicesReady) { noVoiceNotice(); return; }
+
+    var fire = function () {
+      // The voice list may have only just arrived.
+      if (!voice) pickVoice();
+      if (!voice && voicesReady) { noVoiceNotice(); return; }
+
+      var u = new window.SpeechSynthesisUtterance(text);
+      if (voice) u.voice = voice;
+      u.lang = (voice && voice.lang) || 'zh-CN';
+      u.rate = opts.slow ? RATE_SLOW : RATE;
+      u.pitch = PITCH;
+
+      if (host) {
+        current.host = host;
+        host.classList.add('zh-playing');
+      }
+
+      u.onend = clearState;
+      u.onerror = function (e) {
+        clearState();
+        // "interrupted"/"canceled" just mean we stopped it on purpose.
+        if (e && e.error && e.error !== 'interrupted' && e.error !== 'canceled') {
+          showToast('Could not play the pronunciation (' + e.error + ').', 4000);
+        }
+      };
+
+      // Chrome sometimes never fires onend (background tab, engine hiccup),
+      // which would leave the highlight stuck on. Clear it defensively.
+      var est = Math.min(12000, 500 + text.length * 320);
+      current.timer = setTimeout(clearState, est);
+
+      try { window.speechSynthesis.speak(u); }
+      catch (err) { clearState(); }
+    };
+
+    // cancel() immediately followed by speak() is swallowed in some Chrome
+    // builds; give the queue one tick to drain when we actually interrupted.
+    if (wasSpeaking) setTimeout(fire, 60);
+    else fire();
+  }
+
+  // ------------------------------------------------------------------ toast
+  var toastEl = null, toastTimer = null;
+  function showToast(msg, ms) {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.className = 'zh-audio-toast';
+      toastEl.setAttribute('role', 'status');
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, ms || 4000);
+  }
+
+  // ------------------------------------------------------------------- CSS
+  var CSS = ""
+    // The clickable phrase. Inline so it never affects layout or line breaking.
+    + ".zh-phrase{cursor:pointer; border-radius:4px; "
+    + "-webkit-tap-highlight-color:transparent; transition:background .15s ease;}"
+    + ".zh-phrase:hover{background:rgba(230,57,70,.07);}"
+    + ".zh-phrase.zh-playing{background:rgba(230,57,70,.14);}"
+
+    // Subtle speaker glyph, drawn in CSS (no image files, no emoji font
+    // inconsistency). Hidden until hover on pointer devices so the page stays
+    // clean; always faintly visible on touch, where there is no hover.
+    + ".zh-phrase::after{content:\"\"; display:inline-block; width:.62em; height:.62em; "
+    + "margin-left:.18em; vertical-align:baseline; background-color:currentColor; "
+    + "opacity:0; transition:opacity .15s ease; "
+    + "-webkit-mask:var(--zh-spk) no-repeat center/contain; "
+    + "mask:var(--zh-spk) no-repeat center/contain;}"
+    + ".zh-phrase:hover::after{opacity:.55;}"
+    + ".zh-phrase.zh-playing::after{opacity:1; animation:zh-pulse .7s ease-in-out infinite;}"
+    + "@keyframes zh-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.28);}}"
+    + "@media (hover:none){.zh-phrase::after{opacity:.3;}}"
+    // Where a row/tile already has its own 🔊 button, don't add a second cue.
+    + ".zh-phrase.zh-noicon::after{display:none;}"
+
+    // One-time discovery hint.
+    + ".zh-audio-hint{display:flex; align-items:center; gap:8px; margin:10px 0 0; "
+    + "padding:9px 13px; border-radius:12px; background:var(--card,#fff); "
+    + "border:1px solid var(--line,#f0e2d0); color:var(--soft,#6c757d); "
+    + "font-size:.83rem; line-height:1.35; box-shadow:0 3px 10px rgba(0,0,0,.05);}"
+    + ".zh-audio-hint b{color:var(--ink,#22223b);}"
+    + ".zh-audio-hint button{margin-left:auto; flex:0 0 auto; background:none; border:none; "
+    + "color:var(--soft,#6c757d); font-size:1.1rem; line-height:1; cursor:pointer; padding:2px 4px;}"
+    + ".zh-audio-hint button:hover{color:var(--red,#e63946);}"
+
+    // Failure / info toast.
+    + ".zh-audio-toast{position:fixed; left:50%; bottom:18px; transform:translate(-50%,12px); "
+    + "z-index:100000; max-width:min(520px,92vw); background:#22223b; color:#fff; "
+    + "border-radius:12px; padding:11px 15px; font-size:.85rem; line-height:1.4; "
+    + "box-shadow:0 10px 30px rgba(0,0,0,.28); opacity:0; pointer-events:none; "
+    + "transition:opacity .18s ease, transform .18s ease;}"
+    + ".zh-audio-toast.on{opacity:1; transform:translate(-50%,0);}";
+
+  var SPEAKER_SVG = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
+    + "viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath d='M16.5 8.5a5 5 0 0 1 0 7' "
+    + "fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3Cpath "
+    + "d='M19 6a8.5 8.5 0 0 1 0 12' fill='none' stroke='black' stroke-width='2' "
+    + "stroke-linecap='round'/%3E%3C/svg%3E\")";
+
+  function injectCss() {
+    var st = document.createElement('style');
+    st.id = 'zh-audio-style';
+    st.textContent = ':root{--zh-spk:' + SPEAKER_SVG + ';}' + CSS;
+    document.head.appendChild(st);
+  }
+
+  // -------------------------------------------------- phrase-run detection
+  var wrapping = false;
+
+  function isTerm(node) {
+    return node.nodeType === 1 && node.classList && node.classList.contains('zh-term');
+  }
+
+  /* A text node may sit inside a run only if it is whitespace and/or Chinese
+     punctuation. Latin/Cyrillic letters end the run. */
+  function isJoinerText(node) {
+    return node.nodeType === 3 && CN_PUNCT_ONLY.test(node.nodeValue);
+  }
+
+  function runText(nodes) {
+    var s = '';
+    for (var i = 0; i < nodes.length; i++) s += nodes[i].textContent;
+    // Collapse whitespace: Mandarin TTS reads spaces as pauses.
+    return s.replace(/\s+/g, '').trim();
+  }
+
+  function wrapRun(nodes, parent) {
+    // Trim pure-whitespace nodes from both ends so the wrapper hugs the text.
+    while (nodes.length && nodes[0].nodeType === 3 && !nodes[0].nodeValue.trim()) nodes.shift();
+    while (nodes.length && nodes[nodes.length - 1].nodeType === 3 &&
+           !nodes[nodes.length - 1].nodeValue.trim()) nodes.pop();
+    if (!nodes.length) return;
+
+    var text = runText(nodes);
+    if (!text || !CJK.test(text)) return;
+
+    var span = document.createElement('span');
+    span.className = 'zh-phrase';
+    span.setAttribute('data-zh-speak', text);
+    span.setAttribute('role', 'button');
+    span.setAttribute('aria-label', 'Play pronunciation: ' + text);
+    span.setAttribute('title', 'Click to hear “' + text + '”');
+
+    // Don't stack a second speaker cue where a 🔊 button already exists.
+    var near = parent.closest && parent.closest('td, .mini-ex, .arrow-flow, .numcard, .blk');
+    if (near && near.querySelector('.audio-btn')) span.classList.add('zh-noicon');
+
+    parent.insertBefore(span, nodes[0]);
+    for (var i = 0; i < nodes.length; i++) span.appendChild(nodes[i]);
+  }
+
+  /* Deliberately has no "already processed" marker: an element can gain new
+     children later (the Pattern Visualization popups are rebuilt in place on
+     every click), and a one-shot flag would permanently lock those out.
+     Instead this is idempotent — a run that is already wrapped presents itself
+     as a `.zh-phrase` child, which breaks the run and is then skipped by the
+     SKIP selector on recursion. So re-running it costs a walk and changes
+     nothing, which is what makes the MutationObserver path safe. */
+  function processElement(el) {
+    if (!el || el.nodeType !== 1) return;
+    if (el.closest && el.closest(SKIP)) return;
+
+    var kids = Array.prototype.slice.call(el.childNodes);
+    var run = [], recurse = [];
+
+    for (var i = 0; i < kids.length; i++) {
+      var n = kids[i];
+      if (isTerm(n) || isJoinerText(n)) {
+        run.push(n);
+      } else {
+        if (run.length) { wrapRun(run, el); run = []; }
+        if (n.nodeType === 1) recurse.push(n);
+      }
+    }
+    if (run.length) wrapRun(run, el);
+
+    for (var j = 0; j < recurse.length; j++) processElement(recurse[j]);
+  }
+
+  function scan(root) {
+    if (!root || wrapping) return;
+    wrapping = true;
+    try {
+      if (root.nodeType === 3) root = root.parentElement;
+      if (root && root.nodeType === 1) processElement(root);
+    } finally {
+      wrapping = false;
+    }
+  }
+
+  // --------------------------------------------------------------- events
+  document.addEventListener('click', function (e) {
+    var p = e.target.closest && e.target.closest('.zh-phrase');
+    if (!p) return;
+    // Let the 🔊 buttons and real links keep their own behaviour.
+    if (e.target.closest('.audio-btn, a, button:not([role=button])')) return;
+    speak(p.getAttribute('data-zh-speak'), p, { slow: e.shiftKey });
+  });
+
+  // Enter on a keyboard-focused word plays its whole phrase — no extra tab
+  // stops added, the .zh-term spans are already focusable.
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { stop(); return; }
+    if (e.key !== 'Enter') return;
+    var t = e.target;
+    var p = t && t.closest && t.closest('.zh-phrase');
+    if (!p) return;
+    e.preventDefault();
+    speak(p.getAttribute('data-zh-speak'), p, { slow: e.shiftKey });
+  });
+
+  // Stop audio when leaving/hiding the page.
+  window.addEventListener('pagehide', stop);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stop();
+  });
+
+  /* The 167 existing 🔊 buttons call the global speak(text) via inline
+     onclick. Capture the button first so it can carry the playing state,
+     then let the (overridden) global speak() route through this engine —
+     that's what stops the old buttons and the new click-to-play from ever
+     talking over each other. */
+  var lastBtn = null;
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.audio-btn');
+    lastBtn = b || null;
+  }, true);
+
+  window.speak = function (text) {
+    var host = lastBtn;
+    lastBtn = null;
+    speak(text, host);
+  };
+
+  // ----------------------------------------------------------------- hint
+  function maybeHint() {
+    var seen;
+    try { seen = localStorage.getItem(HINT_KEY); } catch (e) { seen = null; }
+    if (seen) return;
+
+    var host = document.querySelector('header') || document.querySelector('.wrap');
+    if (!host) return;
+
+    var box = document.createElement('div');
+    box.className = 'zh-audio-hint';
+    box.innerHTML = '<span aria-hidden="true">🔊</span>' +
+      '<span>Click any <b>Chinese text</b> to hear it in Mandarin. ' +
+      'Hold <b>Shift</b> while clicking for a slower reading.</span>' +
+      '<button type="button" aria-label="Dismiss">×</button>';
+    box.querySelector('button').addEventListener('click', function () {
+      try { localStorage.setItem(HINT_KEY, '1'); } catch (e) {}
+      box.remove();
+    });
+    if (host.tagName === 'HEADER') host.insertAdjacentElement('afterend', box);
+    else host.insertAdjacentElement('afterbegin', box);
+  }
+
+  // ------------------------------------------------------------ public API
+  window.ZH_AUDIO = {
+    speak: function (text, host, opts) { speak(text, host, opts); },
+    stop: stop,
+    rescan: function (root) { scan(root || document.body); },
+    status: function () {
+      var list = [];
+      try { list = (window.speechSynthesis.getVoices() || []); } catch (e) {}
+      return {
+        supported: supported,
+        ready: voicesReady,
+        voice: voice ? { name: voice.name, lang: voice.lang } : null,
+        chineseVoices: list.filter(function (v) { return scoreVoice(v) >= 0; })
+                           .map(function (v) { return v.name + ' [' + v.lang + ']'; }),
+        phrases: document.querySelectorAll('.zh-phrase').length
+      };
+    }
+  };
+
+  // ----------------------------------------------------------------- boot
+  function observe() {
+    /* The glossary wraps words one text node at a time, so a single injection
+       produces a burst of records. Coalesce them to one rescan per element. */
+    var obs = new MutationObserver(function (muts) {
+      if (wrapping) return;
+      var todo = [];
+      for (var i = 0; i < muts.length; i++) {
+        var m = muts[i];
+        if (m.type !== 'childList' || !m.addedNodes.length) continue;
+        var host = m.target;
+        if (host && host.nodeType === 3) host = host.parentElement;
+        if (!host || host.nodeType !== 1) continue;
+        if (host.closest && host.closest(SKIP)) continue;
+        if (todo.indexOf(host) === -1) todo.push(host);
+      }
+      for (var j = 0; j < todo.length; j++) scan(todo[j]);
+    });
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
+
+  function init() {
+    injectCss();
+    initVoices();
+    // The glossary wraps words on DOMContentLoaded too. Both modules are
+    // `defer`red in source order, but run one tick later so we always see the
+    // finished .zh-term spans regardless of load order.
+    setTimeout(function () {
+      scan(document.body);
+      observe();
+      maybeHint();
+    }, 0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>

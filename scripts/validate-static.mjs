@@ -44,6 +44,13 @@ async function validateSource() {
     "rules.html must contain 13 review buttons"
   );
   assert.match(rules, /firebase-firestore-compat\.js/, "grammar-rules Firestore client is missing");
+  assert.match(rules, /window\.__zhAudioLoaded/, "grammar-rules shared audio module is missing");
+  assert.match(rules, /speechSynthesis\.addEventListener\(['"]voiceschanged['"]/, "audio voice readiness handling is missing");
+  assert.match(rules, /new MutationObserver\(/, "audio support for dynamically injected content is missing");
+  assert.match(rules, /data-zh-speak/, "audio unit markers are missing");
+  assert.doesNotMatch(rules, /setAttribute\(['"]data-zh-audio['"]/, "stale audio processed flag can block rescanning injected content");
+  assert.match(rules, /shiftKey/, "slow Shift-click audio mode is missing");
+  assert.match(rules, /zh-CN/, "Mandarin voice selection is missing");
   assert.match(syncSource, /var COLLECTION\s*=\s*['"]rules_sync['"]/, "grammar-rules sync collection changed unexpectedly");
 
   const blocks = [...rules.matchAll(/<script>\n([\s\S]*?)\n<\/script>/g)]
