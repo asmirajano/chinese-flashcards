@@ -40,9 +40,21 @@ async function validateSource() {
   assert.match(rules, /<title>Chinese · Grammar Rules<\/title>/, "grammar-rules title is missing");
   assert.equal(
     (rules.match(/<button type="button" class="review-btn"/g) ?? []).length,
-    13,
-    "rules.html must contain 13 review buttons"
+    14,
+    "rules.html must contain 14 review buttons"
   );
+  assert.deepEqual(
+    [...rules.matchAll(/data-title="Rule (\d+)"/g)].map((match) => Number(match[1])),
+    Array.from({ length: 14 }, (_, index) => index + 1),
+    "grammar-rule pages must remain in the intended 1-14 teaching order"
+  );
+  assert.match(rules, /data-topic="r14"/, "complement-comparison rule is missing");
+  assert.match(
+    rules,
+    /Rule 14 — Комплементы \(补语\): сравнение Правил 9–13/,
+    "complement-comparison title changed unexpectedly"
+  );
+  assert.match(rules, /Главная сравнительная таблица/, "complement comparison table is missing");
   assert.match(rules, /firebase-firestore-compat\.js/, "grammar-rules Firestore client is missing");
   assert.match(rules, /window\.__zhAudioLoaded/, "grammar-rules shared audio module is missing");
   assert.match(rules, /speechSynthesis\.addEventListener\(['"]voiceschanged['"]/, "audio voice readiness handling is missing");
