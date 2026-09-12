@@ -6503,6 +6503,824 @@
   }
 })();
 </script>
+<script>
+/*
+  Mobile study layer for Grammar Rules.
+
+  ------------------------------------------------------------------
+  DESKTOP IS UNTOUCHED — BY CONSTRUCTION
+  ------------------------------------------------------------------
+  Every style rule in this file lives inside `@media (max-width: 640px)`,
+  and every behavioural change is gated on `MQ.matches`. Nothing here can
+  reach a desktop viewport: there is no rule outside the media query, and
+  no DOM mutation runs when the query does not match. That is the whole
+  safety argument — it is checkable by reading the CSS string below.
+
+  ------------------------------------------------------------------
+  WHAT THE AUDIT FOUND (measured at 375x812, real device emulation)
+  ------------------------------------------------------------------
+   1. 466px of the 812px viewport (57%) was chrome before any rule content:
+      header 175 + audio hint 55 + title 54 + ru-subtitle 65 + review
+      button 40 + accordion toolbar 77. First real content began at y=627,
+      i.e. below the fold, leaving ~109px of usable space on screen one.
+   2. The six-column "Examples" tables measured 1109px wide — three screens
+      of sideways swiping through the richest learning content on the page.
+   3. Pinyin rendered at 8.3px. Cause: `.z .p{font-size:.6em}` compounding
+      inside cells already reduced to .86rem. Pinyin is precisely what a
+      learner needs to read, and it was the smallest text in the app.
+   4. The rule navigator was 15 dots of 20x8px — impossible to aim at, and
+      the only way to reach rule 11 was 10 taps on "Next".
+   5. Tap targets below 44px: audio buttons 26x26, panel closers 28x28,
+      accordion toolbar buttons 84x36, edge tabs 26px wide.
+   6. The two desktop sidebars opened as 320/330px panels on a 375px screen
+      and their pull-tabs sat on top of the text.
+
+  ------------------------------------------------------------------
+  WHAT THIS FILE DOES
+  ------------------------------------------------------------------
+   - Typography with hard px floors, so nothing can compound below 12px.
+   - Wide tables become stacked label/value cards; no sideways swiping.
+   - Chrome cut to a 48px sticky bar; header/title/toolbar compacted.
+   - A rule sheet with search (number, title, Chinese, Russian, English)
+     replaces the dot strip — any rule is two taps away from anywhere.
+   - 44px minimum on every control.
+   - Current rule, open sections and scroll position survive a reload.
+
+  Load it after the other modules:
+    <script src="zh-mobile.js" defer><\/script>
+*/
+(function () {
+  if (window.__zhMobileLoaded) return;
+  window.__zhMobileLoaded = true;
+
+  var BP = 640;
+  var MQ = window.matchMedia('(max-width: ' + BP + 'px)');
+  var LS_PAGE = 'zh100_m_page_v1';
+  var LS_OPEN = 'zh100_m_open_v1';
+  var LS_SCROLL = 'zh100_m_scroll_v1';
+
+  /* ================================================================
+     STYLES — every rule is inside the media query. Nothing escapes.
+     ================================================================ */
+  var CSS = '@media (max-width:' + BP + 'px){'
+
+    /* ---- 1. TYPOGRAPHY -------------------------------------------
+       max() gives a hard floor: text can grow with its context but can
+       never compound its way below the floor again. */
+    + 'body{font-size:16px; line-height:1.6;}'
+    + '.wrap{padding:10px 12px 24px;}'
+    + '.ru-block p, .lead, p{font-size:15.5px; line-height:1.62;}'
+    + '.gloss, .note, .en, .mini-ex .en{font-size:14px; line-height:1.55;}'
+    + '.ru-block .ru-tag{font-size:12.5px;}'
+    /* Chinese and pinyin are the reading surface — largest floors. */
+    + '.z .h{font-size:max(1em,17px); line-height:1.35;}'
+    + '.z .p{font-size:max(0.62em,12.5px); line-height:1.3;}'
+    + '.zh-term{border-bottom-width:1px;}'
+    + 'th,td{font-size:14.5px; padding:10px 11px;}'
+    + '.blk .lbl{font-size:11.5px;} .blk .py2{font-size:12.5px;}'
+    + '.subhead{font-size:15.5px;} .tile h3{font-size:15.5px;} .scard h3{font-size:15.5px;}'
+    + '.mini-ex{font-size:15px;}'
+    + '.acc-title{font-size:15px;} .acc-count{font-size:12.5px;}'
+
+    /* ---- 2. RECLAIM VERTICAL SPACE ------------------------------- */
+    + 'header{padding:13px 14px; border-radius:14px; text-align:left;}'
+    + 'header h1{font-size:1.12rem; margin:0;}'
+    + 'header .sub{display:none;}'              /* 2 lines of prose, every screen */
+    + 'header .review-status{margin-top:9px; justify-content:flex-start; gap:6px;}'
+    + 'header .review-badge,header .review-sync-btn{font-size:12.5px; padding:7px 12px;}'
+    + '.ruletitle{font-size:1.18rem; margin:14px 0 3px; text-align:left; line-height:1.3;}'
+    + '.rule-ru-sub{font-size:14px; text-align:left; margin:0 0 12px;}'
+    + '.acc-toolbar{display:none;}'             /* moved into the rule sheet */
+    + '.zh-audio-hint{font-size:13px; padding:8px 11px; margin:8px 0 0;}'
+    + '.review-btn{margin:0 0 14px; padding:13px; font-size:15px; min-height:48px;}'
+    + '.builder{padding:14px 10px; border-radius:16px;}'
+    + '.tile{padding:14px;} .scard{padding:15px;}'
+
+    /* ---- 3. STICKY STUDY BAR ------------------------------------- */
+    + '.zm-bar{position:fixed; top:0; left:0; right:0; z-index:9997; display:flex;'
+    + 'align-items:center; gap:8px; height:48px; padding:0 8px;'
+    + 'background:rgba(255,247,239,.97); backdrop-filter:blur(8px);'
+    + 'border-bottom:1px solid var(--line,#f0e2d0);}'
+    + '.zm-bar button{background:none; border:none; font-family:inherit; cursor:pointer;'
+    + 'color:var(--ink,#22223b); display:flex; align-items:center; justify-content:center;'
+    + 'min-width:44px; min-height:44px; border-radius:12px; padding:0 6px;}'
+    + '.zm-bar button:active{background:rgba(230,57,70,.1);}'
+    + '.zm-cur{flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start;'
+    + 'justify-content:center; gap:1px; padding:0 4px;}'
+    + '.zm-cur .n{font-size:11.5px; font-weight:800; color:var(--red,#e63946);'
+    + 'letter-spacing:.4px; text-transform:uppercase;}'
+    + '.zm-cur .t{font-size:13.5px; font-weight:600; max-width:100%; overflow:hidden;'
+    + 'text-overflow:ellipsis; white-space:nowrap;}'
+    + '.zm-ico{font-size:19px; line-height:1;}'
+    + 'body{padding-top:48px;}'
+
+    /* ---- 4. TABLES AS CARDS -------------------------------------- */
+    + '.zm-stack, .zm-stack tbody, .zm-stack tr, .zm-stack td{display:block; width:auto;}'
+    + '.zm-stack{border-collapse:collapse; background:none; box-shadow:none; border-radius:0;}'
+    + '.zm-stack tr.zm-head{display:none;}'
+    + '.zm-stack tr{background:var(--card,#fff); border:1px solid var(--line,#f0e2d0);'
+    + 'border-radius:14px; padding:4px 2px; margin:0 0 10px;'
+    + 'box-shadow:0 2px 8px rgba(0,0,0,.05);}'
+    + '.zm-stack tr:nth-child(even) td,.zm-stack tr:nth-child(odd) td{background:none;}'
+    + '.zm-stack td{border:none; border-bottom:1px dashed var(--line,#f0e2d0);'
+    + 'padding:9px 13px; text-align:left;}'
+    + '.zm-stack tr td:last-child{border-bottom:none;}'
+    + '.zm-stack td:empty{display:none;}'
+    + '.zm-stack td::before{content:attr(data-zm-label); display:block; font-size:10.5px;'
+    + 'font-weight:800; letter-spacing:.5px; text-transform:uppercase;'
+    + 'color:var(--red,#e63946); opacity:.75; margin-bottom:3px;}'
+    + '.zm-stack td[data-zm-label=""]::before{display:none;}'
+    /* the first cell of each card carries the sentence — give it weight */
+    + '.zm-stack td:first-child{font-size:16px; padding-top:11px;}'
+    + '.zm-stack-wrap{overflow:visible; box-shadow:none; background:none; margin-top:10px;}'
+    + '.zm-stack-wrap::after{display:none;}'
+    /* tables left as real tables lose the nowrap that forced the overflow */
+    + '.table-scroll th,.table-scroll td{white-space:normal;}'
+
+    /* ---- 5. TAP TARGETS ------------------------------------------ */
+    + '.audio-btn{width:42px; height:42px; font-size:17px; margin-left:4px;}'
+    + '.zm-stack td .audio-btn{width:46px; height:46px;}'
+    + '.acc-header{min-height:54px; padding:15px 14px;}'
+    + '.acc-chevron{font-size:13px; width:16px;}'
+    + '.gg-close,.vs-close{width:44px !important; height:44px !important; font-size:20px;}'
+    + '.navbtn{min-height:48px; padding:12px 16px; font-size:15px; flex:1;}'
+    + '.blk{min-height:56px; padding:12px 10px;}'
+
+    /* ---- 6. BOTTOM NAV: dots out, real buttons in ----------------- */
+    + '.dots{display:none;}'
+    + '.navbar{padding:8px; gap:8px; border-radius:14px; bottom:8px;}'
+    + '.pageof{font-size:13px; font-weight:700; min-width:52px; color:var(--ink,#22223b);}'
+
+    /* ---- 7. SIDEBARS: edge tabs out, sheet entries in ------------- */
+    + '.gg-tab,.vs-tab{display:none !important;}'
+    + '.gg-panel,.vs-panel{width:100% !important; max-width:100% !important;}'
+
+    /* ---- 8. EXAMPLES GET THEIR OWN VOICE ------------------------- */
+    + '.mini-ex{border-left:3px solid var(--gold,#f4a259); border-radius:0 10px 10px 0;'
+    + 'padding:10px 12px;}'
+    + '.arrow-flow{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}'
+
+    /* ---- 9. RULE SHEET ------------------------------------------- */
+    + '.zm-sheet{position:fixed; inset:0; z-index:10001; display:flex; flex-direction:column;'
+    + 'background:var(--bg,#fff7ef); transform:translateY(100%);'
+    + 'transition:transform .22s ease; visibility:hidden;}'
+    + '.zm-sheet.on{transform:translateY(0); visibility:visible;}'
+    + '.zm-sheet-top{display:flex; align-items:center; gap:8px; padding:8px 10px;'
+    + 'border-bottom:1px solid var(--line,#f0e2d0); background:var(--card,#fff);}'
+    + '.zm-search{flex:1; min-width:0; font-family:inherit; font-size:16px;'  /* 16px stops iOS zoom */
+    + 'padding:12px 14px; border:1.5px solid var(--line,#f0e2d0); border-radius:12px;'
+    + 'background:var(--bg,#fff7ef); color:var(--ink,#22223b); min-height:46px;}'
+    + '.zm-search:focus{outline:none; border-color:var(--red,#e63946);}'
+    + '.zm-sheet-close{min-width:46px; min-height:46px; border:none; background:none;'
+    + 'font-size:22px; color:var(--soft,#6c757d); cursor:pointer; border-radius:12px;}'
+    + '.zm-list{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:8px 10px 24px;}'
+    + '.zm-item{display:flex; align-items:center; gap:11px; width:100%; text-align:left;'
+    + 'background:var(--card,#fff); border:1px solid var(--line,#f0e2d0); border-radius:14px;'
+    + 'padding:12px 13px; margin-bottom:8px; min-height:56px; cursor:pointer;'
+    + 'font-family:inherit; color:var(--ink,#22223b);}'
+    + '.zm-item:active{background:#fdf0e8;}'
+    + '.zm-item.cur{border-color:var(--red,#e63946); background:#fff1f2;}'
+    + '.zm-item .num{flex:0 0 34px; height:34px; border-radius:10px; display:flex;'
+    + 'align-items:center; justify-content:center; background:var(--line,#f0e2d0);'
+    + 'font-weight:800; font-size:14px; color:var(--ink,#22223b);}'
+    + '.zm-item.cur .num{background:var(--red,#e63946); color:#fff;}'
+    + '.zm-item.done .num{background:#2e9e5b; color:#fff;}'
+    + '.zm-item .tt{flex:1; min-width:0; font-size:14.5px; font-weight:600; line-height:1.35;}'
+    + '.zm-item .hit{display:block; font-size:12.5px; font-weight:400;'
+    + 'color:var(--soft,#6c757d); margin-top:2px; overflow:hidden; text-overflow:ellipsis;'
+    + 'white-space:nowrap;}'
+    + '.zm-sec{display:flex; gap:8px; padding:0 10px 10px;}'
+    + '.zm-sec button{flex:1; min-height:44px; border-radius:12px; font-family:inherit;'
+    + 'font-size:13.5px; font-weight:700; cursor:pointer;'
+    + 'border:1.5px solid var(--line,#f0e2d0); background:var(--card,#fff);'
+    + 'color:var(--ink,#22223b);}'
+    + '.zm-empty{text-align:center; color:var(--soft,#6c757d); font-size:14.5px; padding:26px 10px;}'
+
+    /* ---- 10. REVIEWED COUNT + CLOUD SYNC, moved out of the header ---- */
+    + 'header .review-status{display:none;}'
+    + '.zm-status{display:flex; align-items:center; gap:8px; padding:0 10px 10px;}'
+    + '.zm-status .b{flex:1; font-size:13px; font-weight:700; color:var(--soft,#6c757d);}'
+    + '.zm-status button{min-height:44px; padding:0 14px; border-radius:12px;'
+    + 'font-family:inherit; font-size:13px; font-weight:700; cursor:pointer;'
+    + 'border:1.5px solid var(--line,#f0e2d0); background:var(--card,#fff);'
+    + 'color:var(--ink,#22223b);}'
+
+    /* ---- 11. LAST-MILE TAP TARGETS + CLEARANCE ------------------- */
+    + '.zh-audio-hint button{min-width:44px; min-height:44px;}'
+    + '.vs-watch,.gg-item button{min-height:44px;}'
+    + '.wrap{padding-bottom:84px;}'              /* content must clear the sticky nav */
+    + 'html{scroll-padding-top:56px; scroll-padding-bottom:96px;}'
+
+    /* ---- 12. AUDIO SITS WITH ITS SENTENCE ------------------------
+       The 🔊 button is moved out of its own column into the Chinese
+       cell, so the control is never separated from what it plays. */
+    + '.zm-stack td:first-child{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}'
+    + '.zm-stack td:first-child::before{flex:0 0 100%;}'
+    + '.zm-stack td:first-child .zm-said{margin-left:auto;}'
+    + '.zm-stack td.zm-audio-cell{display:none;}'
+
+    /* ---- 13. HEADER: the title gets to be readable ----------------
+       It used to be one nowrap line with an ellipsis, which turned
+       "Potential Complement (可能补语, kěnéng bǔyǔ)" into "Potential
+       Complement (可能补语..., k...". Now it wraps to two lines, and the
+       nav buttons are narrowed so they stop eating the title's width. */
+    + '.zm-bar{height:auto; min-height:48px; padding:5px 6px;}'
+    + '.zm-bar .zm-nav{display:flex; gap:2px; flex:0 0 auto;}'
+    + '.zm-bar button{min-width:40px; padding:0 2px;}'
+    + '.zm-cur{gap:2px; padding:2px 4px;}'
+    + '.zm-cur .t{white-space:normal; line-height:1.25; font-size:13px; display:-webkit-box;'
+    + '-webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:clip;}'
+
+    /* ---- 14. SECTIONS: the four desktop controls, one mobile door -- */
+    + '.zm-sections{display:flex; align-items:center; justify-content:center; gap:7px;'
+    + 'width:100%; min-height:46px; margin:0 0 14px; border-radius:12px; font-family:inherit;'
+    + 'font-size:14px; font-weight:700; cursor:pointer;'
+    + 'border:1.5px solid var(--line,#f0e2d0); background:var(--card,#fff); color:var(--ink,#22223b);}'
+    + '.zm-secsheet{position:fixed; inset:0; z-index:10002; display:none;}'
+    + '.zm-secsheet.on{display:block;}'
+    + '.zm-secsheet .bd{position:absolute; inset:0; background:rgba(34,34,59,.35);}'
+    + '.zm-secsheet .pn{position:absolute; left:8px; right:8px; bottom:8px;'
+    + 'background:var(--card,#fff); border-radius:16px; padding:8px;'
+    + 'box-shadow:0 -6px 30px rgba(0,0,0,.22);'
+    + 'padding-bottom:calc(8px + env(safe-area-inset-bottom));}'
+    + '.zm-secsheet .pn button{display:block; width:100%; min-height:50px; margin-bottom:6px;'
+    + 'border-radius:12px; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;'
+    + 'border:1px solid var(--line,#f0e2d0); background:var(--bg,#fff7ef); color:var(--ink,#22223b);}'
+    + '.zm-secsheet .pn button.x{background:var(--card,#fff); color:var(--soft,#6c757d); margin-bottom:0;}'
+
+    /* ---- 15. NOTHING HIDES BEHIND THE FLOATING NAV ---------------- */
+    + '.wrap{padding-bottom:calc(112px + env(safe-area-inset-bottom));}'
+    + '.navbar{bottom:calc(8px + env(safe-area-inset-bottom));}'
+    + '.acc{scroll-margin-top:96px; scroll-margin-bottom:118px;}'
+
+    /* ---- 16. TRANSLATION POPUP ------------------------------------
+       The shared tooltip has two show paths (hover AND focus) but only
+       one dismissal path, gated on a `(hover:none)` flag read once at
+       load. On a phone reporting hover:none the two paths cancel out;
+       on one reporting hover:hover nothing ever closes it. Rather than
+       re-gate the shared module and risk the approved desktop tooltip,
+       mobile hides it and drives its own popup with one explicit model:
+         inside popup -> keep · same word -> toggle
+         other word   -> switch · anything else -> close            */
+    + '#zh-tip-popover{display:none !important;}'
+    + '#zm-tip{position:fixed; z-index:10003; max-width:min(290px,92vw);'
+    + 'background:var(--card,#fff); color:var(--ink,#22223b);'
+    + 'border:1px solid var(--line,#f0e2d0); border-radius:14px;'
+    + 'box-shadow:0 10px 30px rgba(0,0,0,.22); padding:11px 13px;'
+    + 'opacity:0; visibility:hidden; transform:translateY(3px);'
+    + 'transition:opacity .12s ease, transform .12s ease; pointer-events:auto;}'
+    + '#zm-tip.on{opacity:1; visibility:visible; transform:translateY(0);}'
+    + '#zm-tip .row{display:flex; align-items:center; gap:10px;}'
+    + '#zm-tip .cn{flex:1; font-weight:800; font-size:19px;'
+    + 'font-family:"PingFang SC","Microsoft YaHei",serif;}'
+    + '#zm-tip .pl{flex:0 0 auto; width:44px; height:44px; border-radius:50%; border:none;'
+    + 'background:var(--subjbg,#eaf0ff); color:var(--subj,#4361ee); font-size:16px; cursor:pointer;}'
+    + '#zm-tip .py{color:var(--red,#e63946); font-style:italic; font-weight:600;'
+    + 'font-size:14px; margin-top:3px;}'
+    + '#zm-tip .en{color:var(--soft,#6c757d); font-size:14px; margin-top:2px; line-height:1.45;}'
+    + '}'
+
+    /* The ONLY rules outside the mobile query. They target nothing but the
+       elements this file itself creates, so they cannot alter the desktop
+       app — they just guarantee those elements stay hidden if someone drags
+       a window from mobile width back up to desktop. */
+    + '@media (min-width:' + (BP + 1) + 'px){'
+    + '.zm-bar,.zm-sheet,.zm-secsheet,.zm-sections,#zm-tip{display:none !important;}}';
+
+  function injectCss() {
+    var s = document.createElement('style');
+    s.id = 'zh-mobile-style';
+    s.textContent = CSS;
+    document.head.appendChild(s);
+  }
+
+  /* ================================================================
+     TABLES -> CARDS
+     Labels come from the table's own header row, so this needs no
+     per-table configuration and covers future rules automatically.
+     ================================================================ */
+  var STACK_FROM_COLS = 4;   // 2- and 3-column tables still read fine as tables
+
+  function stackTables() {
+    document.querySelectorAll('table').forEach(function (t) {
+      if (t.__zmDone) return;
+      t.__zmDone = true;
+
+      var rows = t.rows;
+      if (!rows.length) return;
+      var head = rows[0];
+      var isHead = head.querySelector('th');
+      var cols = head.children.length;
+      if (!isHead || cols < STACK_FROM_COLS) return;
+
+      var labels = [].map.call(head.children, function (th) {
+        return (th.textContent || '').trim();
+      });
+
+      head.classList.add('zm-head');
+      for (var i = 1; i < rows.length; i++) {
+        var cells = rows[i].children;
+        for (var c = 0; c < cells.length; c++) {
+          var lab = labels[c] || '';
+          // An "Audio" column label is noise next to a speaker button.
+          if (/^(audio|аудио|звук)$/i.test(lab)) lab = '';
+          cells[c].setAttribute('data-zm-label', lab);
+        }
+        moveAudioUp(rows[i]);
+      }
+      t.classList.add('zm-stack');
+      var w = t.parentElement;
+      if (w && w.classList.contains('table-scroll')) w.classList.add('zm-stack-wrap');
+    });
+  }
+
+  /* A trailing cell holding nothing but a 🔊 button becomes a whole card row
+     of its own once stacked — and puts the control a screenful away from the
+     sentence it plays. Move it up beside the Chinese instead. */
+  function moveAudioUp(row) {
+    var cells = row.children;
+    if (cells.length < 2) return;
+    var last = cells[cells.length - 1];
+    if (last.classList.contains('zm-audio-cell')) return;
+    var btns = last.querySelectorAll('.audio-btn');
+    // Structural test: the cell's own text is just the button's glyph.
+    var onlyBtn = btns.length === 1 && last.children.length === 1 &&
+                  last.textContent.trim() === btns[0].textContent.trim();
+    if (!onlyBtn) return;
+    btns[0].classList.add('zm-said');
+    cells[0].appendChild(btns[0]);
+    last.classList.add('zm-audio-cell');
+  }
+
+  /* Progressive disclosure: several pages open two or three sections by
+     default, which is comfortable on a wide screen and a wall of text on a
+     phone. Keep the first one open, fold the rest away. Mobile only. */
+  function foldExtraSections() {
+    document.querySelectorAll('.page').forEach(function (p) {
+      var open = [].slice.call(p.querySelectorAll('.acc-header[aria-expanded="true"]'));
+      open.slice(1).forEach(function (h) { h.click(); });
+    });
+  }
+
+  /* Undo every DOM change if the viewport grows back past the breakpoint, so
+     a desktop user who drags their window narrow and wide again is left with
+     exactly the desktop app. */
+  function teardownMobile() {
+    document.querySelectorAll('table.zm-stack').forEach(function (t) {
+      t.classList.remove('zm-stack');
+      if (t.rows[0]) t.rows[0].classList.remove('zm-head');
+      var w = t.parentElement;
+      if (w) w.classList.remove('zm-stack-wrap');
+      t.__zmDone = false;
+    });
+    document.querySelectorAll('.audio-btn.zm-said').forEach(function (b) {
+      var row = b.closest('tr'); if (!row) return;
+      var cell = row.querySelector('td.zm-audio-cell');
+      if (cell) { cell.classList.remove('zm-audio-cell'); cell.appendChild(b); }
+      b.classList.remove('zm-said');
+    });
+    document.querySelectorAll('.zm-sections').forEach(function (b) { b.remove(); });
+    hideTip();
+    closeSec();
+    if (sheet) closeSheet();
+    document.body.style.overflow = '';
+    document.body.style.paddingTop = '';                 // drop the mobile bar offset
+    document.documentElement.style.scrollPaddingTop = '';
+    started = false;
+  }
+
+  /* ================================================================
+     PAGE MODEL
+     ================================================================ */
+  var pages = [];
+  function readPages() {
+    pages = [].map.call(document.querySelectorAll('.page'), function (p, i) {
+      var t = p.querySelector('.ruletitle');
+      var full = t ? t.textContent.trim() : (p.getAttribute('data-title') || '');
+      return {
+        el: p,
+        idx: i,
+        num: i + 1,
+        nav: p.getAttribute('data-title') || ('Rule ' + (i + 1)),
+        title: full.replace(/^Rule\s*\d+\s*[—–-]\s*/, ''),
+        topic: p.getAttribute('data-topic') || '',
+        text: null        // search index, built lazily
+      };
+    });
+  }
+  function curIdx() {
+    for (var i = 0; i < pages.length; i++) {
+      if (pages[i].el.classList.contains('active')) return i;
+    }
+    return 0;
+  }
+  function goTo(i) {
+    if (typeof window.__grammarGoTo === 'function') window.__grammarGoTo(i);
+  }
+
+  /* ================================================================
+     STICKY BAR
+     ================================================================ */
+  var bar, curEl;
+  function buildBar() {
+    bar = document.createElement('div');
+    bar.className = 'zm-bar';
+    bar.innerHTML =
+      '<button type="button" class="zm-open" aria-label="Список правил"><span class="zm-ico">☰</span></button>' +
+      '<div class="zm-cur"><span class="n"></span><span class="t"></span></div>' +
+      '<div class="zm-nav">' +
+        '<button type="button" class="zm-prev" aria-label="Предыдущее правило"><span class="zm-ico">‹</span></button>' +
+        '<button type="button" class="zm-next" aria-label="Следующее правило"><span class="zm-ico">›</span></button>' +
+      '</div>';
+    document.body.appendChild(bar);
+    curEl = bar.querySelector('.zm-cur');
+
+    bar.querySelector('.zm-open').addEventListener('click', function () { hideTip(); openSheet(); });
+    curEl.addEventListener('click', function () { hideTip(); openSheet(); });
+    bar.querySelector('.zm-prev').addEventListener('click', function () { hideTip(); goTo(curIdx() - 1); });
+    bar.querySelector('.zm-next').addEventListener('click', function () { hideTip(); goTo(curIdx() + 1); });
+  }
+  function syncBar() {
+    if (!bar) return;
+    var p = pages[curIdx()];
+    if (!p) return;
+    curEl.querySelector('.n').textContent = 'Правило ' + p.num + ' / ' + pages.length;
+    curEl.querySelector('.t').textContent = p.title;
+    bar.querySelector('.zm-prev').disabled = (curIdx() === 0);
+    bar.querySelector('.zm-next').disabled = (curIdx() === pages.length - 1);
+    setBarOffset();
+  }
+
+  /* The bar is no longer a fixed 48px — a two-line title makes it taller.
+     Keep the body offset and scroll anchoring in step with its real height,
+     or the first section ends up underneath it. */
+  function setBarOffset() {
+    if (!bar) return;
+    var h = Math.round(bar.getBoundingClientRect().height);
+    document.body.style.paddingTop = h + 'px';
+    document.documentElement.style.scrollPaddingTop = (h + 10) + 'px';
+  }
+
+  /* ================================================================
+     RULE SHEET + SEARCH
+     ================================================================ */
+  var sheet, listEl, searchEl;
+  function buildSheet() {
+    sheet = document.createElement('div');
+    sheet.className = 'zm-sheet';
+    sheet.innerHTML =
+      '<div class="zm-sheet-top">' +
+        '<input class="zm-search" type="search" inputmode="search" ' +
+        'placeholder="Поиск: 得, complement, номер…" aria-label="Поиск по правилам">' +
+        '<button type="button" class="zm-sheet-close" aria-label="Закрыть">✕</button>' +
+      '</div>' +
+      '<div class="zm-status"><span class="b"></span>' +
+        '<button type="button" class="zm-sync"></button></div>' +
+      '<div class="zm-sec">' +
+        '<button type="button" data-act="expand">Развернуть всё</button>' +
+        '<button type="button" data-act="collapse">Свернуть всё</button>' +
+      '</div>' +
+      '<div class="zm-list"></div>';
+    document.body.appendChild(sheet);
+
+    // The reviewed badge and the cloud-sync button left the header to save
+    // 40px on every screen; mirror them here so nothing is actually lost.
+    var stat = sheet.querySelector('.zm-status');
+    var mirror = function () {
+      var badge = document.getElementById('reviewBadge');
+      var sync = document.getElementById('rulesSyncBtn');
+      stat.querySelector('.b').textContent = badge ? badge.textContent : '';
+      stat.querySelector('.zm-sync').textContent = sync ? sync.textContent : 'Cloud Sync';
+    };
+    stat.querySelector('.zm-sync').addEventListener('click', function () {
+      var b = document.getElementById('rulesSyncBtn');
+      if (b) b.click();
+      setTimeout(mirror, 80);
+    });
+    mirror();
+    document.addEventListener('click', function () { setTimeout(mirror, 80); });
+    listEl = sheet.querySelector('.zm-list');
+    searchEl = sheet.querySelector('.zm-search');
+
+    sheet.querySelector('.zm-sheet-close').addEventListener('click', closeSheet);
+    searchEl.addEventListener('input', function () { hideTip(); renderList(searchEl.value); });
+    sheet.querySelectorAll('.zm-sec button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var expand = b.getAttribute('data-act') === 'expand';
+        var page = pages[curIdx()].el;
+        page.querySelectorAll('.acc-header').forEach(function (h) {
+          var open = h.getAttribute('aria-expanded') === 'true';
+          if (open !== expand) h.click();
+        });
+        closeSheet();
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && sheet.classList.contains('on')) closeSheet();
+    });
+  }
+
+  function indexOf(p) {
+    if (p.text === null) p.text = (p.el.textContent || '').toLowerCase().replace(/\s+/g, ' ');
+    return p.text;
+  }
+
+  function renderList(q) {
+    q = (q || '').trim().toLowerCase();
+    var cur = curIdx();
+    var html = '';
+    var shown = 0;
+    var matches = [];
+
+    pages.forEach(function (p) {
+      var hit = '', exact = false;
+      if (q) {
+        exact = String(p.num) === q;
+        var inTitle = exact || p.title.toLowerCase().indexOf(q) > -1 ||
+                      p.nav.toLowerCase().indexOf(q) > -1;
+        var body = indexOf(p);
+        var at = body.indexOf(q);
+        if (!inTitle && at < 0) return;
+        if (!inTitle && at > -1) {
+          hit = body.slice(Math.max(0, at - 28), at + q.length + 34).trim();
+          hit = (at > 28 ? '…' : '') + hit + '…';
+        }
+      }
+      matches.push({ p: p, hit: hit, exact: exact });
+    });
+
+    // Typing "12" should land on rule 12, not on the rules that mention it.
+    matches.sort(function (a, b) { return (b.exact ? 1 : 0) - (a.exact ? 1 : 0); });
+
+    matches.forEach(function (m) {
+      var p = m.p;
+      shown++;
+      var done = p.el.querySelector('.review-btn.done') ? ' done' : '';
+      html += '<button type="button" class="zm-item' + (p.idx === cur ? ' cur' : '') + done +
+              '" data-go="' + p.idx + '">' +
+              '<span class="num">' + p.num + '</span>' +
+              '<span class="tt">' + esc(p.title) +
+              (m.hit ? '<span class="hit">' + esc(m.hit) + '</span>' : '') +
+              '</span></button>';
+    });
+
+    listEl.innerHTML = shown ? html :
+      '<div class="zm-empty">Ничего не найдено.<br>Попробуйте номер правила, иероглиф или слово из объяснения.</div>';
+
+    listEl.querySelectorAll('.zm-item').forEach(function (b) {
+      b.addEventListener('click', function () {
+        goTo(+b.getAttribute('data-go'));
+        closeSheet();
+      });
+    });
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function openSheet() {
+    renderList(searchEl.value);
+    sheet.classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSheet() {
+    sheet.classList.remove('on');
+    document.body.style.overflow = '';
+  }
+
+  /* ================================================================
+     SECTIONS MENU
+     The four approved desktop controls are untouched — this just gives
+     them a mobile-sized door. Each option clicks the real .acc-ctrl
+     button, so the existing expand/collapse logic is what runs.
+     ================================================================ */
+  var secSheet;
+  function openSec() { hideTip(); if (secSheet) secSheet.classList.add('on'); }
+  function closeSec() { if (secSheet) secSheet.classList.remove('on'); }
+
+  function buildSecSheet() {
+    secSheet = document.createElement('div');
+    secSheet.className = 'zm-secsheet';
+    secSheet.innerHTML = '<div class="bd"></div><div class="pn">' +
+      '<button type="button" data-s="expand-all">Развернуть все секции</button>' +
+      '<button type="button" data-s="collapse-all">Свернуть все секции</button>' +
+      '<button type="button" data-s="expand-learning">Развернуть учебные секции</button>' +
+      '<button type="button" data-s="collapse-learning">Свернуть учебные секции</button>' +
+      '<button type="button" class="x" data-s="close">Отмена</button></div>';
+    document.body.appendChild(secSheet);
+    secSheet.querySelector('.bd').addEventListener('click', closeSec);
+    secSheet.querySelectorAll('.pn button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var k = b.getAttribute('data-s');
+        if (k !== 'close') {
+          var real = pages[curIdx()].el.querySelector('.acc-' + k);
+          if (real) real.click();
+        }
+        closeSec();
+      });
+    });
+  }
+
+  /* Sits exactly where the hidden desktop toolbar was: after the rule
+     subtitle, immediately before the collapsible sections. */
+  function addSectionsButtons() {
+    document.querySelectorAll('.page').forEach(function (p) {
+      if (p.querySelector('.zm-sections')) return;
+      var tb = p.querySelector('.acc-toolbar');
+      if (!tb) return;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'zm-sections';
+      b.innerHTML = '<span>Секции</span><span aria-hidden="true">▾</span>';
+      b.addEventListener('click', openSec);
+      tb.parentNode.insertBefore(b, tb.nextSibling);
+    });
+  }
+
+  /* ================================================================
+     TRANSLATION POPUP  (see note 16 in the stylesheet for the why)
+        inside popup -> keep · same word -> toggle
+        other word   -> switch · anything else -> close
+     ================================================================ */
+  var tip = null, tipTerm = null, tipAnchorY = 0;
+
+  function buildTip() {
+    tip = document.createElement('div');
+    tip.id = 'zm-tip';
+    tip.innerHTML = '<div class="row"><span class="cn"></span>' +
+      '<button type="button" class="pl" aria-label="Произношение">🔊</button></div>' +
+      '<div class="py"></div><div class="en"></div>';
+    document.body.appendChild(tip);
+    tip.querySelector('.pl').addEventListener('click', function (ev) {
+      ev.stopPropagation();                 // a control inside the popup must not close it
+      var w = tip.querySelector('.cn').textContent;
+      if (w && typeof window.speak === 'function') window.speak(w);
+    });
+  }
+
+  /* Stay inside the viewport, never under the sticky bar, and prefer to sit
+     above the word so the word itself stays readable. */
+  function placeTip(term) {
+    var r = term.getBoundingClientRect();
+    tip.style.left = '0px'; tip.style.top = '0px';
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var barH = bar ? bar.getBoundingClientRect().height : 0;
+    var left = r.left + r.width / 2 - tw / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+    var above = r.top - th - 10, below = r.bottom + 10;
+    var top = (above >= barH + 6) ? above : below;
+    if (top + th > window.innerHeight - 10) top = Math.max(barH + 6, above);
+    tip.style.left = Math.round(left) + 'px';
+    tip.style.top = Math.round(top) + 'px';
+  }
+
+  function showTip(term) {
+    var dict = window.ZH_GLOSSARY || {};
+    var w = term.getAttribute('data-zh');
+    var e = dict[w];
+    if (!e) return;
+    tip.querySelector('.cn').textContent = w;
+    tip.querySelector('.py').textContent = e[0];
+    tip.querySelector('.en').textContent = e[1];
+    tipTerm = term;
+    tipAnchorY = window.scrollY;
+    tip.classList.add('on');
+    placeTip(term);
+  }
+
+  function hideTip() {
+    if (!tip) return;
+    tip.classList.remove('on');
+    tipTerm = null;
+  }
+
+  function wireTip() {
+    document.addEventListener('click', function (e) {
+      if (!MQ.matches || !tip) return;
+      if (e.target.closest && e.target.closest('#zm-tip')) return;
+      var t = e.target.closest && e.target.closest('.zh-term');
+      if (t) { if (tipTerm === t) hideTip(); else showTip(t); return; }
+      hideTip();
+    });
+
+    /* .zh-term carries tabindex=0, so a tap also focuses it and the shared
+       module opens its (now hidden) tooltip. Dropping focus keeps the two
+       from fighting and stops a focus ring lingering on a tapped word. */
+    document.addEventListener('focusin', function (e) {
+      if (!MQ.matches) return;
+      if (e.target.classList && e.target.classList.contains('zh-term')) e.target.blur();
+    });
+
+    /* Context moved on -> the popup is stale. */
+    window.addEventListener('scroll', function () {
+      if (!tipTerm) return;
+      var r = tipTerm.getBoundingClientRect();
+      var barH = bar ? bar.getBoundingClientRect().height : 0;
+      if (r.bottom < barH || r.top > window.innerHeight - 40 ||
+          Math.abs(window.scrollY - tipAnchorY) > 140) hideTip();
+      else placeTip(tipTerm);
+    }, { passive: true });
+
+    window.addEventListener('resize', function () { hideTip(); setBarOffset(); });
+    document.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('.acc-header')) hideTip();
+    }, true);
+  }
+
+  /* ================================================================
+     STUDY CONTINUITY — come back to exactly where you left off
+     ================================================================ */
+  function openAccIds() {
+    var ids = [];
+    document.querySelectorAll('.acc-header[aria-expanded="true"]').forEach(function (h) {
+      if (h.id) ids.push(h.id);
+    });
+    return ids;
+  }
+  function saveState() {
+    try {
+      localStorage.setItem(LS_PAGE, String(curIdx()));
+      localStorage.setItem(LS_OPEN, JSON.stringify(openAccIds()));
+      localStorage.setItem(LS_SCROLL, String(Math.round(window.scrollY)));
+    } catch (e) {}
+  }
+  function restoreState() {
+    var idx, open, sc;
+    try {
+      idx = parseInt(localStorage.getItem(LS_PAGE), 10);
+      open = JSON.parse(localStorage.getItem(LS_OPEN) || '[]');
+      sc = parseInt(localStorage.getItem(LS_SCROLL), 10);
+    } catch (e) { return; }
+
+    if (!isNaN(idx) && idx > 0 && idx < pages.length) goTo(idx);
+    if (open && open.length) {
+      open.forEach(function (id) {
+        var h = document.getElementById(id);
+        if (h && h.getAttribute('aria-expanded') !== 'true') h.click();
+      });
+    }
+    if (!isNaN(sc) && sc > 0) {
+      // after the accordions have laid out
+      setTimeout(function () { window.scrollTo(0, sc); }, 120);
+    }
+  }
+
+  /* ================================================================
+     BOOT
+     ================================================================ */
+  var started = false;
+  function startMobile() {
+    if (started) return;
+    started = true;
+    readPages();
+    stackTables();
+    buildBar();
+    buildSheet();
+    buildSecSheet();
+    buildTip();
+    addSectionsButtons();
+    wireTip();
+    syncBar();
+    foldExtraSections();
+    restoreState();
+
+    // keep the bar in step with whatever changed the page, and drop any
+    // popup/menu left over from the rule we just left
+    var obs = new MutationObserver(function () { hideTip(); closeSec(); syncBar(); });
+    pages.forEach(function (p) {
+      obs.observe(p.el, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    var t;
+    window.addEventListener('scroll', function () {
+      clearTimeout(t); t = setTimeout(saveState, 400);
+    }, { passive: true });
+    document.addEventListener('click', function () { setTimeout(saveState, 60); });
+    window.addEventListener('pagehide', saveState);
+  }
+
+  function init() {
+    injectCss();                 // harmless at any width: it is all inside the media query
+    if (MQ.matches) startMobile();
+    // Rotate or resize into mobile range: light it up. Back out again: undo it.
+    var onChange = function () {
+      if (MQ.matches) startMobile();
+      else if (started) teardownMobile();
+    };
+    if (MQ.addEventListener) MQ.addEventListener('change', onChange);
+    else if (MQ.addListener) MQ.addListener(onChange);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 0); });
+  } else {
+    setTimeout(init, 0);
+  }
+})();
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
