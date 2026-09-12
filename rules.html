@@ -252,13 +252,13 @@
 
   /* ---- general mobile tuning ---- */
 
-  /* ---- Rule 14: complement comparison ---- */
+  /* ---- Rule 15: complement comparison ---- */
   .ruk{color:var(--red); font-weight:700;}
   .cmp-pill{display:inline-block; padding:2px 9px; border-radius:999px; color:#fff;
     font-size:.74rem; font-weight:700; white-space:nowrap;}
   .cmp-pill.p9{background:#2a9d8f;} .cmp-pill.p10{background:#f4a259;}
   .cmp-pill.p11{background:#e63946;} .cmp-pill.p12{background:#4361ee;}
-  .cmp-pill.p13{background:#7048b6;}
+  .cmp-pill.p13{background:#7048b6;} .cmp-pill.p-deg{background:#c1121f;}
   .cmp-neg{font-size:1.05em;}
   .cmp-branch{margin:0 0 12px; padding:12px 15px; border-radius:12px; background:var(--bg);
     border-left:4px solid var(--line); font-size:.93rem;}
@@ -3083,7 +3083,8 @@
               <tr><th>Rule</th><th>Type</th><th>Question it answers</th><th>Example</th></tr>
               <tr><td>Rule 9</td><td>结果补语 — result</td><td>Did the action reach its outcome?</td><td><span class="h">我写完作业。</span> wǒ xiě wán zuòyè</td></tr>
               <tr><td>Rule 11</td><td>状态补语 — state / manner</td><td><b>How</b> is it done?</td><td><span class="h">他跑得很快。</span> tā pǎo de hěn kuài</td></tr>
-              <tr><td>Rule 13</td><td>可能补语 — potential</td><td><b>Can</b> the outcome be reached?</td><td><span class="h">我看得懂汉字。</span> wǒ kàn de dǒng Hànzì</td></tr>
+              <tr><td>Rule 12</td><td>程度补语 — degree</td><td><b>How much</b> / to what degree?</td><td><span class="h">今天热得很。</span> jīntiān rè de hěn</td></tr>
+              <tr><td>Rule 14</td><td>可能补语 — potential</td><td><b>Can</b> the outcome be reached?</td><td><span class="h">我看得懂汉字。</span> wǒ kàn de dǒng Hànzì</td></tr>
             </table>
           </div>
         </div>
@@ -3170,9 +3171,446 @@
       </section>
     </div>
 
-    <!-- PAGE 12: R7 -->
-    <div class="page" data-title="Rule 12" data-topic="r7">
-      <div class="ruletitle">Rule 12 — S + V + O + V + 得(de) + Complement</div>
+    <!-- PAGE 12: R15 -->
+    <div class="page" data-title="Rule 12" data-topic="r15">
+      <div class="ruletitle">Rule 12 — Degree Complement (程度补语, chéngdù bǔyǔ)</div>
+      <div class="rule-ru-sub">Это правило про то, как сказать «насколько» — и про конструкцию Прил. + 得很 («крайне»), которой нет в Правиле 11.</div>
+      <button type="button" class="review-btn" data-rule="r15" onclick="toggleReviewed('r15')">☐ Mark as Reviewed</button>
+
+      <div class="acc-toolbar">
+        <button type="button" class="acc-ctrl acc-expand-all">Expand All</button>
+        <button type="button" class="acc-ctrl acc-collapse-all">Collapse All</button>
+        <button type="button" class="acc-ctrl acc-expand-learning">Expand Learning Sections</button>
+        <button type="button" class="acc-ctrl acc-collapse-learning">Collapse Learning Sections</button>
+      </div>
+
+      <section class="acc" id="r15-summary-ru" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="r15-summary-ru-header" aria-expanded="false" aria-controls="r15-summary-ru-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇷🇺</span>
+          <span class="acc-title">Summary in Russian</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-summary-ru-body" role="region" aria-labelledby="r15-summary-ru-header">
+            <div class="ru-block">
+              <div class="ru-tag">🇷🇺 На русском</div>
+              <p><b>程度补语 (chéngdù bǔyǔ)</b> — комплемент степени. Он отвечает на вопрос <b>«насколько?»</b>: до какой степени совершается действие или выражено качество.</p>
+              <p><b>Формула:</b> Глагол / Прилагательное + <b>得</b> + описание степени.</p>
+              <p><b>Две структуры:</b><br>
+                1️⃣ <b>Глагол + 得 + …</b> → <span class="z"><span class="h">我说得很慢。</span><span class="p">wǒ shuō de hěn màn.</span></span> «Я говорю медленно».<br>
+                2️⃣ <b>Прилагательное + 得 + …</b> → <span class="z"><span class="h">今天热得很。</span><span class="p">jīntiān rè de hěn.</span></span> «Сегодня крайне жарко».</p>
+              <p>⚡ <b>Самое важное здесь — оборот <span class="z"><span class="h">得很</span><span class="p">de hěn</span></span>.</b> Обратите внимание: 很 стоит <b>после</b> 得 и само является комплементом со значением «крайне, очень сильно». Это <b>не то же самое</b>, что 得 + 很 + прилагательное из Правила 11. Сравните: <span class="z"><span class="h">很热</span><span class="p">hěn rè</span></span> «жарко» → <span class="z"><span class="h">热得很</span><span class="p">rè de hěn</span></span> «крайне жарко» (сильнее и разговорнее).</p>
+              <p>🇬🇧 <b>Разница с английским и русским:</b> там наречие ставится <b>перед</b> глаголом («She runs quickly», «Она быстро бегает»), а в китайском описание идёт <b>после</b> глагола через 得.</p>
+              <p>⚠️ 得 здесь — всегда нейтральный тон <b>de</b>. И не путайте его с 的 и 地 — об этом отдельная секция ниже.</p>
+              <p>🔗 <b>Связь с Правилом 11.</b> Многие учебники объединяют 程度补语 и 状态补语 — конструкция та же. Разница в акценте: Правило 11 отвечает на «<b>как</b> делается», это правило — на «<b>насколько</b> сильно». Уникальное здесь — модель «Прилагательное + 得很».</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-explain-en" data-group="intro" data-default-open="false">
+        <button class="acc-header" id="r15-explain-en-header" aria-expanded="false" aria-controls="r15-explain-en-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇬🇧</span>
+          <span class="acc-title">Explanation in English</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-explain-en-body" role="region" aria-labelledby="r15-explain-en-header">
+            <p class="lead">A <b>degree complement (程度补语)</b> says <b>how much</b> — to what degree an action is performed or a quality holds. Pattern: <b>Verb / Adjective + 得 + degree complement</b>.</p>
+            <div class="h2" style="margin-top:16px"><span class="em">🔁</span> The core English–Chinese difference</div>
+            <table>
+              <tr><th></th><th>Where the description goes</th><th>Example</th></tr>
+              <tr>
+                <td><b>🇬🇧 English</b></td>
+                <td>adverb <b>before</b> the verb</td>
+                <td>She runs <b>quickly</b>.</td>
+              </tr>
+              <tr>
+                <td><b>🇨🇳 Chinese</b></td>
+                <td><b>得 + description after</b> the verb or adjective</td>
+                <td><span class="z"><span class="h">她跑得很快。</span><span class="p">tā pǎo de hěn kuài.</span></span></td>
+              </tr>
+            </table>
+            <p class="lead" style="margin-top:14px">So the mental swap is: <b>[adverb] + verb</b> → <b>verb + 得 + [description]</b>.</p>
+            <div class="h2" style="margin-top:18px"><span class="em">🧱</span> Two structures</div>
+            <table>
+              <tr><th>Structure</th><th>Example</th><th>Meaning</th></tr>
+              <tr>
+                <td><b>Verb + 得 + complement</b></td>
+                <td><span class="z"><span class="h">我说得很慢。</span><span class="p">wǒ shuō de hěn màn.</span></span></td>
+                <td>I speak slowly.</td>
+              </tr>
+              <tr>
+                <td><b>Adjective + 得 + complement</b></td>
+                <td><span class="z"><span class="h">天气热得很。</span><span class="p">tiānqì rè de hěn.</span></span></td>
+                <td>The weather is extremely hot.</td>
+              </tr>
+            </table>
+            <p class="lead" style="margin-top:14px">⚡ Note what <b>得很</b> does: 很 lands <b>after</b> 得 and becomes the complement itself, meaning "extremely". <span style="color:var(--red)">很热</span> is "hot"; <span style="color:var(--red)">热得很</span> is "<i>really</i> hot" — stronger, and more colloquial.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-pattern" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="r15-pattern-header" aria-expanded="false" aria-controls="r15-pattern-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🧩</span>
+          <span class="acc-title">Pattern Visualization</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-pattern-body" role="region" aria-labelledby="r15-pattern-header">
+            <div class="builder">
+              <h2>👆 Tap a block to see its job</h2>
+              <div class="hint">The left slot takes a verb OR an adjective — that's what makes this pattern wider than it looks.</div>
+              <div class="blocks">
+                <div class="blk b-le" onclick="showDegree('base')">
+                  <div class="lbl">Verb / Adjective</div>
+                  <div class="big">热</div>
+                  <div class="py2">rè — hot</div>
+                </div>
+                <div class="op">+</div>
+                <div class="blk b-mei" onclick="showDegree('de')">
+                  <div class="lbl">得 (marker)</div>
+                  <div class="big">得</div>
+                  <div class="py2">de — neutral tone</div>
+                </div>
+                <div class="op">+</div>
+                <div class="blk b-bu" onclick="showDegree('deg')">
+                  <div class="lbl">Degree</div>
+                  <div class="big">很</div>
+                  <div class="py2">hěn — extremely</div>
+                </div>
+              </div>
+              <div class="popup3" id="popup15">👆 Tap any block above. Pattern:
+                <span class="z"><span class="h">V / Adj + 得 + 程度</span><span class="p">V / Adj + de + degree</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-three-de" data-group="learning" data-default-open="true">
+        <button class="acc-header" id="r15-three-de-header" aria-expanded="false" aria-controls="r15-three-de-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">⚠️</span>
+          <span class="acc-title">的 / 地 / 得 — три «de»</span>
+          <span class="acc-count">(3)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-three-de-body" role="region" aria-labelledby="r15-three-de-header">
+            <p class="lead">Три разных иероглифа, <b>одно и то же произношение</b> — нейтральное <i>de</i>. На слух их различить невозможно, поэтому это ошибка не слуха, а письма. Различаются они по тому, <b>что стоит вокруг</b>.</p>
+            <table>
+              <tr><th>Иероглиф</th><th>Где стоит</th><th>Что соединяет</th><th>Пример</th><th>Audio</th></tr>
+              <tr>
+                <td><span class="z"><span class="h">的</span><span class="p">de</span></span></td>
+                <td><b>перед существительным</b></td>
+                <td>определение + <b>существительное</b><div class="en">чей? какой?</div></td>
+                <td><span class="z"><span class="h">我的书</span><span class="p">wǒ de shū</span></span><div class="en">моя книга</div></td>
+                <td><button class="audio-btn" onclick="speak('我的书')" aria-label="Play audio">🔊</button></td>
+              </tr>
+              <tr>
+                <td><span class="z"><span class="h">地</span><span class="p">de</span></span></td>
+                <td><b>перед глаголом</b></td>
+                <td>наречие + <b>глагол</b><div class="en">как? — до действия</div></td>
+                <td><span class="z"><span class="h">慢慢地说</span><span class="p">mànmàn de shuō</span></span><div class="en">говорить медленно</div></td>
+                <td><button class="audio-btn" onclick="speak('慢慢地说')" aria-label="Play audio">🔊</button></td>
+              </tr>
+              <tr>
+                <td><span class="z"><span class="h">得</span><span class="p">de</span></span></td>
+                <td><b>после глагола / прилагательного</b></td>
+                <td>глагол + <b>оценка</b><div class="en">насколько? — после действия</div></td>
+                <td><span class="z"><span class="h">说得很慢</span><span class="p">shuō de hěn màn</span></span><div class="en">говорит медленно</div></td>
+                <td><button class="audio-btn" onclick="speak('说得很慢')" aria-label="Play audio">🔊</button></td>
+              </tr>
+            </table>
+
+            <p class="lead" style="margin-top:16px">💡 <b>Подсказка по позиции.</b> 地 и 得 могут выражать почти одно и то же — разница в том, <b>с какой стороны от глагола</b> они стоят:</p>
+            <div class="tiles">
+              <div class="tile good">
+                <h3>地 — описание ДО действия</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">他慢慢地说。</span><span class="p">tā mànmàn de shuō.</span></span>
+                  <button class="audio-btn" onclick="speak('他慢慢地说。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">Намерение, манера, с которой он <i>приступает</i> к действию: «он говорит медленно (нарочно, не спеша)».</div>
+              </div>
+              <div class="tile good">
+                <h3>得 — оценка ПОСЛЕ действия</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">他说得很慢。</span><span class="p">tā shuō de hěn màn.</span></span>
+                  <button class="audio-btn" onclick="speak('他说得很慢。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">Оценка того, что получилось: «он говорит медленно (так это выглядит со стороны)». Именно это — комплемент степени.</div>
+              </div>
+            </div>
+            <p class="lead" style="margin-top:14px">📝 Мнемоника: <b>的</b> ведёт к <b>вещи</b> (существительному), <b>地</b> — к <b>действию</b> (глаголу впереди), <b>得</b> — к <b>оценке</b> (она идёт следом).</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-main-examples" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r15-main-examples-header" aria-expanded="false" aria-controls="r15-main-examples-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🎯</span>
+          <span class="acc-title">Main Examples</span>
+          <span class="acc-count">(3)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-main-examples-body" role="region" aria-labelledby="r15-main-examples-header">
+            <div class="tiles">
+              <div class="tile good">
+                <h3>✅ Структура 1 — Глагол + 得 + оценка</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">我说得很慢。</span><span class="p">wǒ shuō de hěn màn.</span></span>
+                  <button class="audio-btn" onclick="speak('我说得很慢。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">«Я говорю медленно». Английское наречие <i>slowly</i> стоит перед глаголом — китайская оценка идёт после него через 得.</div>
+              </div>
+              <div class="tile good">
+                <h3>✅ Структура 2 — Прилагательное + 得很</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">今天热得很。</span><span class="p">jīntiān rè de hěn.</span></span>
+                  <button class="audio-btn" onclick="speak('今天热得很。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">«Сегодня крайне жарко». Слева от 得 — <b>прилагательное</b>, а справа 很 работает как комплемент «крайне». Уникальная для этого правила модель.</div>
+              </div>
+              <div class="tile bad">
+                <h3>❌ Не путать с обычным 很 + прилагательное</h3>
+                <div class="arrow-flow">
+                  <span class="z"><span class="h">今天很热。</span><span class="p">jīntiān hěn rè.</span></span>
+                  <button class="audio-btn" onclick="speak('今天很热。')" aria-label="Play audio">🔊</button>
+                </div>
+                <div class="gloss">Это тоже правильно, но слабее: просто «сегодня жарко» (Правило 4). А <span class="z"><span class="h">热得很</span></span> — «жарко до невозможности». Порядок 很 и 得 меняет силу высказывания.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-more-examples" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r15-more-examples-header" aria-expanded="false" aria-controls="r15-more-examples-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">📚</span>
+          <span class="acc-title">More Examples</span>
+          <span class="acc-count">(8)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-more-examples-body" role="region" aria-labelledby="r15-more-examples-header">
+            <div class="subhead"><span class="em">👩‍🏫</span> Восемь предложений с урока</div>
+            <div class="grid" style="margin-top:8px">
+              <div class="scard">
+                <div class="num">1</div><h3>说 → 说得很慢</h3>
+                <div class="gloss">Глагол + 得</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">我说得很慢。</span><span class="p">wǒ shuō de hěn màn.</span></span>
+                  <button class="audio-btn" onclick="speak('我说得很慢。')" aria-label="Play audio">🔊</button>
+                  <div class="en">I speak slowly.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">2</div><h3>写 → 写得很好</h3>
+                <div class="gloss">Глагол + 得</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">你写得很好。</span><span class="p">nǐ xiě de hěn hǎo.</span></span>
+                  <button class="audio-btn" onclick="speak('你写得很好。')" aria-label="Play audio">🔊</button>
+                  <div class="en">You write well.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">3</div><h3>读 → 读得很清楚</h3>
+                <div class="gloss">Глагол + 得</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">他读得很清楚。</span><span class="p">tā dú de hěn qīngchu.</span></span>
+                  <button class="audio-btn" onclick="speak('他读得很清楚。')" aria-label="Play audio">🔊</button>
+                  <div class="en">He reads clearly.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">4</div><h3>难 → 难得很</h3>
+                <div class="gloss">⚡ Прилагательное + 得很</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">这个句子难得很。</span><span class="p">zhège jùzi nán de hěn.</span></span>
+                  <button class="audio-btn" onclick="speak('这个句子难得很。')" aria-label="Play audio">🔊</button>
+                  <div class="en">This sentence is very difficult.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">5</div><h3>听 → 听得很认真</h3>
+                <div class="gloss">Глагол + 得</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">学生听得很认真。</span><span class="p">xuésheng tīng de hěn rènzhēn.</span></span>
+                  <button class="audio-btn" onclick="speak('学生听得很认真。')" aria-label="Play audio">🔊</button>
+                  <div class="en">The students listen carefully.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">6</div><h3>大 → 大得很</h3>
+                <div class="gloss">⚡ Прилагательное + 得很</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">教室大得很。</span><span class="p">jiàoshì dà de hěn.</span></span>
+                  <button class="audio-btn" onclick="speak('教室大得很。')" aria-label="Play audio">🔊</button>
+                  <div class="en">The classroom is very big.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">7</div><h3>笑 → 笑得很开心</h3>
+                <div class="gloss">Глагол + 得</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">她笑得很开心。</span><span class="p">tā xiào de hěn kāixīn.</span></span>
+                  <button class="audio-btn" onclick="speak('她笑得很开心。')" aria-label="Play audio">🔊</button>
+                  <div class="en">She laughs happily.</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">8</div><h3>热 → 热得很</h3>
+                <div class="gloss">⚡ Прилагательное + 得很</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">今天热得很。</span><span class="p">jīntiān rè de hěn.</span></span>
+                  <button class="audio-btn" onclick="speak('今天热得很。')" aria-label="Play audio">🔊</button>
+                  <div class="en">Today is extremely hot.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="h2 more-block" style="margin-top:22px"><span class="em">📚</span> Examples</div>
+            <table>
+              <tr><th>Chinese</th><th>Pinyin</th><th>English</th><th>Russian</th><th>Что происходит</th><th>Audio</th></tr>
+              <tr><td>我说得很慢。</td><td>wǒ shuō de hěn màn.</td><td>I speak slowly.</td><td class="ru">Я говорю медленно.</td><td class="note">Глагол 说 + 得 + оценка 很慢. В английском <i>slowly</i> стояло бы перед глаголом.</td><td><button class="audio-btn" onclick="speak('我说得很慢。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>你写得很好。</td><td>nǐ xiě de hěn hǎo.</td><td>You write well.</td><td class="ru">Ты пишешь хорошо.</td><td class="note">Та же модель. 很 обязательно: «你写得好» звучит незакончённо.</td><td><button class="audio-btn" onclick="speak('你写得很好。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>他读得很清楚。</td><td>tā dú de hěn qīngchu.</td><td>He reads clearly.</td><td class="ru">Он читает очень чётко.</td><td class="note">读 (читать вслух) + 得 + 很清楚 (очень ясно).</td><td><button class="audio-btn" onclick="speak('他读得很清楚。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>学生听得很认真。</td><td>xuésheng tīng de hěn rènzhēn.</td><td>The students listen carefully.</td><td class="ru">Студенты слушают очень внимательно.</td><td class="note">认真 — «серьёзно, добросовестно». Оценка того, КАК слушают.</td><td><button class="audio-btn" onclick="speak('学生听得很认真。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>她笑得很开心。</td><td>tā xiào de hěn kāixīn.</td><td>She laughs happily.</td><td class="ru">Она смеётся очень радостно.</td><td class="note">Эта же модель встречалась в Правиле 11 — конструкция общая, здесь важен акцент на степени.</td><td><button class="audio-btn" onclick="speak('她笑得很开心。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>今天热得很。</td><td>jīntiān rè de hěn.</td><td>Today is extremely hot.</td><td class="ru">Сегодня крайне жарко.</td><td class="note">⚡ Прилагательное 热 слева, 很 справа от 得 как комплемент «крайне». Сильнее, чем 今天很热.</td><td><button class="audio-btn" onclick="speak('今天热得很。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>教室大得很。</td><td>jiàoshì dà de hěn.</td><td>The classroom is very big.</td><td class="ru">Аудитория очень большая.</td><td class="note">⚡ Та же модель «Прил. + 得很». Разговорный, живой оборот.</td><td><button class="audio-btn" onclick="speak('教室大得很。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>这个句子难得很。</td><td>zhège jùzi nán de hěn.</td><td>This sentence is very difficult.</td><td class="ru">Это предложение очень трудное.</td><td class="note">⚡ 难 (трудный) + 得很. Осторожно: 难得 отдельным словом (nándé) значит «редкий» — здесь это НЕ оно, а 难 + 得很.</td><td><button class="audio-btn" onclick="speak('这个句子难得很。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>天气热得很。</td><td>tiānqì rè de hěn.</td><td>The weather is extremely hot.</td><td class="ru">Погода крайне жаркая.</td><td class="note">Ещё один пример «Прил. + 得很» — с 天气 вместо 今天.</td><td><button class="audio-btn" onclick="speak('天气热得很。')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-quick-reference" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r15-quick-reference-header" aria-expanded="false" aria-controls="r15-quick-reference-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🔗</span>
+          <span class="acc-title">Quick Reference</span>
+          <span class="acc-count">(4)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-quick-reference-body" role="region" aria-labelledby="r15-quick-reference-header">
+            <table>
+              <tr><th>Модель</th><th>Пример</th><th>Перевод</th></tr>
+              <tr><td>Глагол + 得 + 很 + Прил.</td><td><span class="z"><span class="h">说得很慢</span><span class="p">shuō de hěn màn</span></span></td><td>говорит медленно</td></tr>
+              <tr><td>Прилагательное + 得很</td><td><span class="z"><span class="h">热得很</span><span class="p">rè de hěn</span></span></td><td>крайне жарко</td></tr>
+              <tr><td>Отрицание: 得 + 不 + Прил.</td><td><span class="z"><span class="h">说得不慢</span><span class="p">shuō de bù màn</span></span></td><td>говорит небыстро</td></tr>
+              <tr><td>Вопрос: 得 + Прил. + 不 + Прил.</td><td><span class="z"><span class="h">说得慢不慢？</span><span class="p">shuō de màn bu màn?</span></span></td><td>медленно ли говорит?</td></tr>
+            </table>
+
+            <div class="h2" style="margin-top:20px"><span class="em">🔥</span> Родственные обороты степени</div>
+            <p class="lead">得很 — не единственный способ сказать «очень сильно». Вот его ближайшие родственники:</p>
+            <table>
+              <tr><th>Оборот</th><th>Пример</th><th>Сила</th><th>Audio</th></tr>
+              <tr><td><span class="z"><span class="h">很 + Прил.</span><span class="p">hěn</span></span></td><td><span class="z"><span class="h">很热</span><span class="p">hěn rè</span></span></td><td>обычное «жарко» (Правило 4)</td><td><button class="audio-btn" onclick="speak('很热')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">Прил. + 得很</span><span class="p">de hěn</span></span></td><td><span class="z"><span class="h">热得很</span><span class="p">rè de hěn</span></span></td><td>крайне жарко, разговорно</td><td><button class="audio-btn" onclick="speak('热得很')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">Прил. + 极了</span><span class="p">jí le</span></span></td><td><span class="z"><span class="h">热极了</span><span class="p">rè jí le</span></span></td><td>жарко до предела</td><td><button class="audio-btn" onclick="speak('热极了')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">Прил. + 死了</span><span class="p">sǐ le</span></span></td><td><span class="z"><span class="h">热死了</span><span class="p">rè sǐ le</span></span></td><td>«умираю от жары», эмоционально</td><td><button class="audio-btn" onclick="speak('热死了')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-common-mistakes" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r15-common-mistakes-header" aria-expanded="false" aria-controls="r15-common-mistakes-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">⚠️</span>
+          <span class="acc-title">Common Mistakes</span>
+          <span class="acc-count">(5)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-common-mistakes-body" role="region" aria-labelledby="r15-common-mistakes-header">
+            <table>
+              <tr><th>❌ Неправильно</th><th>✅ Правильно</th><th>Почему</th></tr>
+              <tr><td><span class="z"><span class="h">我很慢说。</span></span></td><td><span class="z"><span class="h">我说得很慢。</span></span></td><td>Это калька с английского/русского: наречие впереди. В китайском оценка идёт <b>после</b> глагола через 得.</td></tr>
+              <tr><td><span class="z"><span class="h">我说的很慢。</span></span></td><td><span class="z"><span class="h">我说得很慢。</span></span></td><td>Не тот иероглиф. 的 — для существительных. После глагола нужен <b>得</b>.</td></tr>
+              <tr><td><span class="z"><span class="h">我说地很慢。</span></span></td><td><span class="z"><span class="h">我说得很慢。</span></span></td><td>地 ставится <b>перед</b> глаголом (慢慢地说), а не после.</td></tr>
+              <tr><td><span class="z"><span class="h">今天得很热。</span></span></td><td><span class="z"><span class="h">今天热得很。</span></span></td><td>В модели «Прил. + 得很» прилагательное стоит <b>слева</b> от 得, а 很 — справа.</td></tr>
+              <tr><td><span class="z"><span class="h">你写得好。</span></span></td><td><span class="z"><span class="h">你写得很好。</span></span></td><td>В утвердительной форме после 得 почти всегда нужен усилитель (很 / 太…了 / 真). Без него фраза звучит оборванной.</td></tr>
+            </table>
+            <p class="lead" style="margin-top:14px">💡 <b>Про тон.</b> 得 здесь всегда нейтральное <i>de</i> — не <i>dé</i> («получать») и не <i>děi</i> («быть должным»). Один и тот же иероглиф, три чтения.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-kettle" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r15-kettle-header" aria-expanded="false" aria-controls="r15-kettle-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🫖</span>
+          <span class="acc-title">For "Чайник"</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-kettle-body" role="region" aria-labelledby="r15-kettle-header">
+            <div class="kettle-block">
+              <div class="kettle-tag">🫖 Для "чайника"</div>
+              <p>По-русски мы говорим «я <b>медленно</b> говорю» — сначала «медленно», потом «говорю». Китаец делает наоборот: сначала называет действие, а потом как бы ставит ему оценку. <span class="z"><span class="h">我说得很慢</span></span> — дословно «я говорю — (оценка:) очень медленно».</p>
+              <p>Слово 得 здесь — просто крючок, на который вешается оценка. Ничего не значит само по себе.</p>
+              <p><b>А теперь фокус, ради которого это отдельное правило.</b> Слева от 得 можно поставить не только глагол, но и <b>прилагательное</b>. И тогда справа ставят 很 — и это уже значит не «очень», а «крайне, до невозможности»:</p>
+              <p><span class="z"><span class="h">很热</span></span> — «жарко». <span class="z"><span class="h">热得很</span></span> — «ну и жарища». Те же два слова, переставили местами — и усилили.</p>
+              <p><b>И главная письменная ловушка — три «de».</b> Звучат одинаково, пишутся по-разному:<br>
+                📦 <span class="z"><span class="h">的</span></span> — если дальше <b>вещь</b>: 我的书 (моя книга).<br>
+                🏃 <span class="z"><span class="h">地</span></span> — если дальше <b>глагол</b>: 慢慢地说 (медленно говорить).<br>
+                ⭐ <span class="z"><span class="h">得</span></span> — если <b>перед ним</b> глагол или прилагательное, а дальше оценка: 说得很慢.</p>
+              <p>Проще всего так: <b>得 — единственное, которое смотрит назад.</b> Два других смотрят вперёд.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-analogue-en" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r15-analogue-en-header" aria-expanded="false" aria-controls="r15-analogue-en-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇬🇧</span>
+          <span class="acc-title">Analogue in English Grammar</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-analogue-en-body" role="region" aria-labelledby="r15-analogue-en-header">
+            <div class="analogue-card en">
+              <div class="a-tag">🇬🇧 English</div>
+              <p>The everyday equivalent is the <b>adverb of manner or degree</b> — "slowly", "clearly", "carefully" — but English puts it <b>before</b> the verb (or at the end of the clause) with no linking word at all. Chinese requires 得 and puts the description <b>after</b>.</p>
+              <p>For the <b>得很</b> pattern the closest English feel is an intensifier stacked after the adjective: "hot <b>as anything</b>", "difficult <b>indeed</b>", "really quite hot" — noticeably stronger and more colloquial than a plain "very hot".</p>
+              <p class="a-ex">我说得很慢 ≈ "I speak very slowly" · 今天热得很 ≈ "It's blazing hot today."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="r15-analogue-ru" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="r15-analogue-ru-header" aria-expanded="false" aria-controls="r15-analogue-ru-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🇷🇺</span>
+          <span class="acc-title">Analogue in Russian Grammar</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="r15-analogue-ru-body" role="region" aria-labelledby="r15-analogue-ru-header">
+            <div class="analogue-card ru">
+              <div class="a-tag">🇷🇺 Русский</div>
+              <p>Ближайший аналог — <b>наречие степени и образа действия</b>: «медленно», «чётко», «внимательно». В русском оно свободно двигается по фразе и не требует никакого служебного слова, поэтому прямого соответствия частице 得 нет.</p>
+              <p>Для модели «Прил. + 得很» аналог — <b>усилительные обороты</b> вроде «жарко <i>до невозможности</i>», «трудный <i>донельзя</i>», «ну и жара». То есть не нейтральное «очень», а разговорное усиление.</p>
+              <p class="a-ex">我说得很慢 ≈ «Я говорю очень медленно» · 今天热得很 ≈ «Сегодня жара несусветная».</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE 13: R7 -->
+    <div class="page" data-title="Rule 13" data-topic="r7">
+      <div class="ruletitle">Rule 13 — S + V + O + V + 得(de) + Complement</div>
       <div class="rule-ru-sub">Это правило про то, как с помощью 得 показать, НАСКОЛЬКО хорошо, быстро или плохо что-то делается.</div>
       <button type="button" class="review-btn" data-rule="r7" onclick="toggleReviewed('r7')">☐ Mark as Reviewed</button>
 
@@ -3437,9 +3875,9 @@
       </section>
     </div>
 
-    <!-- PAGE 13: R13 -->
-    <div class="page" data-title="Rule 13" data-topic="r13">
-      <div class="ruletitle">Rule 13 — Potential Complement (可能补语, kěnéng bǔyǔ)</div>
+    <!-- PAGE 14: R13 -->
+    <div class="page" data-title="Rule 14" data-topic="r13">
+      <div class="ruletitle">Rule 14 — Potential Complement (可能补语, kěnéng bǔyǔ)</div>
       <div class="rule-ru-sub">Это правило про то, как сказать «могу / не могу» не словом 能, а через 得 и 不 внутри самого глагола.</div>
       <button type="button" class="review-btn" data-rule="r13" onclick="toggleReviewed('r13')">☐ Mark as Reviewed</button>
 
@@ -3687,7 +4125,8 @@
               <tr><th>Rule</th><th>Type</th><th>Question it answers</th><th>Example</th></tr>
               <tr><td>Rule 9</td><td>结果补语 — result</td><td>Did it reach the outcome?</td><td><span class="h">我吃完饭。</span> wǒ chī wán fàn</td></tr>
               <tr><td>Rule 11</td><td>状态补语 — state / manner</td><td><b>How</b> is it done?</td><td><span class="h">他跑得很快。</span> tā pǎo de hěn kuài</td></tr>
-              <tr><td>Rule 13</td><td>可能补语 — potential</td><td><b>Can</b> the outcome be reached?</td><td><span class="h">我吃得完饭。</span> wǒ chī de wán fàn</td></tr>
+              <tr><td>Rule 12</td><td>程度补语 — degree</td><td><b>How much</b> / to what degree?</td><td><span class="h">今天热得很。</span> jīntiān rè de hěn</td></tr>
+              <tr><td>Rule 14</td><td>可能补语 — potential</td><td><b>Can</b> the outcome be reached?</td><td><span class="h">我吃得完饭。</span> wǒ chī de wán fàn</td></tr>
             </table>
           </div>
         </div>
@@ -3775,10 +4214,10 @@
       </section>
     </div>
 
-    <!-- PAGE 14: R14 -->
-    <div class="page" data-title="Rule 14" data-topic="r14">
-      <div class="ruletitle">Rule 14 — Комплементы (补语): сравнение Правил 9–13</div>
-      <div class="rule-ru-sub">Это правило-итог: все пять комплементов рядом, чтобы наконец перестать их путать.</div>
+    <!-- PAGE 15: R14 -->
+    <div class="page" data-title="Rule 15" data-topic="r14">
+      <div class="ruletitle">Rule 15 — Комплементы (补语): сравнение Правил 9–14</div>
+      <div class="rule-ru-sub">Это правило-итог: все шесть комплементов рядом, чтобы наконец перестать их путать.</div>
       <button type="button" class="review-btn" data-rule="r14" onclick="toggleReviewed('r14')">☐ Mark as Reviewed</button>
 
       <div class="acc-toolbar">
@@ -3799,13 +4238,14 @@
           <div class="acc-body" id="r14-summary-ru-body" role="region" aria-labelledby="r14-summary-ru-header">
             <div class="ru-block">
               <div class="ru-tag">🇷🇺 На русском</div>
-              <p><b>Комплемент (补语, bǔyǔ)</b> — это то, что стоит <b>после глагола</b> и уточняет его: получилось ли, куда, как, сможешь ли. В курсе их пять, и теперь они идут подряд — <b>Правила 9–13</b>.</p>
+              <p><b>Комплемент (补语, bǔyǔ)</b> — это то, что стоит <b>после глагола</b> и уточняет его: получилось ли, куда, как, насколько, сможешь ли. В курсе их шесть, и они идут подряд — <b>Правила 9–14</b>.</p>
               <p><b>Правило 9</b> — <span class="ruk">результат</span>: <span class="z"><span class="h">吃完</span><span class="p">chī wán</span></span> «доел».<br>
                  <b>Правило 10</b> — <span class="ruk">направление</span>: <span class="z"><span class="h">拿出来</span><span class="p">ná chūlái</span></span> «достал сюда».<br>
                  <b>Правило 11</b> — <span class="ruk">состояние</span>: <span class="z"><span class="h">跑得很快</span><span class="p">pǎo de hěn kuài</span></span> «бегает быстро».<br>
-                 <b>Правило 12</b> — то же состояние, но <span class="ruk">когда есть дополнение</span>: <span class="z"><span class="h">说中文说得很流利</span><span class="p">shuō Zhōngwén shuō de hěn liúlì</span></span>.<br>
-                 <b>Правило 13</b> — <span class="ruk">возможность</span>: <span class="z"><span class="h">吃得完</span><span class="p">chī de wán</span></span> «смогу доесть».</p>
-              <p>Главное, что нужно унести с этой страницы: <b>отрицание у них разное</b>. У Правил 9 и 10 — <span class="z"><span class="h">没</span><span class="p">méi</span></span> перед глаголом. У Правил 11 и 12 — <span class="z"><span class="h">不</span><span class="p">bù</span></span> после 得. У Правила 13 — <span class="z"><span class="h">不</span><span class="p">bù</span></span> <b>вместо</b> 得.</p>
+                 <b>Правило 12</b> — <span class="ruk">степень</span>: <span class="z"><span class="h">热得很</span><span class="p">rè de hěn</span></span> «крайне жарко».<br>
+                 <b>Правило 13</b> — то же состояние, но <span class="ruk">когда есть дополнение</span>: <span class="z"><span class="h">说中文说得很流利</span><span class="p">shuō Zhōngwén shuō de hěn liúlì</span></span>.<br>
+                 <b>Правило 14</b> — <span class="ruk">возможность</span>: <span class="z"><span class="h">吃得完</span><span class="p">chī de wán</span></span> «смогу доесть».</p>
+              <p>Главное, что нужно унести с этой страницы: <b>отрицание у них разное</b>. У Правил 9 и 10 — <span class="z"><span class="h">没</span><span class="p">méi</span></span> перед глаголом. У Правил 11, 12 и 13 — <span class="z"><span class="h">不</span><span class="p">bù</span></span> после 得. У Правила 14 — <span class="z"><span class="h">不</span><span class="p">bù</span></span> <b>вместо</b> 得.</p>
             </div>
           </div>
         </div>
@@ -3861,7 +4301,7 @@
 
             <div class="cmp-branch b11">
               <span class="cmp-when">ДА — и справа от 得 стоит оценка (很 / 太 / 真 + прилагательное)</span>
-              <b class="ruk">→ Правило 11</b>. А если между глаголом и 得 влезло дополнение — глагол повторяется, и это <b class="ruk">Правило 12</b>.
+              <b class="ruk">→ Правило 11</b>. А если между глаголом и 得 влезло дополнение — глагол повторяется, и это <b class="ruk">Правило 13</b>. Если же слева от 得 стоит не глагол, а <b>прилагательное</b> (热得很) — это <b class="ruk">Правило 12</b>.
               Отрицание: <span class="z"><span class="h">不</span><span class="p">bù</span></span> после 得.
               <div class="cmp-ex">
                 <span class="z"><span class="h">孩子笑得很开心。</span><span class="p">háizi xiào de hěn kāixīn.</span></span>
@@ -3872,7 +4312,7 @@
 
             <div class="cmp-branch b13">
               <span class="cmp-when">ДА — и справа от 得 стоит результат или направление (懂 / 完 / 动 / 着 / 下来)</span>
-              <b class="ruk">→ Правило 13</b>, комплемент возможности.
+              <b class="ruk">→ Правило 14</b>, комплемент возможности.
               Отрицание: <span class="z"><span class="h">不</span><span class="p">bù</span></span> вместо 得.
               <div class="cmp-ex">
                 <span class="z"><span class="h">我搬得动箱子。</span><span class="p">wǒ bān de dòng xiāngzi.</span></span>
@@ -3889,7 +4329,7 @@
           <span class="acc-chevron" aria-hidden="true">▶</span>
           <span class="acc-icon">📊</span>
           <span class="acc-title">Главная сравнительная таблица</span>
-          <span class="acc-count">(5)</span>
+          <span class="acc-count">(6)</span>
         </button>
         <div class="acc-body-wrap">
           <div class="acc-body" id="r14-main-table-body" role="region" aria-labelledby="r14-main-table-header">
@@ -3920,7 +4360,15 @@
                 <td><span class="ruk cmp-neg">不</span> после 得<div class="en">他跑得不快。</div></td>
               </tr>
               <tr>
-                <td><span class="cmp-pill p12">Прав. 12</span></td>
+                <td><span class="cmp-pill p-deg">Прав. 12</span></td>
+                <td><span class="z"><span class="h">程度补语</span><span class="p">chéngdù bǔyǔ</span></span><div class="en">степени</div></td>
+                <td><b>Насколько?</b><div class="en">до какой степени</div></td>
+                <td>Глагол/<b>Прил.</b> + <span class="ruk">得</span> + степень<div class="en">уникальное: Прил. + 得很</div></td>
+                <td><span class="z"><span class="h">今天热得很。</span><span class="p">jīntiān rè de hěn</span></span><div class="en">Сегодня крайне жарко.</div></td>
+                <td><span class="ruk cmp-neg">不</span> после 得<div class="en">说得不慢。</div></td>
+              </tr>
+              <tr>
+                <td><span class="cmp-pill p12">Прав. 13</span></td>
                 <td><span class="z"><span class="h">状态补语</span><span class="p">+ дополнение</span></span><div class="en">повтор глагола</div></td>
                 <td><b>Как?</b> — но у глагола <b>есть дополнение</b><div class="en">оно мешает дотянуться до 得</div></td>
                 <td>S + Г + <span class="ruk">Доп.</span> + Г + 得 + оценка<div class="en">или: S + Доп. + Г + 得 + оценка</div></td>
@@ -3928,7 +4376,7 @@
                 <td><span class="ruk cmp-neg">不</span> после 得<div class="en">说得不流利。</div></td>
               </tr>
               <tr>
-                <td><span class="cmp-pill p13">Прав. 13</span></td>
+                <td><span class="cmp-pill p13">Прав. 14</span></td>
                 <td><span class="z"><span class="h">可能补语</span><span class="p">kěnéng bǔyǔ</span></span><div class="en">возможности</div></td>
                 <td><b>Получится ли?</b><div class="en">достижим ли результат</div></td>
                 <td>Глагол + <span class="ruk">得 / 不</span> + результат<div class="en">берёт готовую пару из Правил 9 и 10</div></td>
@@ -3944,30 +4392,38 @@
         <button class="acc-header" id="r14-de-group-header" aria-expanded="false" aria-controls="r14-de-group-body">
           <span class="acc-chevron" aria-hidden="true">▶</span>
           <span class="acc-icon">🔀</span>
-          <span class="acc-title">Три правила с 得 — где путаница</span>
-          <span class="acc-count">(2)</span>
+          <span class="acc-title">Правила с 得 — где путаница</span>
+          <span class="acc-count">(3)</span>
         </button>
         <div class="acc-body-wrap">
           <div class="acc-body" id="r14-de-group-body" role="region" aria-labelledby="r14-de-group-header">
-            <p class="lead">В Правилах 11, 12 и 13 есть <span class="z"><span class="h">得</span><span class="p">de</span></span>. Различить их можно по одному признаку: <b>что стоит справа от 得</b>.</p>
+            <p class="lead">В Правилах 11, 12, 13 и 14 есть <span class="z"><span class="h">得</span><span class="p">de</span></span>. Различить их можно по двум признакам: <b>что стоит слева</b> и <b>что стоит справа</b> от 得.</p>
             <table>
-              <tr><th>Что справа от 得</th><th>Значит, это</th><th>Смысл</th><th>Пример</th><th>Отрицание</th></tr>
+              <tr><th>Слева от 得</th><th>Справа от 得</th><th>Значит, это</th><th>Пример</th><th>Отрицание</th></tr>
               <tr>
-                <td><b>Оценка / прилагательное</b><div class="en">很快, 很流利, 太慢了, 吓人</div></td>
-                <td><span class="cmp-pill p11">Прав. 11</span><div class="en">+ Прав. 12, если есть дополнение</div></td>
-                <td>Насколько хорошо это делается</td>
+                <td><b>Глагол</b></td>
+                <td><b>Оценка</b><div class="en">很快, 很流利, 太慢了</div></td>
+                <td><span class="cmp-pill p11">Прав. 11</span><div class="en">+ Прав. 13, если есть дополнение</div></td>
                 <td><span class="z"><span class="h">他跑得很快。</span><span class="p">tā pǎo de hěn kuài</span></span></td>
                 <td><span class="z"><span class="h">跑得不快</span><span class="p">pǎo de bù kuài</span></span><div class="en">✅ 得 остаётся</div></td>
               </tr>
               <tr>
+                <td><b>Прилагательное</b><div class="en">热, 大, 难</div></td>
+                <td><b>很 (само по себе)</b><div class="en">= «крайне»</div></td>
+                <td><span class="cmp-pill p-deg">Прав. 12</span></td>
+                <td><span class="z"><span class="h">今天热得很。</span><span class="p">jīntiān rè de hěn</span></span></td>
+                <td><span class="z"><span class="h">不太热</span><span class="p">bú tài rè</span></span><div class="en">得很 не отрицают напрямую</div></td>
+              </tr>
+              <tr>
+                <td><b>Глагол</b></td>
                 <td><b>Результат / направление</b><div class="en">懂, 完, 动, 着, 下来</div></td>
-                <td><span class="cmp-pill p13">Прав. 13</span></td>
-                <td>Получится ли достичь результата</td>
+                <td><span class="cmp-pill p13">Прав. 14</span></td>
                 <td><span class="z"><span class="h">我看得懂。</span><span class="p">wǒ kàn de dǒng</span></span></td>
                 <td><span class="z"><span class="h">看不懂</span><span class="p">kàn bu dǒng</span></span><div class="en">❌ 得 исчезает!</div></td>
               </tr>
             </table>
-            <p class="lead" style="margin-top:14px">⚠️ <b>Главная ловушка.</b> Правило 11 → <span class="z"><span class="h">跑得不快</span></span> (得 остаётся, 不 встаёт после него). Правило 13 → <span class="z"><span class="h">看不懂</span></span> (得 исчезает, 不 занимает его место). Формы <span class="z"><span class="h">看得不懂</span></span> <b>не существует</b>.</p>
+            <p class="lead" style="margin-top:14px">⚠️ <b>Главная ловушка.</b> Правило 11 → <span class="z"><span class="h">跑得不快</span></span> (得 остаётся, 不 встаёт после него). Правило 14 → <span class="z"><span class="h">看不懂</span></span> (得 исчезает, 不 занимает его место). Формы <span class="z"><span class="h">看得不懂</span></span> <b>не существует</b>.</p>
+            <p class="lead">💡 А Правило 12 отличается <b>слева</b>, а не справа: это единственный случай, когда перед 得 стоит <b>прилагательное</b>, а не глагол. Сравните <span class="z"><span class="h">很热</span></span> «жарко» и <span class="z"><span class="h">热得很</span></span> «крайне жарко».</p>
           </div>
         </div>
       </section>
@@ -3986,8 +4442,8 @@
               <tr><th>Форма</th><th>Правило</th><th>Перевод</th><th>Что именно сказано</th><th>Audio</th></tr>
               <tr><td><span class="z"><span class="h">我吃完饭。</span><span class="p">wǒ chī wán fàn</span></span></td><td><span class="cmp-pill p9">9</span></td><td>Я доел.</td><td class="note">Результат достигнут — факт.</td><td><button class="audio-btn" onclick="speak('我吃完饭。')" aria-label="Play audio">🔊</button></td></tr>
               <tr><td><span class="z"><span class="h">我吃得很快。</span><span class="p">wǒ chī de hěn kuài</span></span></td><td><span class="cmp-pill p11">11</span></td><td>Я ем быстро.</td><td class="note">Оценка манеры — как именно я ем.</td><td><button class="audio-btn" onclick="speak('我吃得很快。')" aria-label="Play audio">🔊</button></td></tr>
-              <tr><td><span class="z"><span class="h">我吃得完饭。</span><span class="p">wǒ chī de wán fàn</span></span></td><td><span class="cmp-pill p13">13</span></td><td>Я смогу всё доесть.</td><td class="note">Способность достичь результата.</td><td><button class="audio-btn" onclick="speak('我吃得完饭。')" aria-label="Play audio">🔊</button></td></tr>
-              <tr><td><span class="z"><span class="h">我吃不完饭。</span><span class="p">wǒ chī bu wán fàn</span></span></td><td><span class="cmp-pill p13">13</span></td><td>Я не смогу всё доесть.</td><td class="note">Отрицание возможности — самая частая форма в живой речи.</td><td><button class="audio-btn" onclick="speak('我吃不完饭。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">我吃得完饭。</span><span class="p">wǒ chī de wán fàn</span></span></td><td><span class="cmp-pill p13">14</span></td><td>Я смогу всё доесть.</td><td class="note">Способность достичь результата.</td><td><button class="audio-btn" onclick="speak('我吃得完饭。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">我吃不完饭。</span><span class="p">wǒ chī bu wán fàn</span></span></td><td><span class="cmp-pill p13">14</span></td><td>Я не смогу всё доесть.</td><td class="note">Отрицание возможности — самая частая форма в живой речи.</td><td><button class="audio-btn" onclick="speak('我吃不完饭。')" aria-label="Play audio">🔊</button></td></tr>
             </table>
 
             <div class="subhead" style="margin-top:20px"><span class="em">👀</span> Глагол 看 (kàn) — «смотреть / читать»</div>
@@ -3995,8 +4451,8 @@
               <tr><th>Форма</th><th>Правило</th><th>Перевод</th><th>Что именно сказано</th><th>Audio</th></tr>
               <tr><td><span class="z"><span class="h">我看懂了。</span><span class="p">wǒ kàn dǒng le</span></span></td><td><span class="cmp-pill p9">9</span></td><td>Я понял.</td><td class="note">Результат уже достигнут.</td><td><button class="audio-btn" onclick="speak('我看懂了。')" aria-label="Play audio">🔊</button></td></tr>
               <tr><td><span class="z"><span class="h">我看得很仔细。</span><span class="p">wǒ kàn de hěn zǐxì</span></span></td><td><span class="cmp-pill p11">11</span></td><td>Я смотрю очень внимательно.</td><td class="note">Оценка того, как происходит действие.</td><td><button class="audio-btn" onclick="speak('我看得很仔细。')" aria-label="Play audio">🔊</button></td></tr>
-              <tr><td><span class="z"><span class="h">我看得懂。</span><span class="p">wǒ kàn de dǒng</span></span></td><td><span class="cmp-pill p13">13</span></td><td>Я способен понять.</td><td class="note">Возможность, а не факт.</td><td><button class="audio-btn" onclick="speak('我看得懂。')" aria-label="Play audio">🔊</button></td></tr>
-              <tr><td><span class="z"><span class="h">我看不懂。</span><span class="p">wǒ kàn bu dǒng</span></span></td><td><span class="cmp-pill p13">13</span></td><td>Я не могу понять.</td><td class="note">Отрицание возможности.</td><td><button class="audio-btn" onclick="speak('我看不懂。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">我看得懂。</span><span class="p">wǒ kàn de dǒng</span></span></td><td><span class="cmp-pill p13">14</span></td><td>Я способен понять.</td><td class="note">Возможность, а не факт.</td><td><button class="audio-btn" onclick="speak('我看得懂。')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">我看不懂。</span><span class="p">wǒ kàn bu dǒng</span></span></td><td><span class="cmp-pill p13">14</span></td><td>Я не могу понять.</td><td class="note">Отрицание возможности.</td><td><button class="audio-btn" onclick="speak('我看不懂。')" aria-label="Play audio">🔊</button></td></tr>
             </table>
           </div>
         </div>
@@ -4006,8 +4462,8 @@
         <button class="acc-header" id="r14-negation-header" aria-expanded="false" aria-controls="r14-negation-body">
           <span class="acc-chevron" aria-hidden="true">▶</span>
           <span class="acc-icon">🚫</span>
-          <span class="acc-title">Отрицание — сводка по всем пяти</span>
-          <span class="acc-count">(5)</span>
+          <span class="acc-title">Отрицание — сводка по всем шести</span>
+          <span class="acc-count">(6)</span>
         </button>
         <div class="acc-body-wrap">
           <div class="acc-body" id="r14-negation-body" role="region" aria-labelledby="r14-negation-header">
@@ -4026,7 +4482,7 @@
                 <td><span class="z"><span class="h">没</span><span class="p">méi</span></span></td>
                 <td>перед глаголом</td>
                 <td><span class="z"><span class="h">他没拿出来。</span><span class="p">tā méi ná chūlái</span></span></td>
-                <td class="note">❌ <span class="z"><span class="h">他拿不出来</span></span> — это уже Правило 13 («не может достать»), другой смысл.</td>
+                <td class="note">❌ <span class="z"><span class="h">他拿不出来</span></span> — это уже Правило 14 («не может достать»), другой смысл.</td>
               </tr>
               <tr>
                 <td><span class="cmp-pill p11">11</span> состояние</td>
@@ -4036,14 +4492,21 @@
                 <td class="note">❌ <span class="z"><span class="h">他不跑得快</span></span> — отрицается оценка, а не само действие.</td>
               </tr>
               <tr>
-                <td><span class="cmp-pill p12">12</span> состояние + доп.</td>
+                <td><span class="cmp-pill p-deg">12</span> степень</td>
+                <td><span class="z"><span class="h">不</span><span class="p">bù</span></span></td>
+                <td><b>после</b> 得</td>
+                <td><span class="z"><span class="h">他说得不慢。</span><span class="p">tā shuō de bù màn</span></span></td>
+                <td class="note">❌ <span class="z"><span class="h">他不说得慢</span></span>. Оборот 得很 напрямую не отрицают — вместо «не крайне жарко» говорят <span class="z"><span class="h">不太热</span></span>.</td>
+              </tr>
+              <tr>
+                <td><span class="cmp-pill p12">13</span> состояние + доп.</td>
                 <td><span class="z"><span class="h">不</span><span class="p">bù</span></span></td>
                 <td><b>после</b> 得</td>
                 <td><span class="z"><span class="h">她说中文说得不流利。</span><span class="p">tā shuō Zhōngwén shuō de bù liúlì</span></span></td>
                 <td class="note">❌ <span class="z"><span class="h">她不说中文说得流利</span></span></td>
               </tr>
               <tr>
-                <td><span class="cmp-pill p13">13</span> возможность</td>
+                <td><span class="cmp-pill p13">14</span> возможность</td>
                 <td><span class="z"><span class="h">不</span><span class="p">bù</span></span></td>
                 <td><b>вместо</b> 得</td>
                 <td><span class="z"><span class="h">我看不懂汉字。</span><span class="p">wǒ kàn bu dǒng Hànzì</span></span></td>
@@ -4059,11 +4522,11 @@
           <span class="acc-chevron" aria-hidden="true">▶</span>
           <span class="acc-icon">🧱</span>
           <span class="acc-title">Как правила связаны между собой</span>
-          <span class="acc-count">(5)</span>
+          <span class="acc-count">(6)</span>
         </button>
         <div class="acc-body-wrap">
           <div class="acc-body" id="r14-relations-body" role="region" aria-labelledby="r14-relations-header">
-            <p class="lead">Это не пять независимых тем — они выстроены друг на друге.</p>
+            <p class="lead">Это не шесть независимых тем — они выстроены друг на друге.</p>
             <div class="grid" style="margin-top:8px">
               <div class="scard">
                 <div class="num">9</div><h3>Результат — фундамент</h3>
@@ -4082,7 +4545,7 @@
                 </div>
               </div>
               <div class="scard">
-                <div class="num">13</div><h3>Возможность — надстройка</h3>
+                <div class="num">14</div><h3>Возможность — надстройка</h3>
                 <div class="gloss">Берёт готовые пары из Правил 9 и 10 и <b>раздвигает</b> их, вставляя 得 или 不.</div>
                 <div class="mini-ex">
                   <span class="z"><span class="h">看得懂 / 看不懂</span><span class="p">kàn de dǒng / kàn bu dǒng</span></span>
@@ -4098,7 +4561,15 @@
                 </div>
               </div>
               <div class="scard">
-                <div class="num">12</div><h3>Состояние + дополнение</h3>
+                <div class="num">12</div><h3>Степень — та же ветка, шире</h3>
+                <div class="gloss">Та же конструкция, что в Правиле 11, но слева от 得 может стоять и <b>прилагательное</b>. Отсюда уникальный оборот «Прил. + 得很».</div>
+                <div class="mini-ex">
+                  <span class="z"><span class="h">热得很</span><span class="p">rè de hěn</span></span>
+                  <div class="en">крайне жарко</div>
+                </div>
+              </div>
+              <div class="scard">
+                <div class="num">13</div><h3>Состояние + дополнение</h3>
                 <div class="gloss">То же Правило 11, но решает одну проблему: что делать, если у глагола есть дополнение. Ответ — повторить глагол.</div>
                 <div class="mini-ex">
                   <span class="z"><span class="h">说中文说得很流利</span><span class="p">shuō Zhōngwén shuō de hěn liúlì</span></span>
@@ -4115,7 +4586,7 @@
           <span class="acc-chevron" aria-hidden="true">▶</span>
           <span class="acc-icon">📌</span>
           <span class="acc-title">Шпаргалка в одну строку</span>
-          <span class="acc-count">(5)</span>
+          <span class="acc-count">(6)</span>
         </button>
         <div class="acc-body-wrap">
           <div class="acc-body" id="r14-cheatsheet-body" role="region" aria-labelledby="r14-cheatsheet-header">
@@ -4124,8 +4595,9 @@
               <tr><td><span class="cmp-pill p9">9</span></td><td>Г + <span class="ruk">результат</span></td><td>«что получилось?»</td><td><span class="z"><span class="h">没</span></span> перед Г</td></tr>
               <tr><td><span class="cmp-pill p10">10</span></td><td>Г + <span class="ruk">направление</span> (+ 来/去)</td><td>«куда?»</td><td><span class="z"><span class="h">没</span></span> перед Г</td></tr>
               <tr><td><span class="cmp-pill p11">11</span></td><td>Г + <span class="ruk">得</span> + оценка</td><td>«как?»</td><td><span class="z"><span class="h">不</span></span> после 得</td></tr>
-              <tr><td><span class="cmp-pill p12">12</span></td><td>Г + доп. + Г + <span class="ruk">得</span> + оценка</td><td>«как?» + есть дополнение</td><td><span class="z"><span class="h">不</span></span> после 得</td></tr>
-              <tr><td><span class="cmp-pill p13">13</span></td><td>Г + <span class="ruk">得/不</span> + результат</td><td>«получится ли?»</td><td><span class="z"><span class="h">不</span></span> вместо 得</td></tr>
+              <tr><td><span class="cmp-pill p-deg">12</span></td><td><b>Прил.</b> + <span class="ruk">得很</span> · Г + <span class="ruk">得</span> + степень</td><td>«насколько?»</td><td><span class="z"><span class="h">不</span></span> после 得</td></tr>
+              <tr><td><span class="cmp-pill p12">13</span></td><td>Г + доп. + Г + <span class="ruk">得</span> + оценка</td><td>«как?» + есть дополнение</td><td><span class="z"><span class="h">不</span></span> после 得</td></tr>
+              <tr><td><span class="cmp-pill p13">14</span></td><td>Г + <span class="ruk">得/不</span> + результат</td><td>«получится ли?»</td><td><span class="z"><span class="h">不</span></span> вместо 得</td></tr>
             </table>
           </div>
         </div>
@@ -4145,12 +4617,13 @@
               <p>Представь, что глагол — это человек, который что-то делает. Комплемент — это то, что идёт <b>сразу за ним</b> и отвечает на один-единственный уточняющий вопрос:</p>
               <p>🍚 <b>«И чем всё кончилось?»</b> → Правило 9. <span class="z"><span class="h">吃完</span></span> — «доел».<br>
                  🚪 <b>«А куда?»</b> → Правило 10. <span class="z"><span class="h">走进来</span></span> — «вошёл сюда».<br>
-                 🏃 <b>«А как именно?»</b> → Правило 11 (и 12, если есть дополнение). <span class="z"><span class="h">跑得很快</span></span> — «бегает быстро».<br>
-                 💪 <b>«А получится ли вообще?»</b> → Правило 13. <span class="z"><span class="h">吃得完</span></span> — «смогу доесть».</p>
+                 🏃 <b>«А как именно?»</b> → Правило 11 (и 13, если есть дополнение). <span class="z"><span class="h">跑得很快</span></span> — «бегает быстро».<br>
+                 🌡️ <b>«А насколько сильно?»</b> → Правило 12. <span class="z"><span class="h">热得很</span></span> — «крайне жарко».<br>
+                 💪 <b>«А получится ли вообще?»</b> → Правило 14. <span class="z"><span class="h">吃得完</span></span> — «смогу доесть».</p>
               <p>Если запомнить только одну вещь со всей страницы — пусть это будет отрицание, потому что именно там все и спотыкаются:</p>
               <p>➡️ Правила 9 и 10 (про факты) → <span class="z"><span class="h">没</span></span> <b>перед</b> глаголом.<br>
-                 ➡️ Правила 11 и 12 (про оценку) → <span class="z"><span class="h">不</span></span> <b>после</b> 得: <span class="z"><span class="h">跑得不快</span></span>.<br>
-                 ➡️ Правило 13 (про возможность) → <span class="z"><span class="h">不</span></span> <b>вместо</b> 得: <span class="z"><span class="h">看不懂</span></span>.</p>
+                 ➡️ Правила 11, 12 и 13 (про оценку и степень) → <span class="z"><span class="h">不</span></span> <b>после</b> 得: <span class="z"><span class="h">跑得不快</span></span>.<br>
+                 ➡️ Правило 14 (про возможность) → <span class="z"><span class="h">不</span></span> <b>вместо</b> 得: <span class="z"><span class="h">看不懂</span></span>.</p>
             </div>
           </div>
         </div>
@@ -4249,6 +4722,13 @@
     c:'\ud83d\udd34 <b>Complement</b> \u2014 the result (\u61c2/\u5b8c/\u7740, Rule 9) or direction (\u4e0b\u6765/\u4e0a\u53bb, Rule 10) you are trying to reach: <span style="color:#e63946">\u61c2 (d\u01d2ng)</span> = "understand."'
   };
   function showPotential(r){ document.getElementById('popup13').innerHTML = potentialText[r]; }
+
+  var degreeText = {
+    base:'⚪ <b>Verb or Adjective</b> — unusually, either works here. A verb: <span style="color:#e63946">说 (shuō)</span> "to speak". An adjective: <span style="color:#e63946">热 (rè)</span> "hot" — that second option is what makes this pattern wider than Rule 11.',
+    de:'🟠 <b>得 (de)</b> — neutral tone, the hook the degree hangs on. Not 的 (before nouns) and not 地 (before verbs): 得 is the only one of the three that looks <i>backwards</i>.',
+    deg:'🔴 <b>Degree</b> — how much. After a verb it is usually 很 + adjective (<span style="color:#e63946">说得很慢</span>). After an adjective, 很 stands alone and means "extremely": <span style="color:#e63946">热得很</span> = "blazing hot", stronger than 很热.'
+  };
+  function showDegree(r){ document.getElementById('popup15').innerHTML = degreeText[r]; }
 
   // ---- text-to-speech ----
   function speak(text){
@@ -4777,6 +5257,14 @@
       { title: '吃完 vs 吃得完 vs 吃不完 — The Full Picture', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner 吃完 吃得完 吃不完 complement difference', thumbClass:'tc-5' },
       { title: 'Все комплементы 补语 в одном видео', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский все комплементы 补语 结果 趋向 状态 可能', thumbClass:'tc-1' },
       { title: 'Разница между 得, 不 и 没 в комплементах', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык комплементы 得 不 没 отрицание разница', thumbClass:'tc-2' }
+    ],
+
+    'r15': [ // Degree complement 程度补语 + 的/地/得
+      { title: 'Degree Complements: V/Adj + 得 + How Much', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese degree complement 程度补语 de hen', thumbClass:'tc-1' },
+      { title: '的 vs 地 vs 得 — The Three "de" Explained', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod 的 地 得 three de difference Chinese particles', thumbClass:'tc-2' },
+      { title: '热得很 / 好极了 — Intensifying Adjectives in Chinese', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner 得很 极了 死了 intensifier adjective degree', thumbClass:'tc-3' },
+      { title: '程度补语 — комплемент степени', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский 程度补语 комплемент степени 得很', thumbClass:'tc-4' },
+      { title: 'Три «дэ»: 的, 地, 得 — как не перепутать', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский язык 的 地 得 три дэ разница частицы', thumbClass:'tc-5' }
     ]
 
   };
@@ -5090,6 +5578,16 @@
     "听懂": ["tīngdǒng", "to understand (by listening)"],
     "看懂": ["kàndǒng", "to understand (by reading/watching)"],
     "仔细": ["zǐxì", "careful; attentive(ly)"],
+    "程度": ["chéngdù", "degree; extent"],
+    "清楚": ["qīngchu", "clear; distinct(ly)"],
+    "认真": ["rènzhēn", "serious; conscientious(ly)"],
+    "教室": ["jiàoshì", "classroom"],
+    "句子": ["jùzi", "sentence"],
+    "学生": ["xuésheng", "student"],
+    "这个": ["zhège", "this one"],
+    "慢慢": ["mànmàn", "slowly; little by little"],
+    "极了": ["jíle", "extremely (degree complement)"],
+    "死了": ["sǐle", "to death; extremely (degree complement)"],
     "一": ["yī", "one"],
     "七": ["qī", "seven"],
     "三": ["sān", "three"],
@@ -5211,6 +5709,22 @@
     "见": ["jiàn", "to see; (result complement: perceive)"],
     "仔": ["zǐ", "(part of 仔细)"],
     "细": ["xì", "fine; detailed"],
+    "读": ["dú", "to read (aloud)"],
+    "热": ["rè", "hot"],
+    "难": ["nán", "difficult"],
+    "大": ["dà", "big; large"],
+    "地": ["de", "adverbial particle (placed before a verb)"],
+    "极": ["jí", "extremely; pole"],
+    "死": ["sǐ", "to die; (intensifier) to death"],
+    "室": ["shì", "room"],
+    "句": ["jù", "sentence; phrase"],
+    "子": ["zi", "(noun suffix); child"],
+    "生": ["shēng", "to be born; life; raw"],
+    "清": ["qīng", "clear"],
+    "楚": ["chǔ", "clear (part of 清楚)"],
+    "认": ["rèn", "to recognise; to admit"],
+    "程": ["chéng", "rule; procedure; journey"],
+    "度": ["dù", "degree; measure"],
   };
 })();
 </script>

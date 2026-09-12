@@ -40,18 +40,18 @@ async function validateSource() {
   assert.match(rules, /<title>Chinese · Grammar Rules<\/title>/, "grammar-rules title is missing");
   assert.equal(
     (rules.match(/<button type="button" class="review-btn"/g) ?? []).length,
-    14,
-    "rules.html must contain 14 review buttons"
+    15,
+    "rules.html must contain 15 review buttons"
   );
   assert.deepEqual(
     [...rules.matchAll(/data-title="Rule (\d+)"/g)].map((match) => Number(match[1])),
-    Array.from({ length: 14 }, (_, index) => index + 1),
-    "grammar-rule pages must remain in the intended 1-14 teaching order"
+    Array.from({ length: 15 }, (_, index) => index + 1),
+    "grammar-rule pages must remain in the intended 1-15 teaching order"
   );
   assert.match(rules, /data-topic="r14"/, "complement-comparison rule is missing");
   assert.match(
     rules,
-    /Rule 14 — Комплементы \(补语\): сравнение Правил 9–13/,
+    /Rule 15 — Комплементы \(补语\): сравнение Правил 9–14/,
     "complement-comparison title changed unexpectedly"
   );
   assert.match(rules, /Главная сравнительная таблица/, "complement comparison table is missing");
