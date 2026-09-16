@@ -268,6 +268,63 @@
   .cmp-when{display:block; font-weight:700; margin-bottom:4px; color:var(--ink);}
   .cmp-ex{margin-top:8px; padding-top:8px; border-top:1px dashed var(--line);}
 
+  /* ---- Page 0: pronunciation introduction ----
+     All new class names, used only by the four intro pages, so nothing
+     here can reach an existing rule page on desktop or mobile. */
+  .p0-badge{display:inline-block; background:var(--subj); color:#fff; border-radius:999px;
+    padding:5px 13px; font-size:.72rem; font-weight:800; letter-spacing:.6px;
+    text-transform:uppercase; margin:26px 0 0;}
+  .p0-hero{background:linear-gradient(135deg,#eef0ff,#fff7ef); border:1.5px solid var(--subj);
+    border-radius:18px; padding:18px 20px; margin:0 0 18px;}
+  .p0-hero p{margin:0;}
+  .syl{display:flex; align-items:stretch; justify-content:center; gap:8px;
+    flex-wrap:wrap; margin:16px 0 0;}
+  .syl .part{border-radius:14px; padding:11px 15px; text-align:center; min-width:100px;}
+  .syl .part .k{font-size:.68rem; font-weight:800; text-transform:uppercase;
+    letter-spacing:.5px; opacity:.85;}
+  .syl .part .v{font-size:1.55rem; font-weight:800;
+    font-family:"PingFang SC","Microsoft YaHei",serif; line-height:1.2;}
+  .syl .part .g{font-size:.74rem; opacity:.85;}
+  .syl .ini{background:var(--subjbg); color:var(--subj);}
+  .syl .fin{background:var(--predbg); color:var(--pred);}
+  .syl .ton{background:var(--lebg); color:#a9631a;}
+  .syl .out{background:var(--verbbg); color:var(--verb);}
+  .syl .eq{align-self:center; font-size:1.3rem; color:var(--soft); font-weight:700;}
+
+  .tone-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:9px; margin-top:12px;}
+  .tone-card{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:12px 7px; text-align:center; cursor:pointer; font-family:inherit;
+    color:var(--ink); transition:.15s; box-shadow:0 3px 10px rgba(0,0,0,.05);}
+  .tone-card:hover{border-color:var(--red); transform:translateY(-2px);}
+  .tone-card .c{font-size:1.5rem; line-height:1.1; color:var(--red); font-weight:700;}
+  .tone-card .t{font-size:1rem; font-weight:800; margin-top:2px;}
+  .tone-card .h2cn{font-size:1.5rem; font-weight:700;
+    font-family:"PingFang SC","Microsoft YaHei",serif; margin-top:2px;}
+  .tone-card .m{font-size:.74rem; color:var(--soft); margin-top:3px; line-height:1.3;}
+
+  .snd-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(112px,1fr));
+    gap:9px; margin-top:10px;}
+  .snd{display:flex; flex-direction:column; align-items:center; gap:2px;
+    background:var(--card); border:1px solid var(--line); border-radius:13px;
+    padding:10px 7px; min-height:84px; cursor:pointer; font-family:inherit;
+    color:var(--ink); transition:.15s; box-shadow:0 2px 8px rgba(0,0,0,.05);}
+  .snd:hover{border-color:var(--red); transform:translateY(-2px);}
+  .snd .snd-py{font-size:1.08rem; font-weight:800; color:var(--red); letter-spacing:.3px;}
+  .snd .snd-cn{font-size:1.3rem; font-family:"PingFang SC","Microsoft YaHei",serif;
+    font-weight:600; line-height:1.15;}
+  .snd .snd-en{font-size:.72rem; color:var(--soft); line-height:1.3;}
+
+  @media(max-width:620px){
+    .p0-badge{margin-top:14px; font-size:.68rem; padding:5px 11px;}
+    .p0-hero{padding:14px 15px; border-radius:15px;}
+    .syl{gap:6px;}
+    .syl .part{min-width:78px; padding:9px 10px;}
+    .syl .part .v{font-size:1.3rem;}
+    .tone-grid{grid-template-columns:repeat(2,1fr);}
+    .snd-grid{grid-template-columns:repeat(auto-fill,minmax(98px,1fr)); gap:7px;}
+    .snd{min-height:80px;}
+  }
+
   @media(max-width:620px){
     .wrap{padding:14px 10px 18px;}
     header{padding:20px 16px; border-radius:16px;}
@@ -308,8 +365,458 @@
 
   <div class="pages" id="pages">
 
+    <!-- ============ PAGE 0 · INTRODUCTION TO PRONUNCIATION ============
+         Four pages that come before Rule 1. They carry data-kind="intro",
+         which is what keeps the grammar rules numbered 1–15: the counter
+         and the mobile bar number each kind separately. -->
+
+    <!-- PAGE 0.1 -->
+    <div class="page active" data-title="Звуки 1" data-topic="p1" data-kind="intro">
+      <div class="p0-badge">Page 0 · Произношение · 1 из 4</div>
+      <div class="ruletitle">Как устроен китайский слог</div>
+      <div class="rule-ru-sub">С этого начинается китайский: почти каждый слог — это инициаль + финаль + тон.</div>
+      <button type="button" class="review-btn" data-rule="i1" onclick="toggleReviewed('i1')">☐ Mark as Reviewed</button>
+
+      <div class="p0-hero">
+        <p><b>Китайский слог собирается как конструктор из трёх деталей.</b> Сначала согласное начало (<b>инициаль</b>), потом гласная часть (<b>финаль</b>), и сверху — <b>тон</b>, который меняет смысл.</p>
+        <div class="syl">
+          <div class="part ini"><div class="k">Инициаль</div><div class="v">m</div><div class="g">согласная</div></div>
+          <div class="eq">+</div>
+          <div class="part fin"><div class="k">Финаль</div><div class="v">a</div><div class="g">гласная</div></div>
+          <div class="eq">+</div>
+          <div class="part ton"><div class="k">Тон</div><div class="v">ˉ</div><div class="g">1-й, ровный</div></div>
+          <div class="eq">=</div>
+          <div class="part out"><div class="k">Слог</div><div class="v">mā</div><div class="g">妈 — мама</div></div>
+        </div>
+        <p style="margin:12px 0 0">Поменяйте любую деталь — получится другое слово. Именно поэтому тон в китайском не украшение, а часть слова.</p>
+      </div>
+
+      <div class="subhead"><span class="em">🎧</span> Один слог, пять значений</div>
+      <p class="lead">Нажмите на любую карточку, чтобы услышать разницу. Инициаль и финаль одинаковые — меняется только тон.</p>
+      <div class="tone-grid">
+        <button type="button" class="tone-card" onclick="speak('妈')">
+          <div class="c">˧˥&#8202;ˉ</div><div class="t">mā</div>
+          <div class="h2cn">妈</div><div class="m">мама</div></button>
+        <button type="button" class="tone-card" onclick="speak('麻')">
+          <div class="c">ˊ</div><div class="t">má</div>
+          <div class="h2cn">麻</div><div class="m">конопля</div></button>
+        <button type="button" class="tone-card" onclick="speak('马')">
+          <div class="c">ˇ</div><div class="t">mǎ</div>
+          <div class="h2cn">马</div><div class="m">лошадь</div></button>
+        <button type="button" class="tone-card" onclick="speak('骂')">
+          <div class="c">ˋ</div><div class="t">mà</div>
+          <div class="h2cn">骂</div><div class="m">ругать</div></button>
+        <button type="button" class="tone-card" onclick="speak('吗')">
+          <div class="c">·</div><div class="t">ma</div>
+          <div class="h2cn">吗</div><div class="m">вопрос. частица</div></button>
+      </div>
+
+      <div class="acc-toolbar">
+        <button type="button" class="acc-ctrl acc-expand-all">Expand All</button>
+        <button type="button" class="acc-ctrl acc-collapse-all">Collapse All</button>
+        <button type="button" class="acc-ctrl acc-expand-learning">Expand Learning Sections</button>
+        <button type="button" class="acc-ctrl acc-collapse-learning">Collapse Learning Sections</button>
+      </div>
+
+      <section class="acc" id="p1-pinyin" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="p1-pinyin-header" aria-expanded="false" aria-controls="p1-pinyin-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🔤</span>
+          <span class="acc-title">Что такое пиньинь</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p1-pinyin-body" role="region" aria-labelledby="p1-pinyin-header">
+            <div class="ru-block">
+              <div class="ru-tag">🇷🇺 На русском</div>
+              <p><b>拼音 (pīnyīn)</b> — официальная запись китайских звуков латиницей. Это <b>не английский</b>: буквы читаются по своим правилам. <span class="z"><span class="h">拼</span><span class="p">pīn</span></span> значит «складывать», <span class="z"><span class="h">音</span><span class="p">yīn</span></span> — «звук». Буквально «складывание звуков».</p>
+              <p>Пиньинь — это костыль для начинающего: китайцы пишут иероглифами, но любой словарь, клавиатура и учебник опираются на пиньинь. Выучив его один раз, вы сможете прочитать вслух любое новое слово.</p>
+              <p>⚠️ Главная ошибка — читать пиньинь «по-английски». <span class="z"><span class="h">q</span></span> это не «кью», <span class="z"><span class="h">x</span></span> не «икс», <span class="z"><span class="h">c</span></span> не «к». Разберём каждую букву на следующих страницах.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="p1-count" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="p1-count-header" aria-expanded="false" aria-controls="p1-count-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🧮</span>
+          <span class="acc-title">Хорошая новость: слогов очень мало</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p1-count-body" role="region" aria-labelledby="p1-count-header">
+            <p class="lead">В китайском всего около <b>400</b> слогов без тонов и примерно <b>1300</b> с тонами. Для сравнения: в английском их десятки тысяч.</p>
+            <p class="lead">Это значит, что фонетику китайского можно выучить <b>целиком и один раз</b> — дальше вы просто узнаёте знакомые слоги. Именно поэтому имеет смысл потратить время на эти четыре страницы до того, как браться за грамматику.</p>
+            <p class="lead">Обратная сторона: слогов мало, поэтому <b>омонимов много</b>. Различать их помогают тон и контекст — отсюда и важность тонов.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="p1-map" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="p1-map-header" aria-expanded="false" aria-controls="p1-map-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🗺️</span>
+          <span class="acc-title">План этого введения</span>
+          <span class="acc-count">(4)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p1-map-body" role="region" aria-labelledby="p1-map-header">
+            <table>
+              <tr><th>Страница</th><th>О чём</th><th>Зачем</th></tr>
+              <tr><td><b>0 · 1</b></td><td>Устройство слога</td><td>Понять схему «инициаль + финаль + тон»</td></tr>
+              <tr><td><b>0 · 2</b></td><td>21 инициаль</td><td>Научиться читать согласные, не путая q / x / c / zh</td></tr>
+              <tr><td><b>0 · 3</b></td><td>Финали</td><td>Гласные и их сочетания, правило точек над ü</td></tr>
+              <tr><td><b>0 · 4</b></td><td>Тоны и практика</td><td>4 тона + нейтральный, куда ставить знак</td></tr>
+            </table>
+            <p class="lead" style="margin-top:14px">После этого начинается грамматика — и первые два правила как раз про тоны: <b>Rule 1</b> (третий тон подряд) и <b>Rule 2</b> (изменение 不).</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE 0.2 -->
+    <div class="page" data-title="Звуки 2" data-topic="p2" data-kind="intro">
+      <div class="p0-badge">Page 0 · Произношение · 2 из 4</div>
+      <div class="ruletitle">Инициали — 21 согласное начало</div>
+      <div class="rule-ru-sub">Нажимайте на карточки: каждая проигрывает реальный слог с этой инициалью.</div>
+      <button type="button" class="review-btn" data-rule="i2" onclick="toggleReviewed('i2')">☐ Mark as Reviewed</button>
+
+      <p class="lead">Инициаль (<span class="z"><span class="h">声母</span><span class="p">shēngmǔ</span></span>) — согласная в начале слога. Их ровно 21, и они разбиты на шесть групп по месту образования. Учить удобнее группами, а не по алфавиту.</p>
+
+      <div class="subhead"><span class="em">👄</span> Губные: b p m f</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('爸')"><span class="snd-py">b</span><span class="snd-cn">爸</span><span class="snd-en">bà · папа</span></button>
+        <button type="button" class="snd" onclick="speak('怕')"><span class="snd-py">p</span><span class="snd-cn">怕</span><span class="snd-en">pà · бояться</span></button>
+        <button type="button" class="snd" onclick="speak('妈')"><span class="snd-py">m</span><span class="snd-cn">妈</span><span class="snd-en">mā · мама</span></button>
+        <button type="button" class="snd" onclick="speak('飞')"><span class="snd-py">f</span><span class="snd-cn">飞</span><span class="snd-en">fēi · летать</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">👅</span> Переднеязычные: d t n l</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('大')"><span class="snd-py">d</span><span class="snd-cn">大</span><span class="snd-en">dà · большой</span></button>
+        <button type="button" class="snd" onclick="speak('他')"><span class="snd-py">t</span><span class="snd-cn">他</span><span class="snd-en">tā · он</span></button>
+        <button type="button" class="snd" onclick="speak('那')"><span class="snd-py">n</span><span class="snd-cn">那</span><span class="snd-en">nà · тот</span></button>
+        <button type="button" class="snd" onclick="speak('来')"><span class="snd-py">l</span><span class="snd-cn">来</span><span class="snd-en">lái · приходить</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">🗣️</span> Заднеязычные: g k h</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('高')"><span class="snd-py">g</span><span class="snd-cn">高</span><span class="snd-en">gāo · высокий</span></button>
+        <button type="button" class="snd" onclick="speak('开')"><span class="snd-py">k</span><span class="snd-cn">开</span><span class="snd-en">kāi · открывать</span></button>
+        <button type="button" class="snd" onclick="speak('好')"><span class="snd-py">h</span><span class="snd-cn">好</span><span class="snd-en">hǎo · хороший</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">⚠️</span> Мягкие (самые коварные): j q x</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('家')"><span class="snd-py">j</span><span class="snd-cn">家</span><span class="snd-en">jiā · дом</span></button>
+        <button type="button" class="snd" onclick="speak('七')"><span class="snd-py">q</span><span class="snd-cn">七</span><span class="snd-en">qī · семь</span></button>
+        <button type="button" class="snd" onclick="speak('想')"><span class="snd-py">x</span><span class="snd-cn">想</span><span class="snd-en">xiǎng · хотеть</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">🌀</span> Загнутый язык: zh ch sh r</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('中')"><span class="snd-py">zh</span><span class="snd-cn">中</span><span class="snd-en">zhōng · середина</span></button>
+        <button type="button" class="snd" onclick="speak('吃')"><span class="snd-py">ch</span><span class="snd-cn">吃</span><span class="snd-en">chī · есть</span></button>
+        <button type="button" class="snd" onclick="speak('是')"><span class="snd-py">sh</span><span class="snd-cn">是</span><span class="snd-en">shì · быть</span></button>
+        <button type="button" class="snd" onclick="speak('人')"><span class="snd-py">r</span><span class="snd-cn">人</span><span class="snd-en">rén · человек</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">😬</span> Свистящие: z c s</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('在')"><span class="snd-py">z</span><span class="snd-cn">在</span><span class="snd-en">zài · в, на</span></button>
+        <button type="button" class="snd" onclick="speak('菜')"><span class="snd-py">c</span><span class="snd-cn">菜</span><span class="snd-en">cài · блюдо</span></button>
+        <button type="button" class="snd" onclick="speak('三')"><span class="snd-py">s</span><span class="snd-cn">三</span><span class="snd-en">sān · три</span></button>
+      </div>
+
+      <div class="acc-toolbar">
+        <button type="button" class="acc-ctrl acc-expand-all">Expand All</button>
+        <button type="button" class="acc-ctrl acc-collapse-all">Collapse All</button>
+        <button type="button" class="acc-ctrl acc-expand-learning">Expand Learning Sections</button>
+        <button type="button" class="acc-ctrl acc-collapse-learning">Collapse Learning Sections</button>
+      </div>
+
+      <section class="acc" id="p2-traps" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="p2-traps-header" aria-expanded="false" aria-controls="p2-traps-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">⚠️</span>
+          <span class="acc-title">Пять ловушек для русскоязычных</span>
+          <span class="acc-count">(5)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p2-traps-body" role="region" aria-labelledby="p2-traps-header">
+            <table>
+              <tr><th>Буква</th><th>❌ Как читают</th><th>✅ Как надо</th><th>Пример</th></tr>
+              <tr><td><b>q</b></td><td>«кв», «к»</td><td>мягкое <b>ць</b> с придыханием, язык у нижних зубов</td><td><span class="z"><span class="h">七</span><span class="p">qī — семь</span></span></td></tr>
+              <tr><td><b>x</b></td><td>«кс», «икс»</td><td>мягкое <b>сь</b>, почти «щ» без нажима</td><td><span class="z"><span class="h">想</span><span class="p">xiǎng — хотеть</span></span></td></tr>
+              <tr><td><b>c</b></td><td>«к»</td><td><b>ц</b> с сильным придыханием</td><td><span class="z"><span class="h">菜</span><span class="p">cài — блюдо</span></span></td></tr>
+              <tr><td><b>zh</b></td><td>«ж»</td><td><b>дж</b> с загнутым назад языком</td><td><span class="z"><span class="h">中</span><span class="p">zhōng — середина</span></span></td></tr>
+              <tr><td><b>r</b></td><td>«р»</td><td>нечто между <b>ж</b> и английским <i>r</i>, язык загнут</td><td><span class="z"><span class="h">人</span><span class="p">rén — человек</span></span></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="p2-asp" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="p2-asp-header" aria-expanded="false" aria-controls="p2-asp-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">💨</span>
+          <span class="acc-title">Главное отличие: придыхание, а не звонкость</span>
+          <span class="acc-count">(3)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p2-asp-body" role="region" aria-labelledby="p2-asp-header">
+            <div class="ru-block">
+              <div class="ru-tag">🇷🇺 На русском</div>
+              <p>В русском <b>б</b> и <b>п</b> различаются <b>звонкостью</b>: при «б» голос работает. В китайском <b>обе</b> буквы глухие. Различаются они <b>придыханием</b> — струёй воздуха после согласного.</p>
+              <p><b>b d g</b> — без придыхания, сухо и коротко.<br><b>p t k</b> — с сильным выдохом, как будто задуваете свечу.</p>
+              <p>🔎 <b>Проверка:</b> поднесите ладонь ко рту. На <span class="z"><span class="h">怕</span><span class="p">pà</span></span> воздух ударит в ладонь, на <span class="z"><span class="h">爸</span><span class="p">bà</span></span> — почти нет.</p>
+            </div>
+            <table style="margin-top:14px">
+              <tr><th>Без придыхания</th><th>С придыханием</th><th>Слушать</th></tr>
+              <tr><td><span class="z"><span class="h">爸</span><span class="p">bà</span></span></td><td><span class="z"><span class="h">怕</span><span class="p">pà</span></span></td><td><button class="audio-btn" onclick="speak('爸怕')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">大</span><span class="p">dà</span></span></td><td><span class="z"><span class="h">他</span><span class="p">tā</span></span></td><td><button class="audio-btn" onclick="speak('大他')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">高</span><span class="p">gāo</span></span></td><td><span class="z"><span class="h">开</span><span class="p">kāi</span></span></td><td><button class="audio-btn" onclick="speak('高开')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE 0.3 -->
+    <div class="page" data-title="Звуки 3" data-topic="p3" data-kind="intro">
+      <div class="p0-badge">Page 0 · Произношение · 3 из 4</div>
+      <div class="ruletitle">Финали — гласная часть слога</div>
+      <div class="rule-ru-sub">То, что идёт после инициали: от простого «a» до сочетаний вроде «uang».</div>
+      <button type="button" class="review-btn" data-rule="i3" onclick="toggleReviewed('i3')">☐ Mark as Reviewed</button>
+
+      <p class="lead">Финаль (<span class="z"><span class="h">韵母</span><span class="p">yùnmǔ</span></span>) — вся часть слога после согласного начала. Финалей около 36, но почти все собираются из шести простых.</p>
+
+      <div class="subhead"><span class="em">🅰️</span> Шесть простых финалей</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('啊')"><span class="snd-py">a</span><span class="snd-cn">啊</span><span class="snd-en">ā · как русское «а»</span></button>
+        <button type="button" class="snd" onclick="speak('我')"><span class="snd-py">o</span><span class="snd-cn">我</span><span class="snd-en">wǒ · округлое «о»</span></button>
+        <button type="button" class="snd" onclick="speak('饿')"><span class="snd-py">e</span><span class="snd-cn">饿</span><span class="snd-en">è · между «э» и «ы»</span></button>
+        <button type="button" class="snd" onclick="speak('一')"><span class="snd-py">i</span><span class="snd-cn">一</span><span class="snd-en">yī · длинное «и»</span></button>
+        <button type="button" class="snd" onclick="speak('五')"><span class="snd-py">u</span><span class="snd-cn">五</span><span class="snd-en">wǔ · «у», губы трубочкой</span></button>
+        <button type="button" class="snd" onclick="speak('女')"><span class="snd-py">ü</span><span class="snd-cn">女</span><span class="snd-en">nǚ · «ю» как в «тюль»</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">➕</span> Сочетания с a / o / e</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('爱')"><span class="snd-py">ai</span><span class="snd-cn">爱</span><span class="snd-en">ài · любить</span></button>
+        <button type="button" class="snd" onclick="speak('北')"><span class="snd-py">ei</span><span class="snd-cn">北</span><span class="snd-en">běi · север</span></button>
+        <button type="button" class="snd" onclick="speak('好')"><span class="snd-py">ao</span><span class="snd-cn">好</span><span class="snd-en">hǎo · хороший</span></button>
+        <button type="button" class="snd" onclick="speak('口')"><span class="snd-py">ou</span><span class="snd-cn">口</span><span class="snd-en">kǒu · рот</span></button>
+        <button type="button" class="snd" onclick="speak('安')"><span class="snd-py">an</span><span class="snd-cn">安</span><span class="snd-en">ān · покой</span></button>
+        <button type="button" class="snd" onclick="speak('很')"><span class="snd-py">en</span><span class="snd-cn">很</span><span class="snd-en">hěn · очень</span></button>
+        <button type="button" class="snd" onclick="speak('昂')"><span class="snd-py">ang</span><span class="snd-cn">昂</span><span class="snd-en">áng · поднимать</span></button>
+        <button type="button" class="snd" onclick="speak('冷')"><span class="snd-py">eng</span><span class="snd-cn">冷</span><span class="snd-en">lěng · холодный</span></button>
+        <button type="button" class="snd" onclick="speak('中')"><span class="snd-py">ong</span><span class="snd-cn">中</span><span class="snd-en">zhōng · середина</span></button>
+        <button type="button" class="snd" onclick="speak('二')"><span class="snd-py">er</span><span class="snd-cn">二</span><span class="snd-en">èr · два</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">🇮</span> Ряд i-</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('家')"><span class="snd-py">ia</span><span class="snd-cn">家</span><span class="snd-en">jiā · дом</span></button>
+        <button type="button" class="snd" onclick="speak('谢')"><span class="snd-py">ie</span><span class="snd-cn">谢</span><span class="snd-en">xiè · спасибо</span></button>
+        <button type="button" class="snd" onclick="speak('小')"><span class="snd-py">iao</span><span class="snd-cn">小</span><span class="snd-en">xiǎo · маленький</span></button>
+        <button type="button" class="snd" onclick="speak('六')"><span class="snd-py">iu</span><span class="snd-cn">六</span><span class="snd-en">liù · шесть</span></button>
+        <button type="button" class="snd" onclick="speak('天')"><span class="snd-py">ian</span><span class="snd-cn">天</span><span class="snd-en">tiān · небо</span></button>
+        <button type="button" class="snd" onclick="speak('心')"><span class="snd-py">in</span><span class="snd-cn">心</span><span class="snd-en">xīn · сердце</span></button>
+        <button type="button" class="snd" onclick="speak('想')"><span class="snd-py">iang</span><span class="snd-cn">想</span><span class="snd-en">xiǎng · хотеть</span></button>
+        <button type="button" class="snd" onclick="speak('明')"><span class="snd-py">ing</span><span class="snd-cn">明</span><span class="snd-en">míng · светлый</span></button>
+        <button type="button" class="snd" onclick="speak('熊')"><span class="snd-py">iong</span><span class="snd-cn">熊</span><span class="snd-en">xióng · медведь</span></button>
+      </div>
+
+      <div class="subhead" style="margin-top:18px"><span class="em">🇺</span> Ряд u- и ü-</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('花')"><span class="snd-py">ua</span><span class="snd-cn">花</span><span class="snd-en">huā · цветок</span></button>
+        <button type="button" class="snd" onclick="speak('我')"><span class="snd-py">uo</span><span class="snd-cn">我</span><span class="snd-en">wǒ · я</span></button>
+        <button type="button" class="snd" onclick="speak('快')"><span class="snd-py">uai</span><span class="snd-cn">快</span><span class="snd-en">kuài · быстрый</span></button>
+        <button type="button" class="snd" onclick="speak('水')"><span class="snd-py">ui</span><span class="snd-cn">水</span><span class="snd-en">shuǐ · вода</span></button>
+        <button type="button" class="snd" onclick="speak('关')"><span class="snd-py">uan</span><span class="snd-cn">关</span><span class="snd-en">guān · закрывать</span></button>
+        <button type="button" class="snd" onclick="speak('春')"><span class="snd-py">un</span><span class="snd-cn">春</span><span class="snd-en">chūn · весна</span></button>
+        <button type="button" class="snd" onclick="speak('黄')"><span class="snd-py">uang</span><span class="snd-cn">黄</span><span class="snd-en">huáng · жёлтый</span></button>
+        <button type="button" class="snd" onclick="speak('月')"><span class="snd-py">üe</span><span class="snd-cn">月</span><span class="snd-en">yuè · луна</span></button>
+        <button type="button" class="snd" onclick="speak('员')"><span class="snd-py">üan</span><span class="snd-cn">员</span><span class="snd-en">yuán · сотрудник</span></button>
+        <button type="button" class="snd" onclick="speak('云')"><span class="snd-py">ün</span><span class="snd-cn">云</span><span class="snd-en">yún · облако</span></button>
+      </div>
+
+      <div class="acc-toolbar">
+        <button type="button" class="acc-ctrl acc-expand-all">Expand All</button>
+        <button type="button" class="acc-ctrl acc-collapse-all">Collapse All</button>
+        <button type="button" class="acc-ctrl acc-expand-learning">Expand Learning Sections</button>
+        <button type="button" class="acc-ctrl acc-collapse-learning">Collapse Learning Sections</button>
+      </div>
+
+      <section class="acc" id="p3-udots" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="p3-udots-header" aria-expanded="false" aria-controls="p3-udots-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🔵</span>
+          <span class="acc-title">Правило точек над ü</span>
+          <span class="acc-count">(2)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p3-udots-body" role="region" aria-labelledby="p3-udots-header">
+            <div class="ru-block">
+              <div class="ru-tag">🇷🇺 На русском</div>
+              <p>Звук <b>ü</b> иногда пишется с точками, а иногда без — и это сбивает с толку. Правило простое:</p>
+              <p>✅ После <b>j q x y</b> точки <b>не пишут</b>: <span class="z"><span class="h">家</span><span class="p">jū→ju</span></span>, <span class="z"><span class="h">云</span><span class="p">yún</span></span>. Причина: после этих букв обычное «u» вообще не встречается, путаницы быть не может.</p>
+              <p>✅ После <b>n</b> и <b>l</b> точки <b>обязательны</b>: <span class="z"><span class="h">女</span><span class="p">nǚ — женщина</span></span> и <span class="z"><span class="h">努</span><span class="p">nǔ — стараться</span></span> — <b>разные слова</b>.</p>
+            </div>
+            <table style="margin-top:14px">
+              <tr><th>Пишется</th><th>Читается</th><th>Пример</th><th>Слушать</th></tr>
+              <tr><td>ju qu xu yu</td><td>jü qü xü yü</td><td><span class="z"><span class="h">去</span><span class="p">qù — идти</span></span></td><td><button class="audio-btn" onclick="speak('去')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>nü lü</td><td>nü lü</td><td><span class="z"><span class="h">女</span><span class="p">nǚ — женщина</span></span></td><td><button class="audio-btn" onclick="speak('女')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="p3-three-i" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="p3-three-i-header" aria-expanded="false" aria-controls="p3-three-i-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🎭</span>
+          <span class="acc-title">Одна буква i — три разных звука</span>
+          <span class="acc-count">(3)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p3-three-i-body" role="region" aria-labelledby="p3-three-i-header">
+            <p class="lead">Это одна из самых частых ошибок чтения: <b>i</b> читается по-разному в зависимости от того, что стоит перед ней.</p>
+            <table>
+              <tr><th>После чего</th><th>Как звучит</th><th>Пример</th><th>Слушать</th></tr>
+              <tr><td><b>z c s</b></td><td>глухое «ы», почти без гласной</td><td><span class="z"><span class="h">四</span><span class="p">sì — четыре</span></span></td><td><button class="audio-btn" onclick="speak('四')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><b>zh ch sh r</b></td><td>«ы» с загнутым назад языком</td><td><span class="z"><span class="h">是</span><span class="p">shì — быть</span></span></td><td><button class="audio-btn" onclick="speak('是')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td>всё остальное</td><td>чистое «и»</td><td><span class="z"><span class="h">你</span><span class="p">nǐ — ты</span></span></td><td><button class="audio-btn" onclick="speak('你')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+            <p class="lead" style="margin-top:14px">⚠️ Поэтому <span class="z"><span class="h">四</span><span class="p">sì</span></span> — это «сы», а не «си», и <span class="z"><span class="h">十</span><span class="p">shí</span></span> — «шы», а не «ши». Для русского уха разница между ними едва слышна, а для китайца это разные слова: 4 и 10.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAGE 0.4 -->
+    <div class="page" data-title="Звуки 4" data-topic="p4" data-kind="intro">
+      <div class="p0-badge">Page 0 · Произношение · 4 из 4</div>
+      <div class="ruletitle">Тоны — и первая практика</div>
+      <div class="rule-ru-sub">Четыре тона плюс нейтральный. Без них слово просто не будет понято.</div>
+      <button type="button" class="review-btn" data-rule="i4" onclick="toggleReviewed('i4')">☐ Mark as Reviewed</button>
+
+      <div class="p0-hero">
+        <p><b>Тон (<span class="z"><span class="h">声调</span><span class="p">shēngdiào</span></span>) — это мелодия слога.</b> В русском интонация меняет эмоцию, в китайском — <b>значение слова</b>. Сказать <span class="z"><span class="h">马</span><span class="p">mǎ</span></span> вместо <span class="z"><span class="h">妈</span><span class="p">mā</span></span> — это не акцент, это другое слово.</p>
+      </div>
+
+      <div class="subhead"><span class="em">🎵</span> Пять тонов на слух</div>
+      <div class="tone-grid">
+        <button type="button" class="tone-card" onclick="speak('妈')">
+          <div class="c">→</div><div class="t">1 · mā</div><div class="h2cn">妈</div>
+          <div class="m">высокий ровный</div></button>
+        <button type="button" class="tone-card" onclick="speak('麻')">
+          <div class="c">↗</div><div class="t">2 · má</div><div class="h2cn">麻</div>
+          <div class="m">восходящий, как вопрос</div></button>
+        <button type="button" class="tone-card" onclick="speak('马')">
+          <div class="c">↘↗</div><div class="t">3 · mǎ</div><div class="h2cn">马</div>
+          <div class="m">вниз и вверх</div></button>
+        <button type="button" class="tone-card" onclick="speak('骂')">
+          <div class="c">↘</div><div class="t">4 · mà</div><div class="h2cn">骂</div>
+          <div class="m">резко вниз, как приказ</div></button>
+        <button type="button" class="tone-card" onclick="speak('吗')">
+          <div class="c">·</div><div class="t">0 · ma</div><div class="h2cn">吗</div>
+          <div class="m">лёгкий, безударный</div></button>
+      </div>
+
+      <div class="subhead" style="margin-top:20px"><span class="em">🎯</span> Минимальные пары — услышьте разницу</div>
+      <div class="snd-grid">
+        <button type="button" class="snd" onclick="speak('买')"><span class="snd-py">mǎi</span><span class="snd-cn">买</span><span class="snd-en">покупать · 3-й</span></button>
+        <button type="button" class="snd" onclick="speak('卖')"><span class="snd-py">mài</span><span class="snd-cn">卖</span><span class="snd-en">продавать · 4-й</span></button>
+        <button type="button" class="snd" onclick="speak('汤')"><span class="snd-py">tāng</span><span class="snd-cn">汤</span><span class="snd-en">суп · 1-й</span></button>
+        <button type="button" class="snd" onclick="speak('糖')"><span class="snd-py">táng</span><span class="snd-cn">糖</span><span class="snd-en">сахар · 2-й</span></button>
+        <button type="button" class="snd" onclick="speak('问')"><span class="snd-py">wèn</span><span class="snd-cn">问</span><span class="snd-en">спрашивать · 4-й</span></button>
+        <button type="button" class="snd" onclick="speak('吻')"><span class="snd-py">wěn</span><span class="snd-cn">吻</span><span class="snd-en">целовать · 3-й</span></button>
+      </div>
+
+      <div class="acc-toolbar">
+        <button type="button" class="acc-ctrl acc-expand-all">Expand All</button>
+        <button type="button" class="acc-ctrl acc-collapse-all">Collapse All</button>
+        <button type="button" class="acc-ctrl acc-expand-learning">Expand Learning Sections</button>
+        <button type="button" class="acc-ctrl acc-collapse-learning">Collapse Learning Sections</button>
+      </div>
+
+      <section class="acc" id="p4-marks" data-group="intro" data-default-open="true">
+        <button class="acc-header" id="p4-marks-header" aria-expanded="false" aria-controls="p4-marks-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">✍️</span>
+          <span class="acc-title">Куда ставить знак тона</span>
+          <span class="acc-count">(3)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p4-marks-body" role="region" aria-labelledby="p4-marks-header">
+            <p class="lead">Если в финали несколько гласных, знак ставится не куда попало. Правило из трёх шагов:</p>
+            <table>
+              <tr><th>Шаг</th><th>Правило</th><th>Пример</th></tr>
+              <tr><td><b>1</b></td><td>Есть <b>a</b> — знак на неё</td><td>h<b>ǎ</b>o, xi<b>ǎ</b>ng, gu<b>ā</b>n</td></tr>
+              <tr><td><b>2</b></td><td>Нет <b>a</b> — ищем <b>o</b> или <b>e</b></td><td>d<b>ō</b>u, xi<b>è</b>, l<b>ě</b>ng</td></tr>
+              <tr><td><b>3</b></td><td>В <b>iu</b> и <b>ui</b> — на <b>последнюю</b></td><td>li<b>ù</b>, shu<b>ǐ</b></td></tr>
+            </table>
+            <p class="lead" style="margin-top:14px">💡 Над <b>i</b> точка убирается: <b>nǐ</b>, а не <b>nǐ̇</b>. Нейтральный тон не обозначается никак: <span class="z"><span class="h">吗</span><span class="p">ma</span></span>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="p4-practice" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="p4-practice-header" aria-expanded="false" aria-controls="p4-practice-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">🗣️</span>
+          <span class="acc-title">Практика: соберите слог сами</span>
+          <span class="acc-count">(6)</span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p4-practice-body" role="region" aria-labelledby="p4-practice-header">
+            <p class="lead">Разберите каждый слог на детали, произнесите вслух, затем сравните с записью.</p>
+            <table>
+              <tr><th>Слог</th><th>Инициаль</th><th>Финаль</th><th>Тон</th><th>Значение</th><th>Audio</th></tr>
+              <tr><td><span class="z"><span class="h">好</span><span class="p">hǎo</span></span></td><td>h</td><td>ao</td><td>3-й</td><td>хороший</td><td><button class="audio-btn" onclick="speak('好')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">中</span><span class="p">zhōng</span></span></td><td>zh</td><td>ong</td><td>1-й</td><td>середина</td><td><button class="audio-btn" onclick="speak('中')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">谢</span><span class="p">xiè</span></span></td><td>x</td><td>ie</td><td>4-й</td><td>благодарить</td><td><button class="audio-btn" onclick="speak('谢')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">水</span><span class="p">shuǐ</span></span></td><td>sh</td><td>ui</td><td>3-й</td><td>вода</td><td><button class="audio-btn" onclick="speak('水')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">去</span><span class="p">qù</span></span></td><td>q</td><td>ü</td><td>4-й</td><td>идти</td><td><button class="audio-btn" onclick="speak('去')" aria-label="Play audio">🔊</button></td></tr>
+              <tr><td><span class="z"><span class="h">云</span><span class="p">yún</span></span></td><td>—</td><td>ün</td><td>2-й</td><td>облако</td><td><button class="audio-btn" onclick="speak('云')" aria-label="Play audio">🔊</button></td></tr>
+            </table>
+            <p class="lead" style="margin-top:14px">🎧 Готовая фраза целиком: <span class="z"><span class="h">你好，我是学生。</span><span class="p">Nǐ hǎo, wǒ shì xuésheng.</span></span> — «Здравствуйте, я студент».
+              <button class="audio-btn" onclick="speak('你好，我是学生。')" aria-label="Play audio">🔊</button></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="acc" id="p4-next" data-group="learning" data-default-open="false">
+        <button class="acc-header" id="p4-next-header" aria-expanded="false" aria-controls="p4-next-body">
+          <span class="acc-chevron" aria-hidden="true">▶</span>
+          <span class="acc-icon">➡️</span>
+          <span class="acc-title">Что дальше</span>
+          <span class="acc-count"></span>
+        </button>
+        <div class="acc-body-wrap">
+          <div class="acc-body" id="p4-next-body" role="region" aria-labelledby="p4-next-header">
+            <div class="kettle-block">
+              <div class="kettle-tag">🫖 Коротко</div>
+              <p>Вы знаете схему: <b>инициаль + финаль + тон</b>. Этого достаточно, чтобы прочитать вслух любое слово из курса.</p>
+              <p>Дальше начинается грамматика — и первые два правила как раз про то, как тоны <b>меняются в потоке речи</b>:</p>
+              <p>➡️ <b>Rule 1</b> — два третьих тона подряд: первый превращается во второй.<br>
+                 ➡️ <b>Rule 2</b> — <span class="z"><span class="h">不</span><span class="p">bù</span></span> меняет тон перед четвёртым.</p>
+              <p>Возвращайтесь на эти четыре страницы в любой момент — они всегда первые в списке.</p>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px">
+              <button type="button" class="navbtn" onclick="__goTopic('r1')">Перейти к Rule 1 →</button>
+              <button type="button" class="acc-ctrl" onclick="__goTopic('r2')">Rule 2</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <!-- PAGE 1: R1 -->
-    <div class="page active" data-title="Rule 1" data-topic="r1">
+    <div class="page" data-title="Rule 1" data-topic="r1">
       <div class="ruletitle">Rule 1 — Third Tone Sandhi (3rd + 3rd → 2nd + 3rd)</div>
       <div class="rule-ru-sub">Это правило про то, как меняется звучание третьего тона, когда несколько слогов третьего тона идут подряд.</div>
       <button type="button" class="review-btn" data-rule="r1" onclick="toggleReviewed('r1')">☐ Mark as Reviewed</button>
@@ -4755,6 +5262,27 @@
     dotsWrap.appendChild(d);
   });
 
+  /* Page 0 sits before Rule 1, so a plain "position / total" counter would
+     read 5 / 19 on Rule 1. Number each kind separately instead: rules keep
+     showing exactly what they showed before (1 / 15), and the intro pages
+     get their own 0-series. */
+  function counterFor(i){
+    var p = pages[i];
+    var isIntro = p.getAttribute('data-kind') === 'intro';
+    var same = pages.filter(function(x){
+      return (x.getAttribute('data-kind') === 'intro') === isIntro;
+    });
+    var n = same.indexOf(p) + 1;
+    return isIntro ? ('0 · ' + n + ' / ' + same.length) : (n + ' / ' + same.length);
+  }
+
+  /* Jump by content id rather than position, so links survive reordering. */
+  window.__goTopic = function(topic){
+    for(var i=0;i<pages.length;i++){
+      if(pages[i].getAttribute('data-topic') === topic){ goTo(i); return; }
+    }
+  };
+
   function goTo(i){
     if(i<0 || i>=pages.length) return;
     pages[current].classList.remove('active');
@@ -4764,7 +5292,7 @@
     dotsWrap.children[current].classList.add('on');
     document.getElementById('prevBtn').disabled = (current===0);
     document.getElementById('nextBtn').disabled = (current===pages.length-1);
-    document.getElementById('pageof').textContent = (current+1) + ' / ' + pages.length;
+    document.getElementById('pageof').textContent = counterFor(current);
     window.scrollTo({top:0, behavior:'smooth'});
   }
   window.__grammarGoTo = goTo;
@@ -5146,6 +5674,32 @@
 */
 (function () {
   window.VIDEO_RECOMMENDATIONS = {
+
+    'p1': [ // Page 0.1 — how a syllable is built
+      { title: 'Pinyin Basics: Initials, Finals and Tones', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese pinyin chart initials finals tones lesson 1', thumbClass:'tc-1' },
+      { title: 'How Chinese Syllables Are Built', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner chinese syllable structure initial final tone', thumbClass:'tc-2' },
+      { title: 'Пиньинь с нуля — как устроен слог', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский пиньинь с нуля инициаль финаль тон', thumbClass:'tc-3' }
+    ],
+
+    'p2': [ // Page 0.2 — initials
+      { title: 'All 21 Chinese Initials Explained', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese 21 initials pronunciation b p m f d t n l', thumbClass:'tc-2' },
+      { title: 'j q x vs zh ch sh — Stop Confusing Them', channel: 'Mandarin Corner', lang: 'en', query: 'Mandarin Corner j q x zh ch sh difference pronunciation', thumbClass:'tc-3' },
+      { title: 'Инициали: j q x и zh ch sh — разница', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский инициали j q x zh ch sh произношение', thumbClass:'tc-4' },
+      { title: 'Придыхание в китайском: b/p, d/t, g/k', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский придыхание b p d t g k произношение', thumbClass:'tc-5' }
+    ],
+
+    'p3': [ // Page 0.3 — finals
+      { title: 'Chinese Finals: Every Vowel Combination', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese finals vowels compound finals pinyin', thumbClass:'tc-3' },
+      { title: 'The ü Rule: ju qu xu yu vs nü lü', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod pinyin u umlaut rule ju qu xu yu nu lu', thumbClass:'tc-4' },
+      { title: 'Три звука буквы i в пиньине', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский звук i после z c s zh ch sh r', thumbClass:'tc-5' }
+    ],
+
+    'p4': [ // Page 0.4 — tones
+      { title: 'The 4 Tones of Mandarin (+ Neutral)', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese four tones neutral tone mandarin lesson', thumbClass:'tc-4' },
+      { title: 'Where to Put the Tone Mark', channel: 'ChinesePod', lang: 'en', query: 'ChinesePod pinyin tone mark placement rule a o e iu ui', thumbClass:'tc-5' },
+      { title: 'Тоны китайского языка с нуля', channel: 'Хуалань', lang: 'ru', query: 'Хуалань китайский четыре тона нейтральный тон с нуля', thumbClass:'tc-1' },
+      { title: 'Как не путать 3-й и 2-й тон', channel: 'Полиглот', lang: 'ru', query: 'Полиглот китайский третий тон второй тон разница', thumbClass:'tc-2' }
+    ],
 
     'r1': [ // Third tone sandhi
       { title: 'Third Tone Sandhi Rule — 3rd Tone + 3rd Tone', channel: 'Yoyo Chinese', lang: 'en', query: 'Yoyo Chinese third tone sandhi rule nihao', thumbClass:'tc-1' },
@@ -5578,6 +6132,11 @@
     "听懂": ["tīngdǒng", "to understand (by listening)"],
     "看懂": ["kàndǒng", "to understand (by reading/watching)"],
     "仔细": ["zǐxì", "careful; attentive(ly)"],
+    "声母": ["shēngmǔ", "initial (first consonant of a syllable)"],
+    "韵母": ["yùnmǔ", "final (vowel part of a syllable)"],
+    "声调": ["shēngdiào", "tone"],
+    "拼音": ["pīnyīn", "pinyin (romanisation)"],
+    "学生": ["xuésheng", "student"],
     "程度": ["chéngdù", "degree; extent"],
     "清楚": ["qīngchu", "clear; distinct(ly)"],
     "认真": ["rènzhēn", "serious; conscientious(ly)"],
@@ -5725,6 +6284,58 @@
     "认": ["rèn", "to recognise; to admit"],
     "程": ["chéng", "rule; procedure; journey"],
     "度": ["dù", "degree; measure"],
+    /* ---- characters introduced by the Page 0 pronunciation pages ---- */
+    "爸": ["bà", "dad"],
+    "怕": ["pà", "to fear"],
+    "飞": ["fēi", "to fly"],
+    "他": ["tā", "he; him"],
+    "那": ["nà", "that"],
+    "高": ["gāo", "tall; high"],
+    "开": ["kāi", "to open; to start"],
+    "七": ["qī", "seven"],
+    "菜": ["cài", "dish; vegetable"],
+    "啊": ["ā", "ah (interjection)"],
+    "哦": ["ó", "oh (interjection)"],
+    "女": ["nǚ", "woman; female"],
+    "北": ["běi", "north"],
+    "口": ["kǒu", "mouth"],
+    "安": ["ān", "peace; safe"],
+    "昂": ["áng", "to raise; high"],
+    "谢": ["xiè", "to thank"],
+    "小": ["xiǎo", "small"],
+    "天": ["tiān", "sky; day"],
+    "心": ["xīn", "heart"],
+    "明": ["míng", "bright"],
+    "熊": ["xióng", "bear"],
+    "花": ["huā", "flower"],
+    "快": ["kuài", "fast"],
+    "水": ["shuǐ", "water"],
+    "关": ["guān", "to close; to shut"],
+    "春": ["chūn", "spring"],
+    "黄": ["huáng", "yellow"],
+    "月": ["yuè", "moon; month"],
+    "员": ["yuán", "member; staff"],
+    "云": ["yún", "cloud"],
+    "麻": ["má", "hemp; numb"],
+    "马": ["mǎ", "horse"],
+    "骂": ["mà", "to scold"],
+    "买": ["mǎi", "to buy"],
+    "卖": ["mài", "to sell"],
+    "汤": ["tāng", "soup"],
+    "糖": ["táng", "sugar; sweets"],
+    "吻": ["wěn", "to kiss"],
+    "努": ["nǔ", "to exert; to strive"],
+    "声": ["shēng", "sound; voice"],
+    "母": ["mǔ", "mother; base form"],
+    "韵": ["yùn", "rhyme"],
+    "调": ["diào", "tone; to adjust"],
+    "拼": ["pīn", "to put together; to spell"],
+    "音": ["yīn", "sound"],
+    "妈": ["mā", "mum"],
+    "家": ["jiā", "home; family"],
+    "想": ["xiǎng", "to want; to think"],
+    "中": ["zhōng", "middle; China"],
+    "爱": ["ài", "to love"],
   };
 })();
 </script>
@@ -6685,6 +7296,8 @@
     + 'font-weight:800; font-size:14px; color:var(--ink,#22223b);}'
     + '.zm-item.cur .num{background:var(--red,#e63946); color:#fff;}'
     + '.zm-item.done .num{background:#2e9e5b; color:#fff;}'
+    + '.zm-item.intro .num{flex-basis:46px; font-size:12.5px;'
+    + 'background:var(--subj,#4361ee); color:#fff;}'
     + '.zm-item .tt{flex:1; min-width:0; font-size:14.5px; font-weight:600; line-height:1.35;}'
     + '.zm-item .hit{display:block; font-size:12.5px; font-weight:400;'
     + 'color:var(--soft,#6c757d); margin-top:2px; overflow:hidden; text-overflow:ellipsis;'
@@ -6893,15 +7506,28 @@
      PAGE MODEL
      ================================================================ */
   var pages = [];
+  /* Page 0 (the pronunciation introduction) sits before Rule 1, so position
+     is no longer the rule number. Number each kind within its own group:
+     the rules keep reading 1–15 exactly as before. */
   function readPages() {
-    pages = [].map.call(document.querySelectorAll('.page'), function (p, i) {
+    var all = [].slice.call(document.querySelectorAll('.page'));
+    var isIntro = function (p) { return p.getAttribute('data-kind') === 'intro'; };
+    var intro = all.filter(isIntro);
+    var rules = all.filter(function (p) { return !isIntro(p); });
+    pages = all.map(function (p, i) {
       var t = p.querySelector('.ruletitle');
       var full = t ? t.textContent.trim() : (p.getAttribute('data-title') || '');
+      var intro_ = isIntro(p);
+      var group = intro_ ? intro : rules;
+      var n = group.indexOf(p) + 1;
       return {
         el: p,
         idx: i,
-        num: i + 1,
-        nav: p.getAttribute('data-title') || ('Rule ' + (i + 1)),
+        isIntro: intro_,
+        num: n,
+        badge: intro_ ? ('0.' + n) : String(n),
+        label: (intro_ ? 'Произношение ' : 'Правило ') + n + ' / ' + group.length,
+        nav: p.getAttribute('data-title') || '',
         title: full.replace(/^Rule\s*\d+\s*[—–-]\s*/, ''),
         topic: p.getAttribute('data-topic') || '',
         text: null        // search index, built lazily
@@ -6944,7 +7570,7 @@
     if (!bar) return;
     var p = pages[curIdx()];
     if (!p) return;
-    curEl.querySelector('.n').textContent = 'Правило ' + p.num + ' / ' + pages.length;
+    curEl.querySelector('.n').textContent = p.label;
     curEl.querySelector('.t').textContent = p.title;
     bar.querySelector('.zm-prev').disabled = (curIdx() === 0);
     bar.querySelector('.zm-next').disabled = (curIdx() === pages.length - 1);
@@ -7035,7 +7661,7 @@
     pages.forEach(function (p) {
       var hit = '', exact = false;
       if (q) {
-        exact = String(p.num) === q;
+        exact = !p.isIntro && String(p.num) === q;   // "12" means Rule 12
         var inTitle = exact || p.title.toLowerCase().indexOf(q) > -1 ||
                       p.nav.toLowerCase().indexOf(q) > -1;
         var body = indexOf(p);
@@ -7057,8 +7683,9 @@
       shown++;
       var done = p.el.querySelector('.review-btn.done') ? ' done' : '';
       html += '<button type="button" class="zm-item' + (p.idx === cur ? ' cur' : '') + done +
+              (p.isIntro ? ' intro' : '') +
               '" data-go="' + p.idx + '">' +
-              '<span class="num">' + p.num + '</span>' +
+              '<span class="num">' + p.badge + '</span>' +
               '<span class="tt">' + esc(p.title) +
               (m.hit ? '<span class="hit">' + esc(m.hit) + '</span>' : '') +
               '</span></button>';

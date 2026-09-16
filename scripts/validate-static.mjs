@@ -40,8 +40,14 @@ async function validateSource() {
   assert.match(rules, /<title>Chinese · Grammar Rules<\/title>/, "grammar-rules title is missing");
   assert.equal(
     (rules.match(/<button type="button" class="review-btn"/g) ?? []).length,
-    15,
-    "rules.html must contain 15 review buttons"
+    19,
+    "rules.html must contain four pronunciation-introduction and 15 grammar-rule review buttons"
+  );
+  assert.deepEqual(
+    [...rules.matchAll(/data-title="Звуки (\d+)"[^>]*data-topic="p(\d+)"[^>]*data-kind="intro"/g)]
+      .map((match) => [Number(match[1]), Number(match[2])]),
+    [[1, 1], [2, 2], [3, 3], [4, 4]],
+    "rules.html must begin with the four-page Page 0 pronunciation introduction"
   );
   assert.deepEqual(
     [...rules.matchAll(/data-title="Rule (\d+)"/g)].map((match) => Number(match[1])),
