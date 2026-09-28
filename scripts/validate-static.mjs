@@ -40,24 +40,29 @@ async function validateSource() {
   assert.match(rules, /<title>Chinese · Grammar Rules<\/title>/, "grammar-rules title is missing");
   assert.equal(
     (rules.match(/<button type="button" class="review-btn"/g) ?? []).length,
-    19,
-    "rules.html must contain four pronunciation-introduction and 15 grammar-rule review buttons"
+    21,
+    "rules.html must contain five introductory and 16 grammar-rule review buttons"
   );
   assert.deepEqual(
     [...rules.matchAll(/data-title="Звуки (\d+)"[^>]*data-topic="p(\d+)"[^>]*data-kind="intro"/g)]
       .map((match) => [Number(match[1]), Number(match[2])]),
     [[1, 1], [2, 2], [3, 3], [4, 4]],
-    "rules.html must begin with the four-page Page 0 pronunciation introduction"
+    "rules.html must begin with the four pronunciation pages of Page 0"
+  );
+  assert.match(
+    rules,
+    /data-title="Числа" data-topic="p5" data-kind="intro"/,
+    "rules.html must include the fifth introductory numbers lesson"
   );
   assert.deepEqual(
     [...rules.matchAll(/data-title="Rule (\d+)"/g)].map((match) => Number(match[1])),
-    Array.from({ length: 15 }, (_, index) => index + 1),
-    "grammar-rule pages must remain in the intended 1-15 teaching order"
+    Array.from({ length: 16 }, (_, index) => index + 1),
+    "grammar-rule pages must remain in the intended 1-16 teaching order"
   );
   assert.match(rules, /data-topic="r14"/, "complement-comparison rule is missing");
   assert.match(
     rules,
-    /Rule 15 — Комплементы \(补语\): сравнение Правил 9–14/,
+    /Rule 16 — Комплементы \(补语\): сравнение Правил 9–15/,
     "complement-comparison title changed unexpectedly"
   );
   assert.match(rules, /Главная сравнительная таблица/, "complement comparison table is missing");
